@@ -1,0 +1,56 @@
+-- A library clause declares a name as a library.  It 
+-- does not create the library; it simply forward declares 
+-- it. 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieed.std_logic_unsigned.all;
+
+entity VGA_DEMO is
+	generic
+	(
+		<name>	: <type>  :=	<default_value>;
+		...
+		<name>	: <type>  :=	<default_value>
+	);
+
+
+	port
+	(
+		-- Input ports
+
+
+		-- Inout ports
+
+
+		-- Output ports
+
+	);
+end VGA_DEMO;
+
+
+-- Library Clause(s) (optional)
+-- Use Clause(s) (optional)
+
+architecture VGA_DEMO_TOP of VGA_DEMO is
+
+	-- Declarations (optional)
+
+begin
+
+	-- Process Statement (optional)
+
+	-- Concurrent Procedure Call (optional)
+
+	-- Concurrent Signal Assignment (optional)
+
+	-- Conditional Signal Assignment (optional)
+
+	-- Selected Signal Assignment (optional)
+
+	-- Component Instantiation Statement (optional)
+
+	-- Generate Statement (optional)
+
+end VGA_DEMO_TOP;
+

@@ -37,12 +37,12 @@
 ### project_name.sof SRAM Object File
 
 # software binary files
-
-/Source/simulation/*
-/Source/db/*
-/Source/greybox_tmp/*
-/Source/incremental_db/*
-/Source/output_files/*
+/*
+###/Source/simulation/*
+###/Source/db/*
+###/Source/greybox_tmp/*
+###/Source/incremental_db/*
+###/Source/output_files/*
 !/*.gitignore
 ##
 !*.qpf

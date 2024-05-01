@@ -1,0 +1,24 @@
+entity vgasync is                                      
+port
+(
+  vga_clk  : in   std_logic;                 -- vga clock 
+  Reset    : in   std_logic;                 -- 1 = Reset                                   
+  hsync    : out  std_logic;                 -- Hsync Monitor
+  vsync    : out  std_logic;                 -- Vsync Monitor
+  xpos     : out  integer range 0 to 1023;   -- Pixel Pos x Bildbereich
+  ypos     : out  integer range 0 to 700;    -- Pixel Pos y Bildbereich
+  videoOn  : out  std_logic);                -- 1 = Bildbereich
+end vgasync;
+
+
+architecture Beh_VgaSync of vgasync is 
+	
+	constant HFP	: integer range 0 to 100;
+	
+	signal hor	: integer range 0 to 2000 := 0;
+	signal ver 	: integer range 0 to 2000 := 0;
+	
+begin 
+
+
+end architecture;
