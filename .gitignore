@@ -38,7 +38,7 @@
 
 # software binary files
 
-/Source/simulation/*
+/Source/simulation/modelsim/*
 /Source/db/*
 /Source/greybox_tmp/*
 /Source/incremental_db/*
