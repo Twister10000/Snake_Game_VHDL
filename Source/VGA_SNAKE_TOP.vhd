@@ -51,6 +51,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			vga_clk							:		std_logic;
 		signal			CLK_ENA_1						:		std_logic;
 		signal			NewFrame_top				:		std_logic;
+		signal 			Update							:		std_logic := '0';
 		signal			Move_Direction			:		Direction := Right;
 
 begin
@@ -121,6 +122,9 @@ begin
 		begin
 				
 				if rising_edge (vga_clk) then
+					if CLK_ENA_1 = '1' then
+						Update <= '1';
+					end if;
 							BTN_LEFT_SYNC(0) <= BTN_LEFT;
 							BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
 							
@@ -148,8 +152,8 @@ begin
 							end if;
 							
 						if NewFrame_top = '1' then
-
-							--if CLK_ENA_1 = '1'	then
+							if Update = '1' then
+								Update <= '0';
 								if Move_Direction = Left then
 									sq_xpos <= sq_xpos - Stepsize;
 									if sq_xpos = 0 then
@@ -174,7 +178,7 @@ begin
 								else
 									
 								end if;
-							--end if;
+							end if;
 						end if;
 				end if;
 		end process Box_Mov;
