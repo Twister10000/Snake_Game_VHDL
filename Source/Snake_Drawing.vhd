@@ -1,6 +1,3 @@
--- A library clause declares a name as a library.  It 
--- does not create the library; it simply forward declares 
--- it. 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -20,7 +17,6 @@ entity snake_drawing is
 			vga_clk									:	in		std_logic;
 			NewFrame_snake					:	in		std_logic;
 
-
 		-- Inout ports
 
 
@@ -29,14 +25,12 @@ entity snake_drawing is
 	);
 end snake_drawing;
 
--- Library Clause(s) (optional)
--- Use Clause(s) (optional)
-
 architecture beh_snake_drawing of snake_drawing is
 
 	-- Declarations (optional)
 		-- Declarations Own Var Types
 			type 				Direction						is	(Right, Left, UP, Down);
+			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
 			constant		X_Stepsize						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
@@ -74,18 +68,19 @@ begin
 				-- Concurrent Signal Assignment (optional)
 				
 				if rising_edge(vga_clk) then
+					BTN_LEFT_SYNC(0) <= BTN_LEFT;
+					BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
+					
+					BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
+					BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
+					
 					Draw_Snake 	<= 	'0';
+					
 					if CLK_ENA_1 = '1' then
 						Update_Sig <= '1';
 					end if;
-				
-							BTN_LEFT_SYNC(0) <= BTN_LEFT;
-							BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
 							
-							BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
-							BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
-							
-							/*FSM Moving Direction*/
+							/*FSM Direction*/ -- Update to Switch Case Statements!!!!
 							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
 							
 								if Move_Direction = Right then
@@ -105,15 +100,8 @@ begin
 								end if;
 							
 							end if;
+							/*FSM Direction END*/
 				
-										if NewFrame_snake = '1' then
-							if Update_sig = '1' then
-								Update_sig <= '0';
-							end if;
-						end if;
-				
-				
-					
 					if videoOn_snake = '1' then
 						
 						if xpos_snake	> SQ_xpos_snake_sig and xpos_snake < (SQ_xpos_snake_sig+40) then
@@ -122,36 +110,37 @@ begin
 							end if;
 						end if;
 					end if;
-					
+					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
 					if NewFrame_snake = '1' then
-							if Update_sig = '1' then
-								--Update_sig <= '0';
-								if Move_Direction = Left then
-									SQ_xpos_snake_sig <= SQ_xpos_snake_sig - X_Stepsize;
-									if sq_xpos_snake_sig = 0 then
-										SQ_xpos_snake_sig	<= x_Range;
-									end if;
-								elsif Move_Direction = Right then
-										SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
-										if SQ_xpos_snake_sig >= x_Range then
-											SQ_xpos_snake_sig	<= 0;
-										end if;
-								elsif Move_Direction = Up then
-										SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_stepsize;
-										if SQ_ypos_snake_sig = 0 then
-											SQ_ypos_snake_sig <= y_Range;
-										end if;
-								elsif	Move_Direction = Down then
-										SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_stepsize;
-										
-										if SQ_ypos_snake_sig >= y_range then
-											SQ_ypos_snake_sig <= 0;
-										end if;
-								else
-									
+						if Update_sig = '1' then
+							Update_sig <= '0';
+							if Move_Direction = Left then
+								SQ_xpos_snake_sig <= SQ_xpos_snake_sig - X_Stepsize;
+								if sq_xpos_snake_sig = 0 then
+									SQ_xpos_snake_sig	<= x_Range;
 								end if;
+							elsif Move_Direction = Right then
+									SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
+									if SQ_xpos_snake_sig >= x_Range then
+										SQ_xpos_snake_sig	<= 0;
+									end if;
+							elsif Move_Direction = Up then
+									SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_stepsize;
+									if SQ_ypos_snake_sig = 0 then
+										SQ_ypos_snake_sig <= y_Range;
+									end if;
+							elsif	Move_Direction = Down then
+									SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_stepsize;
+									
+									if SQ_ypos_snake_sig >= y_range then
+										SQ_ypos_snake_sig <= 0;
+									end if;
+							else
+								
 							end if;
 						end if;
+					end if;
+					/*FSM Moving*/
 					
 					
 				end if;
