@@ -11,10 +11,10 @@ entity VGA_SNAKE_TOP is
 	port
 	(
 		-- Input ports
-			clk  				: 		in   	std_logic;                 -- vga clock 
-			Reset    		: 		in   	std_logic;                 -- 1 = Reset
-			BTN_LEFT    :			in 		std_logic;
-			BTN_RIGHT		:			in 		std_logic;
+			clk  					: 		in   	std_logic;                 -- vga clock 
+			Reset    			: 		in   	std_logic;                 -- 1 = Reset
+			BTN_LEFT    	:			in 		std_logic;
+			BTN_RIGHT			:			in 		std_logic;
 
 		-- Inout ports
 
@@ -31,10 +31,13 @@ end VGA_SNAKE_TOP;
 
 
 architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
+		-- Declarations Own Var Types
+		type 				Direction						is	(Right, Left, UP, Down);
+
 		-- Declarations Constant
 		constant 		CLK_div1_MAX				:		integer range 0 to 108e6 	:= 1e6; 		-- CLK MAX COUNTER
-		constant		Stepsize						:		integer range 0 to 500		:= 10;			-- Wie viel sich der Balken bewegen darf
-		constant		move_range					:		integer	range 0	to 1280		:= 1130;		-- Von wo bis wo darf sich der Balken bewegen
+		constant		Stepsize						:		integer range 0 to 500		:= 5;			-- Wie viel sich der Balken bewegen darf
+		constant		move_range					:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 		-- Declarations Signal
 
 		signal			xpos_top     				:  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
@@ -45,7 +48,8 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			videoOn_top  				:  	std_logic;               							-- 1 = Bildbereich
 		signal			vga_clk							:		std_logic;
 		signal			CLK_ENA_1						:		std_logic;
-		
+		signal			Move_Direction			:		Direction := Right;
+
 begin
 		/*VGA_SYNC Instantiation*/
 	 VGA_SYNC : entity work.vga_sync
@@ -93,8 +97,8 @@ begin
 					if xpos_top = 640 then
 						R <= x"F";
 					end if;
-					if xpos_top	>= 1+Move and xpos_top < 150+Move then
-						if ypos_top >= 100 and ypos_top < 150 then -- Quadrat
+					if xpos_top	>= 1+Move and xpos_top < 41+Move then
+						if ypos_top >= 100 and ypos_top < 140 then -- Quadrat
 							G <= x"F";
 							
 						end if;
@@ -112,23 +116,31 @@ begin
 		begin
 				
 				if rising_edge (vga_clk) then
-						if videoOn_top = '0' then
-							
-							
 							BTN_LEFT_SYNC(0) <= BTN_LEFT;
 							BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
 							
 							BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
 							BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
+							
+							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
+							
+								if Move_Direction = Right then
+									Move_Direction <= Left;
+								else
+									Move_Direction <= Right;
+								end if;
+							end if;
+							
+						if videoOn_top = '0' then
+
 							if CLK_ENA_1 = '1'	then
-								if BTN_LEFT_SYNC(1) = '0' then
+								if Move_Direction = Left then
 									Move <= Move - Stepsize;
-									if move >= move_range then
-										move <= 0;
+									if move = 0 then
+										move	<= move_range;
 									end if;
-								elsif BTN_RIGHT_SYNC(1) = '0' then
+								elsif Move_Direction = Right then
 										move	<= move + stepsize;
-										
 										if move >= move_range then
 											move	<= 0;
 										end if;
@@ -137,8 +149,6 @@ begin
 								end if;
 							end if;
 						end if;
-						
-						
 				end if;
 		end process Box_Mov;
 		
