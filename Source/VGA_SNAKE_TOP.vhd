@@ -37,12 +37,14 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		-- Declarations Constant
 		constant 		CLK_div1_MAX				:		integer range 0 to 108e6 	:= 1e6; 		-- CLK MAX COUNTER
 		constant		Stepsize						:		integer range 0 to 128		:= 5;			-- Wie viel sich der Balken bewegen darf
-		constant		move_range					:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
+		constant		X_range							:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
+		constant		Y_range							:		integer	range 0 to 1024		:= 984;
 		-- Declarations Signal
 
 		signal			xpos_top     				:  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 		signal			ypos_top     				:  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-		signal			Move								:		integer range 0 to move_range := 0;
+		signal			SQ_xpos								:		integer range 0 to x_range := 0;
+		signal			SQ_ypos								: 	integer range 0 to y_range := 0;
 		signal			BTN_LEFT_SYNC				: 	std_logic_vector (1 downto 0);
 		signal			BTN_RIGHT_SYNC			: 	std_logic_vector (1 downto 0);		
 		signal			videoOn_top  				:  	std_logic;               							-- 1 = Bildbereich
@@ -100,8 +102,8 @@ begin
 						R <= x"F";
 					end if;
 					
-					if xpos_top	> Move and xpos_top < (Move+40) then
-						if ypos_top > 100 and ypos_top < 140 then -- Quadrat
+					if xpos_top	> SQ_xpos and xpos_top < (sq_xpos+40) then
+						if ypos_top > sq_ypos and ypos_top < sq_ypos+40 then -- Quadrat
 							G <= x"F";
 							
 						end if;
@@ -132,20 +134,42 @@ begin
 								else
 									Move_Direction <= Right;
 								end if;
+							elsif BTN_LEFT_SYNC(1) = '0' and BTN_LEFT_SYNC(0) = '1' then
+								
+								if Move_Direction = Up then
+									
+									Move_Direction <= Down;
+								elsif Move_Direction = Down then
+									Move_Direction <= Up;
+								else 
+									Move_Direction <= Up;
+								end if;
+							
 							end if;
 							
 						if NewFrame_top = '1' then
 
 							--if CLK_ENA_1 = '1'	then
 								if Move_Direction = Left then
-									Move <= Move - Stepsize;
-									if move = 0 then
-										move	<= move_range;
+									sq_xpos <= sq_xpos - Stepsize;
+									if sq_xpos = 0 then
+										sq_xpos	<= x_Range;
 									end if;
 								elsif Move_Direction = Right then
-										move	<= move + stepsize;
-										if move >= move_range then
-											move	<= 0;
+										sq_xpos	<= sq_xpos + stepsize;
+										if sq_xpos >= x_Range then
+											sq_xpos	<= 0;
+										end if;
+								elsif Move_Direction = Up then
+										sq_ypos <= sq_ypos - stepsize;
+										if sq_ypos = 0 then
+											sq_ypos <= y_Range;
+										end if;
+								elsif	Move_Direction = Down then
+										sq_ypos <= sq_ypos + stepsize;
+										
+										if sq_ypos >= y_range then
+											sq_ypos <= 0;
 										end if;
 								else
 									
