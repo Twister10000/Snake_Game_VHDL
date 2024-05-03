@@ -79,15 +79,15 @@ begin
 			c0			=> vga_clk);
 		
 		/*CLK_DIV Instantiation*/
-		CLK_div1	:	entity work.GEN_Clockdivider
-		generic map(
-			
-		CNT_MAX => CLK_div1_MAX)
-		port map(
-		
-			CLK  		=> 	CLK,
-			RST			=>	Reset,
-			Enable	=>	CLK_ENA_1);
+	--	CLK_div1	:	entity work.GEN_Clockdivider
+	--	generic map(
+	--		
+	--	CNT_MAX => CLK_div1_MAX)
+	--	port map(
+	--	
+	--		CLK  		=> 	CLK,
+	--		RST			=>	Reset,
+	--		Enable	=>	CLK_ENA_1);
 			
 			
 		/*Snake_Drawing Instantiation*/
@@ -100,12 +100,11 @@ begin
 					BTN_RIGHT							=>	BTN_RIGHT,
 					videoOn_snake  				=>	videoOn_top,
 					vga_clk								=>	vga_clk,
-					CLK_ENA_1							=>	CLK_ENA_1,
+					--CLK_ENA_1							=>	CLK_ENA_1,
 					NewFrame_snake				=>	NewFrame_top,
 					Draw_Snake						=>	Draw_Snake,
-					--SQ_xpos_snake					=>	SQ_xpos,
-					--SQ_ypos_snake					=>	SQ_ypos,
-					Update								=>	Update);
+					Reset									=>	Reset);
+					--Update								=>	Update
 		
 	-- Process Statement (optional)
 		Drawing	:	process(all)
@@ -144,9 +143,9 @@ begin
 		
 		begin
 				if rising_edge (vga_clk) then
-					if CLK_ENA_1 = '1' then
-						Update <= '1';
-					end if;
+			--		if CLK_ENA_1 = '1' then
+			--			Update <= '1';
+			--		end if;
 							--BTN_LEFT_SYNC(0) <= BTN_LEFT;
 							--BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
 							--
@@ -175,11 +174,11 @@ begin
 							--end if;
 							
 							/*BOX_MOVEMENT PART*/
-						if NewFrame_top = '1' then
-							if Update = '1' then
-								Update <= '0';
-							end if;
-						end if;
+						--if NewFrame_top = '1' then
+						--	if Update = '1' then
+						--		Update <= '0';
+						--	end if;
+						--end if;
 						--		if Move_Direction = Left then
 						--			sq_xpos <= sq_xpos - X_Stepsize;
 						--			if sq_xpos = 0 then

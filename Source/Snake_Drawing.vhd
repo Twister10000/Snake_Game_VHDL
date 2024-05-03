@@ -13,15 +13,16 @@ entity snake_drawing is
 		-- Input ports
 			xpos_snake     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 			ypos_snake     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-			BTN_LEFT					:	in	 	std_logic;
-			BTN_RIGHT					:	in	 	std_logic;
+			BTN_LEFT								:	in	 	std_logic;
+			BTN_RIGHT								:	in	 	std_logic;
+			Reset										:	in		std_logic;
 			videoOn_snake  					:	in  	std_logic;               							-- 1 = Bildbereich
 			vga_clk									:	in		std_logic;
-			CLK_ENA_1								:	in		std_logic;
+			--CLK_ENA_1								:	in		std_logic;
 			NewFrame_snake					:	in		std_logic;
 			--SQ_xpos_snake									:	in		integer range 0 to 1240 := 0;
 			--SQ_ypos_snake									:	in	 	integer range 0 to 1024 := 0;
-			Update									:	in		std_logic := '0'; 										--The update signal is responsible for updating the position of the snake. 
+			
 
 
 		-- Inout ports
@@ -41,6 +42,7 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			type 				Direction						is	(Right, Left, UP, Down);
 		-- Constants
+			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 13e6; 		-- CLK MAX COUNTER
 			constant		X_Stepsize						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
 			constant		Y_Stepsize						:		integer range 0 to 128		:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
@@ -51,12 +53,24 @@ architecture beh_snake_drawing of snake_drawing is
 			signal 			Move_Direction						:		Direction := Right;
 			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
-			signal			Update_Sig								:		std_logic	:= '0';
+			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
 			signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
+			signal			CLK_ENA_1									:		std_logic;
 				
 begin
 
+
+		/*CLK_DIV Instantiation*/
+		CLK_div1	:	entity work.GEN_Clockdivider
+		generic map(
+			
+		CNT_MAX => CLK_div1_MAX)
+		port map(
+		
+			CLK  		=> 	vga_clk,
+			RST			=>	Reset,
+			Enable	=>	CLK_ENA_1);
 	
 	Snake_drawing	: process	(all)
 	
@@ -66,7 +80,10 @@ begin
 				
 				
 				if rising_edge(vga_clk) then
-				
+					Draw_Snake 	<= 	'0';
+					if CLK_ENA_1 = '1' then
+						Update_Sig <= '1';
+					end if;
 				
 							BTN_LEFT_SYNC(0) <= BTN_LEFT;
 							BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
@@ -95,10 +112,14 @@ begin
 							
 							end if;
 				
+										if NewFrame_snake = '1' then
+							if Update_sig = '1' then
+								Update_sig <= '0';
+							end if;
+						end if;
 				
 				
-				
-					Draw_Snake 	<= 	'0';
+					
 					if videoOn_snake = '1' then
 						
 						if xpos_snake	> SQ_xpos_snake_sig and xpos_snake < (SQ_xpos_snake_sig+40) then
@@ -109,7 +130,7 @@ begin
 					end if;
 					
 					if NewFrame_snake = '1' then
-							if Update = '1' then
+							if Update_sig = '1' then
 								--Update_sig <= '0';
 								if Move_Direction = Left then
 									SQ_xpos_snake_sig <= SQ_xpos_snake_sig - X_Stepsize;
