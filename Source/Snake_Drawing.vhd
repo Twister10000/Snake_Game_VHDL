@@ -18,11 +18,7 @@ entity snake_drawing is
 			Reset										:	in		std_logic;
 			videoOn_snake  					:	in  	std_logic;               							-- 1 = Bildbereich
 			vga_clk									:	in		std_logic;
-			--CLK_ENA_1								:	in		std_logic;
 			NewFrame_snake					:	in		std_logic;
-			--SQ_xpos_snake									:	in		integer range 0 to 1240 := 0;
-			--SQ_ypos_snake									:	in	 	integer range 0 to 1024 := 0;
-			
 
 
 		-- Inout ports
@@ -42,7 +38,7 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			type 				Direction						is	(Right, Left, UP, Down);
 		-- Constants
-			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 13e6; 		-- CLK MAX COUNTER
+			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
 			constant		X_Stepsize						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
 			constant		Y_Stepsize						:		integer range 0 to 128		:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
@@ -51,12 +47,12 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Declarations Signal
 			signal 			Move_Direction						:		Direction := Right;
+			signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
+			signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
 			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
 			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
-			signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
-			signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
-			signal			CLK_ENA_1									:		std_logic;
+			signal			CLK_ENA_1									:		std_logic := '0';
 				
 begin
 
@@ -76,8 +72,6 @@ begin
 	
 		begin
 				-- Concurrent Signal Assignment (optional)
-				
-				
 				
 				if rising_edge(vga_clk) then
 					Draw_Snake 	<= 	'0';
