@@ -36,7 +36,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 
 		-- Declarations Constant
 		constant 		CLK_div1_MAX				:		integer range 0 to 108e6 	:= 1e6; 		-- CLK MAX COUNTER
-		constant		Stepsize						:		integer range 0 to 500		:= 5;			-- Wie viel sich der Balken bewegen darf
+		constant		Stepsize						:		integer range 0 to 128		:= 5;			-- Wie viel sich der Balken bewegen darf
 		constant		move_range					:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 		-- Declarations Signal
 
@@ -48,6 +48,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			videoOn_top  				:  	std_logic;               							-- 1 = Bildbereich
 		signal			vga_clk							:		std_logic;
 		signal			CLK_ENA_1						:		std_logic;
+		signal			NewFrame_top				:		std_logic;
 		signal			Move_Direction			:		Direction := Right;
 
 begin
@@ -61,6 +62,7 @@ begin
 				vsync		=>	vsync_top,
 				xpos		=>	xpos_top,
 				ypos		=>	ypos_top,
+				NewFrame => NewFrame_top,
 				videoOn	=>	videoOn_top);
 				
 		/*PLL Instantiation*/		
@@ -97,8 +99,9 @@ begin
 					if xpos_top = 640 then
 						R <= x"F";
 					end if;
-					if xpos_top	>= 1+Move and xpos_top < 41+Move then
-						if ypos_top >= 100 and ypos_top < 140 then -- Quadrat
+					
+					if xpos_top	> Move and xpos_top < (Move+40) then
+						if ypos_top > 100 and ypos_top < 140 then -- Quadrat
 							G <= x"F";
 							
 						end if;
@@ -131,9 +134,9 @@ begin
 								end if;
 							end if;
 							
-						if videoOn_top = '0' then
+						if NewFrame_top = '1' then
 
-							if CLK_ENA_1 = '1'	then
+							--if CLK_ENA_1 = '1'	then
 								if Move_Direction = Left then
 									Move <= Move - Stepsize;
 									if move = 0 then
@@ -147,7 +150,7 @@ begin
 								else
 									
 								end if;
-							end if;
+							--end if;
 						end if;
 				end if;
 		end process Box_Mov;
