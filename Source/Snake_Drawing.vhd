@@ -76,28 +76,30 @@ begin
 					
 					Draw_Snake 	<= 	'0';
 					
-					if CLK_ENA_1 = '1' then
-						Update_Sig <= '1';
-					end if;
+					case CLK_ENA_1 is
+						when '1'							=>	Update_sig	<= '1';
+						when others						=>	Update_sig	<= Update_Sig;
+					end case;
 							
 							/*FSM Direction*/ -- Update to Switch Case Statements!!!!
 							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
-							
-								if Move_Direction = Right then
-									Move_Direction <= Left;
-								else
-									Move_Direction <= Right;
-								end if;
+								case Move_Direction is
+									when Right			=>	Move_Direction <= Left;
+									when Left				=>	Move_Direction <= Right;
+									when Up					=>	Move_Direction <= Right;
+									when Down				=>	Move_Direction <= Left;
+									when others			=>	Move_Direction <= Move_Direction;
+								end case;
+
 							elsif BTN_LEFT_SYNC(1) = '0' and BTN_LEFT_SYNC(0) = '1' then
 								
-								if Move_Direction = Up then
-									
-									Move_Direction <= Down;
-								elsif Move_Direction = Down then
-									Move_Direction <= Up;
-								else 
-									Move_Direction <= Up;
-								end if;
+								case Move_Direction is
+									when Up								=>	Move_Direction	<= Down;
+									when Down							=>	Move_Direction	<= Up;
+									when Left							=>	Move_Direction	<= Up;
+									when Right						=>	Move_Direction	<= Down;
+									when others						=>	Move_Direction	<= Move_Direction;
+								end case;
 							
 							end if;
 							/*FSM Direction END*/
@@ -114,33 +116,28 @@ begin
 					if NewFrame_snake = '1' then
 						if Update_sig = '1' then
 							Update_sig <= '0';
-							if Move_Direction = Left then
-								SQ_xpos_snake_sig <= SQ_xpos_snake_sig - X_Stepsize;
-								if sq_xpos_snake_sig = 0 then
-									SQ_xpos_snake_sig	<= x_Range;
-								end if;
-							elsif Move_Direction = Right then
-									SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
-									if SQ_xpos_snake_sig >= x_Range then
-										SQ_xpos_snake_sig	<= 0;
-									end if;
-							elsif Move_Direction = Up then
-									SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_stepsize;
-									if SQ_ypos_snake_sig = 0 then
-										SQ_ypos_snake_sig <= y_Range;
-									end if;
-							elsif	Move_Direction = Down then
-									SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_stepsize;
-									
-									if SQ_ypos_snake_sig >= y_range then
-										SQ_ypos_snake_sig <= 0;
-									end if;
-							else
-								
-							end if;
+							case Move_Direction is
+								when Left								=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
+																						if sq_xpos_snake_sig = 0 then
+																							SQ_xpos_snake_sig	<= x_Range;
+																						end if;
+								when Right							=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
+																						if SQ_xpos_snake_sig >= x_Range then
+																							SQ_xpos_snake_sig	<= 0;
+																						end if;
+								when Up									=> 	SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_Stepsize;
+																						if SQ_ypos_snake_sig = 0 then
+																							SQ_ypos_snake_sig <= y_Range;
+																						end if;
+								when Down								=> SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_Stepsize;
+																						if SQ_ypos_snake_sig >= y_range then
+																							SQ_ypos_snake_sig <= 0;
+																						end if;
+								when others							=> Null;
+							end case;
 						end if;
 					end if;
-					/*FSM Moving*/
+					/*FSM Moving ENDE*/
 					
 					
 				end if;
