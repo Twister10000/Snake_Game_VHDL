@@ -52,7 +52,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			vga_clk							:		std_logic;
 		signal			CLK_ENA_1						:		std_logic;
 		signal			NewFrame_top				:		std_logic;
-		signal 			Update							:		std_logic := '0';
+		signal 			Update							:		std_logic := '0'; 										--The update signal is responsible for updating the position of the snake. 
 		signal			Move_Direction			:		Direction := Right;
 
 begin
@@ -88,7 +88,7 @@ begin
 			RST			=>	Reset,
 			Enable	=>	CLK_ENA_1);
 	-- Process Statement (optional)
-		process(all)
+		Drawing	:	process(all)
 		
 		begin
 		
@@ -121,7 +121,7 @@ begin
 					end if;
 				end if;
 			end if;
-		end process;
+		end process Drawing;
 		
 		Box_Mov : process (all)
 		
@@ -135,7 +135,7 @@ begin
 							
 							BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
 							BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
-							
+							/*FSM Moving Direction*/
 							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
 							
 								if Move_Direction = Right then
@@ -155,7 +155,7 @@ begin
 								end if;
 							
 							end if;
-							
+							/*BOX_MOVEMENT PART*/
 						if NewFrame_top = '1' then
 							if Update = '1' then
 								Update <= '0';
