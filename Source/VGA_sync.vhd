@@ -12,6 +12,7 @@ port
   vsync    : out  std_logic;                 -- Vsync Monitor
   xpos     : out  integer range 0 to 1300;   -- Pixel Pos x Bildbereich
   ypos     : out  integer range 0 to 1033;    -- Pixel Pos y Bildbereich
+	NewFrame : out	std_logic;
   videoOn  : out  std_logic);                -- 1 = Bildbereich
 end vga_sync;
 
@@ -50,6 +51,7 @@ begin
 				
 				hor <= hor + 1;
 				hSync <= not polH;
+				NewFrame	<= '0';
 				
 				if hor > HFP and hor < HFP + HS then --sync Puls ausgeben
 					hsync <= polH;
@@ -67,6 +69,7 @@ begin
 				-- Das Ende vom Bildschirm wird ÜBERprüft.
 				if ver = Vtot - 1 then
 					ver <= 0; -- Wir fangen wieder von oben an
+					NewFrame <= '1';
 				end if;
 				
 			end if;
