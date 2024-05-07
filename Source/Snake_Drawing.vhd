@@ -29,7 +29,7 @@ architecture beh_snake_drawing of snake_drawing is
 
 	-- Declarations (optional)
 		-- Declarations Own Var Types
-			type 				Direction						is	(Right, Left, UP, Down);
+			type 				Direction						is	(Rechts, Links, UP, Down);
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
@@ -40,7 +40,7 @@ architecture beh_snake_drawing of snake_drawing is
 			
 			
 		-- Declarations Signal
-			signal 			Move_Direction						:		Direction := Right;
+			signal 			Move_Direction						:		Direction := Rechts;
 			signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
 			signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
 			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
@@ -84,10 +84,10 @@ begin
 							/*FSM Direction*/ -- Update to Switch Case Statements!!!!
 							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
 								case Move_Direction is
-									when Right						=>	Move_Direction <= Left;
-									when Left							=>	Move_Direction <= Right;
-									when Up								=>	Move_Direction <= Right;
-									when Down							=>	Move_Direction <= Left;
+									when Rechts						=>	Move_Direction <= Links; --Right and Left wechseln!
+									when Links						=>	Move_Direction <= Rechts;
+									when Up								=>	Move_Direction <= Rechts;
+									when Down							=>	Move_Direction <= Links;
 									when others						=>	Null;
 								end case;
 
@@ -96,8 +96,8 @@ begin
 								case Move_Direction is
 									when Up								=>	Move_Direction	<= Down;
 									when Down							=>	Move_Direction	<= Up;
-									when Left							=>	Move_Direction	<= Up;
-									when Right						=>	Move_Direction	<= Down;
+									when Links						=>	Move_Direction	<= Up;
+									when Rechts						=>	Move_Direction	<= Down;
 									when others						=>	Null;
 								end case;
 							
@@ -117,12 +117,12 @@ begin
 						if Update_sig = '1' then
 							Update_sig <= '0';
 							case Move_Direction is
-								when Left								=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
+								when Links								=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
 																						if sq_xpos_snake_sig = 0 then
 																							SQ_xpos_snake_sig	<= x_Range;
 																						end if;
 																						
-								when Right							=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
+								when Rechts							=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
 																						if SQ_xpos_snake_sig >= x_Range then
 																							SQ_xpos_snake_sig	<= 0;
 																						end if;
