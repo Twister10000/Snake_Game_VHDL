@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_signed.all;
 
 entity snake_drawing is
 	
@@ -30,11 +30,11 @@ architecture beh_snake_drawing of snake_drawing is
 	-- Declarations (optional)
 		-- Declarations Own Var Types
 			type 				Direction						is	(Rechts, Links, UP, Down);
-			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range 0 to 1280;
-			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range 0 to 1024;
+			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 1280;
+			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 1024;
 			
 		-- Constants
-			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
+			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 56e6;--27e6; 		-- CLK MAX COUNTER
 			constant		Stepsize_x						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
 			constant		Stepsize_y						:		integer range 0 to 128		:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
@@ -43,8 +43,8 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Declarations Signal
 			signal 			Move_Direction						:		Direction := Rechts;
-			signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
-			signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
+			--signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
+			--signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
 			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
 			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
@@ -168,9 +168,21 @@ begin
 																							
 								when others								=> Null;
 							end case;
+							
+							if x(0) > x_Range 	then
+								x(0) <= 0;
+							elsif	x(0) < 0			then
+								x(0)	<= x_Range;
+							elsif	y(0) < 0 			then
+								y(0) <=	y_range;
+							elsif	y(0) > y_range			then
+								y(0)	<=	0;
+							end if;
+							
 						end if;
 					end if;
 					/*FSM Moving ENDE*/
+					
 					
 					
 				end if;
