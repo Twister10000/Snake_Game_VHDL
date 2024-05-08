@@ -30,6 +30,8 @@ architecture beh_snake_drawing of snake_drawing is
 	-- Declarations (optional)
 		-- Declarations Own Var Types
 			type 				Direction						is	(Rechts, Links, UP, Down);
+			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range 0 to 1280;
+			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range 0 to 1024;
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
@@ -47,6 +49,8 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
 			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1									:		std_logic := '0';
+			signal 			x													:	x_pos_arr := (others => 0);
+			signal 			y													:	y_pos_arr := (others => 0);
 				
 begin
 
