@@ -35,8 +35,8 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 27e6; 		-- CLK MAX COUNTER
-			constant		X_Stepsize						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
-			constant		Y_Stepsize						:		integer range 0 to 128		:= 41;	
+			constant		Stepsize_x						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
+			constant		Stepsize_y						:		integer range 0 to 128		:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 			constant		Y_range								:		integer	range 0 to 1024		:= 984;
 			
@@ -138,27 +138,35 @@ begin
 							
 							
 							case Move_Direction is
-								when Links								=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
-																						if sq_xpos_snake_sig = 0 then
-																							SQ_xpos_snake_sig	<= x_Range;
-																						end if;
+								when Links								=> 	x(0) <=	x(0) - stepsize_x;
+																							y(0) <= y(0);
+																							/*SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
+																							if sq_xpos_snake_sig = 0 then
+																								SQ_xpos_snake_sig	<= x_Range;
+																							end if;*/
 																						
-								when Rechts							=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
-																						if SQ_xpos_snake_sig >= x_Range then
-																							SQ_xpos_snake_sig	<= 0;
-																						end if;
+								when Rechts								=> 	x(0) <=	x(0) + stepsize_x;
+																							y(0) <= y(0);
+																							/*SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
+																							if SQ_xpos_snake_sig >= x_Range then
+																								SQ_xpos_snake_sig	<= 0;
+																							end if;*/
 																						
-								when Up									=> 	SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_Stepsize;
-																						if SQ_ypos_snake_sig = 0 then
-																							SQ_ypos_snake_sig <= y_Range;
-																						end if;
-																						
-								when Down								=> SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_Stepsize;
-																						if SQ_ypos_snake_sig >= y_range then
-																							SQ_ypos_snake_sig <= 0;
-																						end if;
-																						
-								when others							=> Null;
+								when Up										=> 	y(0)	<=	y(0) - stepsize_y;
+																							x(0)	<=	x(0);
+																							/*SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_Stepsize;
+																							if SQ_ypos_snake_sig = 0 then
+																								SQ_ypos_snake_sig <= y_Range;
+																							end if;*/
+																							
+								when Down									=> 	y(0)	<=	y(0) + stepsize_y;
+																							x(0)	<=	x(0);
+																							/*SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_Stepsize;
+																							if SQ_ypos_snake_sig >= y_range then
+																								SQ_ypos_snake_sig <= 0;
+																							end if;*/
+																							
+								when others								=> Null;
 							end case;
 						end if;
 					end if;
