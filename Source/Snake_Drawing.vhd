@@ -122,11 +122,21 @@ begin
 							if ypos_snake > SQ_ypos_snake_sig and ypos_snake < (SQ_ypos_snake_sig+40) then -- Quadrat
 								Draw_Snake <= '1';
 							end if;
+						end if;*/
 					end if;
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
 					if NewFrame_snake = '1' then
 						if Update_sig = '1' then
 							Update_sig <= '0';
+							
+							for i in 1 to lange loop
+								
+								x(i)	<=	x(i-1);
+								y(i)	<=	y(i-1);
+								
+							end loop;
+							
+							
 							case Move_Direction is
 								when Links								=> 	SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
 																						if sq_xpos_snake_sig = 0 then
