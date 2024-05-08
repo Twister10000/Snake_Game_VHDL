@@ -43,15 +43,13 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Declarations Signal
 			signal 			Move_Direction						:		Direction := Rechts;
-			--signal			SQ_xpos_snake_sig					:		integer	range 0 to 1240 := 0;
-			--signal			SQ_ypos_snake_sig					:		integer range 0 to 1024	:= 0;
 			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
 			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1									:		std_logic := '0';
 			signal 			x													:	x_pos_arr := (others => 0);
 			signal 			y													:	y_pos_arr := (others => 0);
-			signal			lange											:		integer range 0 to 50	:= 3;
+			signal			lange											:		integer range 0 to 50	:= 2;
 				
 begin
 
@@ -118,11 +116,6 @@ begin
 								end if;
 							end if;
 						end loop;
-						/*if xpos_snake	> SQ_xpos_snake_sig and xpos_snake < (SQ_xpos_snake_sig+40) then
-							if ypos_snake > SQ_ypos_snake_sig and ypos_snake < (SQ_ypos_snake_sig+40) then -- Quadrat
-								Draw_Snake <= '1';
-							end if;
-						end if;*/
 					end if;
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
 					if NewFrame_snake = '1' then
@@ -140,35 +133,20 @@ begin
 							case Move_Direction is
 								when Links								=> 	x(0) <=	x(0) - stepsize_x;
 																							y(0) <= y(0);
-																							/*SQ_xpos_snake_sig	<= SQ_xpos_snake_sig - X_Stepsize;
-																							if sq_xpos_snake_sig = 0 then
-																								SQ_xpos_snake_sig	<= x_Range;
-																							end if;*/
 																						
 								when Rechts								=> 	x(0) <=	x(0) + stepsize_x;
 																							y(0) <= y(0);
-																							/*SQ_xpos_snake_sig	<= SQ_xpos_snake_sig + X_Stepsize;
-																							if SQ_xpos_snake_sig >= x_Range then
-																								SQ_xpos_snake_sig	<= 0;
-																							end if;*/
 																						
 								when Up										=> 	y(0)	<=	y(0) - stepsize_y;
 																							x(0)	<=	x(0);
-																							/*SQ_ypos_snake_sig <= SQ_ypos_snake_sig - Y_Stepsize;
-																							if SQ_ypos_snake_sig = 0 then
-																								SQ_ypos_snake_sig <= y_Range;
-																							end if;*/
 																							
 								when Down									=> 	y(0)	<=	y(0) + stepsize_y;
 																							x(0)	<=	x(0);
-																							/*SQ_ypos_snake_sig <= SQ_ypos_snake_sig + Y_Stepsize;
-																							if SQ_ypos_snake_sig >= y_range then
-																								SQ_ypos_snake_sig <= 0;
-																							end if;*/
 																							
 								when others								=> Null;
 							end case;
 							
+							/*Bildschirmrand detection*/
 							if x(0) > x_Range 	then
 								x(0) <= 0;
 							elsif	x(0) < 0			then
