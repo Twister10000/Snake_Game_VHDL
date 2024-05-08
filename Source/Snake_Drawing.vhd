@@ -51,6 +51,7 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			CLK_ENA_1									:		std_logic := '0';
 			signal 			x													:	x_pos_arr := (others => 0);
 			signal 			y													:	y_pos_arr := (others => 0);
+			signal			lange											:		integer range 0 to 50	:= 3;
 				
 begin
 
@@ -110,11 +111,17 @@ begin
 				
 					if videoOn_snake = '1' then
 						
-						if xpos_snake	> SQ_xpos_snake_sig and xpos_snake < (SQ_xpos_snake_sig+40) then
+						for i in 0 to lange	loop
+							if xpos_snake	> x(i) and xpos_snake < (x(i)+40) then
+								if ypos_snake > y(i) and ypos_snake < (y(i)+40) then -- Quadrat
+									Draw_Snake <= '1';
+								end if;
+							end if;
+						end loop;
+						/*if xpos_snake	> SQ_xpos_snake_sig and xpos_snake < (SQ_xpos_snake_sig+40) then
 							if ypos_snake > SQ_ypos_snake_sig and ypos_snake < (SQ_ypos_snake_sig+40) then -- Quadrat
 								Draw_Snake <= '1';
 							end if;
-						end if;
 					end if;
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
 					if NewFrame_snake = '1' then
