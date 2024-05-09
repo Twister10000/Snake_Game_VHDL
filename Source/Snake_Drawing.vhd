@@ -21,7 +21,7 @@ entity snake_drawing is
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := '0'
+			Draw_Snake							: out 	std_logic := 	'0'
 	);
 end snake_drawing;
 
@@ -42,14 +42,14 @@ architecture beh_snake_drawing of snake_drawing is
 			
 			
 		-- Declarations Signal
-			signal 			Move_Direction						:		Direction := Rechts;
-			signal			BTN_LEFT_SYNC							:		std_logic_vector (1 downto 0);
-			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
-			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
-			signal			CLK_ENA_1									:		std_logic := '0';
-			signal 			x													:	x_pos_arr := (40,others => 0);
-			signal 			y													:	y_pos_arr := (40,others => 0);
-			signal			lange											:		integer range 0 to 50	:= 2;
+			signal 			Move_Direction									:		Direction := Rechts;
+			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0);
+			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0);
+			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
+			signal			CLK_ENA_1												:		std_logic := '0';
+			signal 			x_snake													:	x_pos_arr := (others => 0);
+			signal 			y_snake													:	y_pos_arr := (others => 0);
+			signal			lange														:		integer range 0 to 50	:= 2;
 				
 begin
 
@@ -80,7 +80,7 @@ begin
 					BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
 					BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
 					
-					Draw_Snake 	<= 	'0';
+					Draw_Snake 	<= 	'0';			
 					
 					case CLK_ENA_1 is
 						when '1'							=>	Update_sig	<= '1';
@@ -110,11 +110,11 @@ begin
 							end if;
 							/*FSM Direction END*/
 				
-					if videoOn_snake = '1' then
+					if videoOn_snake = '1' then		
 						
 						for i in 0 to lange	loop
-							if xpos_snake	> x(i) and xpos_snake < (x(i)+40) then
-								if ypos_snake > y(i) and ypos_snake < (y(i)+40) then -- Quadrat
+							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
+								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
 									Draw_Snake <= '1';
 								end if;
 							end if;
@@ -126,42 +126,46 @@ begin
 							Update_sig <= '0';
 							
 							for i in 1 to lange loop
-								x(i)	<=	x(i-1);
-								y(i)	<=	y(i-1);	
+								x_snake(i)	<=	x_snake(i-1);
+								y_snake(i)	<=	y_snake(i-1);	
 							end loop;
 							
 							case Move_Direction is
-								when Links								=> 	x(0) <=	x(0) - stepsize_x;
-																							y(0) <= y(0);
+								when Links								=> 	x_snake(0) <=	x_snake(0) - stepsize_x;
+																							y_snake(0) <= y_snake(0);
 																							/*Detection for Left Screen Border*/
-																							if x(0) < 40 then
-																								x(0) <= x_range;
+																							if x_snake(0) < 40 then
+																								x_snake(0) <= x_range;
 																							end if;
 																						
-								when Rechts								=> 	x(0) <=	x(0) + stepsize_x;
-																							y(0) <= y(0);
+								when Rechts								=> 	x_snake(0) <=	x_snake(0) + stepsize_x;
+																							y_snake(0) <= y_snake(0);
 																							/*Detection for Right Screen Border*/
-																							if x(0) > (x_range-40)	then
-																								x(0) <= 0;
+																							if x_snake(0) > (x_range-40)	then
+																								x_snake(0) <= 0;
 																							end if;
 																						
-								when Up										=> 	y(0)	<=	y(0) - stepsize_y;
-																							x(0)	<=	x(0);
+								when Up										=> 	y_snake(0)	<=	y_snake(0) - stepsize_y;
+																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for Upper Screen Border*/
-																							if	y(0) < 40	then
-																								y(0)	<= y_range;
+																							if	y_snake(0) < 40	then
+																								y_snake(0)	<= y_range;
 																							end if;
 																							
-								when Down									=> 	y(0)	<=	y(0) + stepsize_y;
-																							x(0)	<=	x(0);
+								when Down									=> 	y_snake(0)	<=	y_snake(0) + stepsize_y;
+																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for lower Screen Border*/
-																							if y(0) > (y_range-40)	then
-																								y(0)	<= 0;
+																							if y_snake(0) > (y_range-40)	then
+																								y_snake(0)	<= 0;
 																							end if;
 																							
 								when others								=> Null;
 							end case;
 						end if;
+						
+						
+
+						
 					end if;
 					/*FSM Moving ENDE*/
 					
