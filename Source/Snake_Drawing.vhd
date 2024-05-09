@@ -47,8 +47,8 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			BTN_RIGHT_SYNC						:		std_logic_vector (1 downto 0);
 			signal			Update_Sig								:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1									:		std_logic := '0';
-			signal 			x													:	x_pos_arr := (others => 0);
-			signal 			y													:	y_pos_arr := (others => 0);
+			signal 			x													:	x_pos_arr := (40,others => 0);
+			signal 			y													:	y_pos_arr := (40,others => 0);
 			signal			lange											:		integer range 0 to 50	:= 2;
 				
 begin
@@ -133,30 +133,34 @@ begin
 							case Move_Direction is
 								when Links								=> 	x(0) <=	x(0) - stepsize_x;
 																							y(0) <= y(0);
+																							/*Detection for Left Screen Border*/
+																							if x(0) < 40 then
+																								x(0) <= x_range;
+																							end if;
 																						
 								when Rechts								=> 	x(0) <=	x(0) + stepsize_x;
 																							y(0) <= y(0);
+																							/*Detection for Right Screen Border*/
+																							if x(0) > (x_range-40)	then
+																								x(0) <= 0;
+																							end if;
 																						
 								when Up										=> 	y(0)	<=	y(0) - stepsize_y;
 																							x(0)	<=	x(0);
+																							/*Detection for Upper Screen Border*/
+																							if	y(0) < 40	then
+																								y(0)	<= y_range;
+																							end if;
 																							
 								when Down									=> 	y(0)	<=	y(0) + stepsize_y;
 																							x(0)	<=	x(0);
+																							/*Detection for lower Screen Border*/
+																							if y(0) > (y_range-40)	then
+																								y(0)	<= 0;
+																							end if;
 																							
 								when others								=> Null;
 							end case;
-							
-							/*Bildschirmrand detection*/
-							if x(0) > x_Range 	then
-								x(0) <= 0;
-							elsif	x(0) < 0			then
-								x(0)	<= x_Range;
-							elsif	y(0) < 0 			then
-								y(0) <=	y_range;
-							elsif	y(0) > y_range			then
-								y(0)	<=	0;
-							end if;
-							
 						end if;
 					end if;
 					/*FSM Moving ENDE*/
