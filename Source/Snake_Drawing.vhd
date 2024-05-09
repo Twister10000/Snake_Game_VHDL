@@ -54,7 +54,7 @@ architecture beh_snake_drawing of snake_drawing is
 begin
 
 
-		/*CLK_DIV Instantiation*/
+		/*CLK_DIV Instantiation start*/
 		CLK_div1	:	entity work.GEN_Clockdivider
 		generic map(
 			
@@ -64,6 +64,7 @@ begin
 			CLK  		=> 	vga_clk,
 			RST			=>	Reset,
 			Enable	=>	CLK_ENA_1);
+	/*CLK_DIV Instantiation end*/
 	
 	Snake_drawing	: process	(all)
 	
@@ -71,6 +72,8 @@ begin
 				-- Concurrent Signal Assignment (optional)
 				
 				if rising_edge(vga_clk) then
+					
+					/*Buttons Synchronisieren*/
 					BTN_LEFT_SYNC(0) <= BTN_LEFT;
 					BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
 					
@@ -84,24 +87,24 @@ begin
 						when others						=>	Null;
 					end case;
 							
-							/*FSM Direction*/ -- Update to Switch Case Statements!!!!
+							/*FSM Direction*/
 							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
 								case Move_Direction is
-									when Rechts						=>	Move_Direction <= Links; --Right and Left wechseln!
-									when Links						=>	Move_Direction <= Rechts;
-									when Up								=>	Move_Direction <= Rechts;
-									when Down							=>	Move_Direction <= Links;
-									when others						=>	Null;
+									when Rechts							=>	Move_Direction <= Links; --Right and Left wechseln!
+									when Links							=>	Move_Direction <= Rechts;
+									when Up									=>	Move_Direction <= Rechts;
+									when Down								=>	Move_Direction <= Links;
+									when others							=>	Null;
 								end case;
 
 							elsif BTN_LEFT_SYNC(1) = '0' and BTN_LEFT_SYNC(0) = '1' then
 								
 								case Move_Direction is
-									when Up								=>	Move_Direction	<= Down;
-									when Down							=>	Move_Direction	<= Up;
-									when Links						=>	Move_Direction	<= Up;
-									when Rechts						=>	Move_Direction	<= Down;
-									when others						=>	Null;
+									when Up									=>	Move_Direction	<= Down;
+									when Down								=>	Move_Direction	<= Up;
+									when Links							=>	Move_Direction	<= Up;
+									when Rechts							=>	Move_Direction	<= Down;
+									when others							=>	Null;
 								end case;
 							
 							end if;
@@ -123,12 +126,9 @@ begin
 							Update_sig <= '0';
 							
 							for i in 1 to lange loop
-								
 								x(i)	<=	x(i-1);
-								y(i)	<=	y(i-1);
-								
+								y(i)	<=	y(i-1);	
 							end loop;
-							
 							
 							case Move_Direction is
 								when Links								=> 	x(0) <=	x(0) - stepsize_x;
