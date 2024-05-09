@@ -62,8 +62,8 @@ begin
 					videoOn_apple  					=>	videoOn_game,
 					vga_clk									=>	vga_clk,
 					NewFrame_apple					=>	NewFrame_game,
-					Draw_apple							=>	Draw_Snake_In,
-					Reset										=>	Reset);
+					Draw_apple							=>	Draw_Apple_In,
+					Reset										=>	Reset
 			);
 			
 					
