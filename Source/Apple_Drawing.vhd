@@ -29,8 +29,7 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 	-- Declarations (optional)
 	
 		-- Declarations Own Var Types
-			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 1280;
-			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 1024;
+
 			
 		-- Constants
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
@@ -40,8 +39,8 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 		-- Declarations Signal
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal 			x_apple													:	x_pos_arr := (others => 0);
-			signal 			y_apple													:	y_pos_arr := (others => 0);
+			signal 			x_apple													:		integer	range 0 to 1280		:= 620;
+			signal 			y_apple													:		integer	range 0 to 1024		:= 492;
 begin
 
 	-- Process Statement (optional)
@@ -51,7 +50,15 @@ begin
 		begin
 			
 			if rising_edge(vga_clk)	then
-			
+				Draw_Apple	<=	'0';
+				if videoOn_apple = '1'	then
+					
+					if xpos_apple	> x_apple and xpos_apple < (x_apple + 40) then
+						if ypos_apple > y_apple and ypos_apple < (y_apple + 40) then -- Quadrat
+							Draw_Apple <= '1';
+						end if;
+					end if;
+				end if;
 			end if;
 			
 		end process Apple_Drawing;
