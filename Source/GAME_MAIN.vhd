@@ -54,7 +54,18 @@ begin
 					Draw_Snake							=>	Draw_Snake_In,
 					Reset										=>	Reset);
 					
-					
+	/*Apple_Drawing Instantiation*/
+		Apple_Drawing	: entity	work.Apple_Drawing
+			port map(
+					xpos_apple     					=>	xpos_game,
+					ypos_apple     					=>	ypos_game,
+					videoOn_apple  					=>	videoOn_game,
+					vga_clk									=>	vga_clk,
+					NewFrame_apple					=>	NewFrame_game,
+					Draw_apple							=>	Draw_Snake_In,
+					Reset										=>	Reset);
+			);
+			
 					
 				Game_Main : process(all)
 				
