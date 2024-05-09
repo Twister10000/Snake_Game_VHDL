@@ -45,6 +45,16 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 begin
 
 	-- Process Statement (optional)
+	
+	Apple_Drawing : process(all)
+	
+		begin
+			
+			if rising_edge(vga_clk)	then
+			
+			end if;
+			
+		end process Apple_Drawing;
 
 	-- Concurrent Procedure Call (optional)
 
