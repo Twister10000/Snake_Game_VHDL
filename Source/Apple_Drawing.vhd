@@ -39,7 +39,7 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 		-- Declarations Signal
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal 			x_apple													:		integer	range 0 to 1280		:= 620;
+			signal 			x_apple													:		integer	range 0 to 1280		:= 600;
 			signal 			y_apple													:		integer	range 0 to 1024		:= 492;
 begin
 
