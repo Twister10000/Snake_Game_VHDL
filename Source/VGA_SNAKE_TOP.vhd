@@ -42,7 +42,8 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			videoOn_top  					:  	std_logic;               							-- 1 = Bildbereich
 		signal			vga_clk								:		std_logic;
 		signal			NewFrame_top					:		std_logic;
-		signal			Draw_Snake						:		std_logic	:= '0';
+		signal			Draw_Snake						:		std_logic	:= 	'0';
+		signal			Draw_Apple						:		std_logic	:=	'0';
 
 begin
 		/*VGA_SYNC Instantiation*/
@@ -66,19 +67,20 @@ begin
 			inclk0 	=> clk,
 			c0			=> vga_clk);
 					
-		/*Snake_Drawing Instantiation*/
+		/*Game_Main Instantiation*/
 		
-		Snake_Drawing	:	entity	work.snake_Drawing
+		Game_Main	:	entity	work.Game_Main
 			port map (
-					xpos_snake     				=>	xpos_top,
-					ypos_snake     				=>	ypos_top,
-					BTN_LEFT							=>	BTN_LEFT,
-					BTN_RIGHT							=>	BTN_RIGHT,
-					videoOn_snake  				=>	videoOn_top,
-					vga_clk								=>	vga_clk,
-					NewFrame_snake				=>	NewFrame_top,
-					Draw_Snake						=>	Draw_Snake,
-					Reset									=>	Reset);
+					xpos_game     						=>	xpos_top,
+					ypos_game     						=>	ypos_top,
+					BTN_LEFT									=>	BTN_LEFT,
+					BTN_RIGHT									=>	BTN_RIGHT,
+					videoOn_game  						=>	videoOn_top,
+					vga_clk										=>	vga_clk,
+					NewFrame_game							=>	NewFrame_top,
+					Draw_Snake_Out						=>	Draw_Snake,
+					Draw_Apple_Out						=>	Draw_Apple,
+					Reset											=>	Reset);
 		
 	-- Process Statement (optional)
 		Drawing	:	process(all)
@@ -100,6 +102,11 @@ begin
 					if Draw_Snake = '1' then -- Schlange zeichnen
 						G <= x"F";
 					end if;
+					
+					if	Draw_Apple	= '1'	then
+						R <= x"F";
+					end if;
+					
 					if ypos_top	= 512 then
 						B	<= x"F";
 						R <= x"8";
