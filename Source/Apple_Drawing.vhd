@@ -20,7 +20,9 @@ entity Apple_Drawing is
 		-- Inout ports
 
 		-- Output ports
-			Draw_Apple							: out 	std_logic := 	'0'
+			Draw_Apple									: out 	std_logic := 	'0';
+			x_Apple_OUT									:	out		integer	range	0	to	2000	:=	0;
+			y_Apple_OUT									:	out		integer	range	0	to	2000	:=	0
 	);
 end Apple_Drawing;
 
@@ -51,6 +53,8 @@ begin
 			
 			if rising_edge(vga_clk)	then
 				Draw_Apple	<=	'0';
+				x_apple_OUT	<= 	x_Apple;
+				y_apple_OUT	<=	y_apple;
 				if videoOn_apple = '1'	then
 					
 					if xpos_apple	> x_apple and xpos_apple < (x_apple + 40) then

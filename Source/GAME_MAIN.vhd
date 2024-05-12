@@ -35,8 +35,10 @@ architecture beh_Game_Main of Game_Main is
 	-- Declarations (optional)
 	-- Signal Declarations
 	
-	signal 			Draw_Apple_In						:	std_logic	:= '0';
-	signal 			Draw_Snake_In						:	std_logic	:= '0';	
+	signal 			Draw_Apple_In							:	std_logic	:= '0';
+	signal 			Draw_Snake_In							:	std_logic	:= '0';
+	signal			x_Apple_Game							:	integer range	0	to	2000 := 0;
+	signal			y_Apple_Game							:	integer range	0	to	2000 := 0;
 
 begin
 
@@ -52,7 +54,9 @@ begin
 					vga_clk									=>	vga_clk,
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
-					Reset										=>	Reset);
+					Reset										=>	Reset,
+					xpos_Apple							=>	x_apple_Game,
+					ypos_Apple							=>	y_apple_Game);
 					
 	/*Apple_Drawing Instantiation*/
 		Apple_Drawing	: entity	work.Apple_Drawing
@@ -63,7 +67,9 @@ begin
 					vga_clk									=>	vga_clk,
 					NewFrame_apple					=>	NewFrame_game,
 					Draw_apple							=>	Draw_Apple_In,
-					Reset										=>	Reset
+					Reset										=>	Reset,
+					x_Apple_OUT							=>	x_apple_Game,
+					y_apple_Out							=>	y_apple_Game
 			);
 			
 					

@@ -10,6 +10,8 @@ entity snake_drawing is
 		-- Input ports
 			xpos_snake     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 			ypos_snake     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
+			xpos_Apple							:	in		integer	range	0	to 1800;
+			ypos_Apple							:	in		integer	range	0	to 1800;
 			BTN_LEFT								:	in	 	std_logic;
 			BTN_RIGHT								:	in	 	std_logic;
 			Reset										:	in		std_logic;
@@ -30,8 +32,8 @@ architecture beh_snake_drawing of snake_drawing is
 	-- Declarations (optional)
 		-- Declarations Own Var Types
 			type 				Direction						is	(Rechts, Links, UP, Down);
-			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 1280;
-			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 1024;
+			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 2000;
+			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 2000;
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 56e6;--27e6; 		-- CLK MAX COUNTER
@@ -45,6 +47,7 @@ architecture beh_snake_drawing of snake_drawing is
 			signal 			Move_Direction									:		Direction := Rechts;
 			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0);
 			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0);
+			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
 			signal 			x_snake													:	x_pos_arr := (others => 0);
@@ -79,6 +82,11 @@ begin
 					
 					BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
 					BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
+					
+					BTN_RESET_SYNC(0) <= Reset;
+					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
+					
+					
 					
 					Draw_Snake 	<= 	'0';			
 					
