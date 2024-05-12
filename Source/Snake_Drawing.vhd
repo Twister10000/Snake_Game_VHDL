@@ -50,9 +50,10 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal 			x_snake													:	x_pos_arr := (others => 0);
-			signal 			y_snake													:	y_pos_arr := (others => 0);
-			signal			lange														:		integer range 0 to 50	:= 2;
+			signal 			x_snake													:	x_pos_arr := (0,0,others => 1900);
+			signal 			y_snake													:	y_pos_arr := (0,0,others => 1900);
+			signal			lange														:		integer range 0 to 50	:= 40;
+			signal			Test														:		integer	range	0	to 150	:= 2;
 				
 begin
 
@@ -114,7 +115,8 @@ begin
 									when Rechts							=>	Move_Direction	<= Down;
 									when others							=>	Null;
 								end case;
-							
+--							elsif	(xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
+--									Test	<= Test + 1;
 							end if;
 							/*FSM Direction END*/
 				
@@ -133,9 +135,17 @@ begin
 						if Update_sig = '1' then
 							Update_sig <= '0';
 							
+							if (xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
+								Test	<= Test + 1;
+							end if;
 							for i in 1 to lange loop
-								x_snake(i)	<=	x_snake(i-1);
-								y_snake(i)	<=	y_snake(i-1);	
+								if	i < Test	then
+									x_snake(i)	<=	x_snake(i-1);
+									y_snake(i)	<=	y_snake(i-1);	
+								else
+									x_snake(i)	<= x_snake(i);
+									y_snake(i)	<= y_snake(i);
+								end if;
 							end loop;
 							
 							case Move_Direction is
