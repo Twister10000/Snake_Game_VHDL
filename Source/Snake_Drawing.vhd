@@ -42,6 +42,7 @@ architecture beh_snake_drawing of snake_drawing is
 			constant		Stepsize_y						:		integer range 0 to 128		:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 			constant		Y_range								:		integer	range 0 to 1024		:= 984;
+			constant		lange									:		integer range 0 to 50	:= 40;
 			
 			
 		-- Declarations Signal
@@ -53,7 +54,6 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			CLK_ENA_1												:		std_logic := '0';
 			signal 			x_snake													:	x_pos_arr := (0,0,others => 1900);
 			signal 			y_snake													:	y_pos_arr := (0,0,others => 1900);
-			signal			lange														:		integer range 0 to 50	:= 40;
 			signal			Test														:		integer	range	0	to 150	:= 2;
 				
 begin

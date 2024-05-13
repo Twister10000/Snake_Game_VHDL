@@ -58,8 +58,8 @@ begin
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
 					Reset										=>	Reset,
-					x_pos_snake						=>	x_snake_Game,
-					y_pos_snake						=>	y_snake_Game,
+					x_pos_snake							=>	x_snake_Game,
+					y_pos_snake							=>	y_snake_Game,
 					add_snake								=>	add);
 					
 	/*Apple_Drawing Instantiation*/
@@ -85,7 +85,7 @@ begin
 							
 							Draw_Apple_Out <= Draw_Apple_In;
 							Draw_Snake_Out <=	Draw_Snake_In;
-							
+							/*Schlangen Wachstum wenn Schlange Apfel isst*/
 							if x_apple_Game = x_snake_Game and y_apple_Game = y_snake_Game	then
 								Add <= '1';
 							else
