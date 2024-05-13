@@ -10,20 +10,21 @@ entity snake_drawing is
 		-- Input ports
 			xpos_snake     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 			ypos_snake     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-			xpos_Apple							:	in		integer	range	0	to 1800;
-			ypos_Apple							:	in		integer	range	0	to 1800;
 			BTN_LEFT								:	in	 	std_logic;
 			BTN_RIGHT								:	in	 	std_logic;
 			Reset										:	in		std_logic;
 			videoOn_snake  					:	in  	std_logic;               							-- 1 = Bildbereich
 			vga_clk									:	in		std_logic;
 			NewFrame_snake					:	in		std_logic;
+			Add_Snake								:	in 		std_logic;
 
 		-- Inout ports
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0'
+			Draw_Snake							: out 	std_logic := 	'0';
+			x_pos_snake							:	out		integer	range	0	to 1800;
+			y_pos_snake							:	out		integer	range	0	to 1800
 	);
 end snake_drawing;
 
@@ -87,9 +88,12 @@ begin
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
 					
-					
+					x_pos_snake	<= x_snake(0);
+					y_pos_snake	<= y_snake(0);
 					
 					Draw_Snake 	<= 	'0';			
+					
+
 					
 					case CLK_ENA_1 is
 						when '1'							=>	Update_sig	<= '1';
@@ -115,8 +119,6 @@ begin
 									when Rechts							=>	Move_Direction	<= Down;
 									when others							=>	Null;
 								end case;
---							elsif	(xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
---									Test	<= Test + 1;
 							end if;
 							/*FSM Direction END*/
 				
@@ -134,10 +136,12 @@ begin
 					if NewFrame_snake = '1' then
 						if Update_sig = '1' then
 							Update_sig <= '0';
-							
-							if (xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
-								Test	<= Test + 1;
+							if Add_Snake = '1' then
+								Test <= Test + 1;
 							end if;
+--							if (xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
+--								Test	<= Test + 1;
+--							end if;
 							for i in 1 to lange loop
 								if	i < Test	then
 									x_snake(i)	<=	x_snake(i-1);

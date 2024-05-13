@@ -37,8 +37,11 @@ architecture beh_Game_Main of Game_Main is
 	
 	signal 			Draw_Apple_In							:	std_logic	:= '0';
 	signal 			Draw_Snake_In							:	std_logic	:= '0';
+	signal 			Add												:	std_logic	:= '0';
 	signal			x_Apple_Game							:	integer range	0	to	2000 := 0;
 	signal			y_Apple_Game							:	integer range	0	to	2000 := 0;
+	signal			x_snake_Game							:	integer range	0	to	2000 := 0;
+	signal			y_snake_Game							:	integer range	0	to	2000 := 0;
 
 begin
 
@@ -55,8 +58,9 @@ begin
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
 					Reset										=>	Reset,
-					xpos_Apple							=>	x_apple_Game,
-					ypos_Apple							=>	y_apple_Game);
+					x_pos_snake						=>	x_snake_Game,
+					y_pos_snake						=>	y_snake_Game,
+					add_snake								=>	add);
 					
 	/*Apple_Drawing Instantiation*/
 		Apple_Drawing	: entity	work.Apple_Drawing
@@ -81,6 +85,12 @@ begin
 							
 							Draw_Apple_Out <= Draw_Apple_In;
 							Draw_Snake_Out <=	Draw_Snake_In;
+							
+							if x_apple_Game = x_snake_Game and y_apple_Game = y_snake_Game	then
+								Add <= '1';
+							else
+								Add <= '0';
+							end if;
 							
 							
 						end if;
