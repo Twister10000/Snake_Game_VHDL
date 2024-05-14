@@ -146,9 +146,14 @@ begin
 								if	i < Test	then
 									x_snake(i)	<=	x_snake(i-1);
 									y_snake(i)	<=	y_snake(i-1);	
-								else
-									x_snake(i)	<= x_snake(i);
-									y_snake(i)	<= y_snake(i);
+--								else
+--									x_snake(i)	<= x_snake(i);
+--									y_snake(i)	<= y_snake(i);
+								end if;
+							end loop;
+							for i in 1 to lange loop
+								if x_snake(0) = x_snake(i) and y_snake(0) = y_Snake(i)	then
+									Test <= 2;
 								end if;
 							end loop;
 							
