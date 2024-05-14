@@ -95,4 +95,5 @@ set_global_assignment -name VHDL_FILE Generic_CLK_DIV.vhd
 set_global_assignment -name VHDL_FILE Snake_Drawing.vhd
 set_global_assignment -name VHDL_FILE GAME_MAIN.vhd
 set_global_assignment -name VHDL_FILE Apple_Drawing.vhd
+set_global_assignment -name SDC_FILE VGA_DEMO.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

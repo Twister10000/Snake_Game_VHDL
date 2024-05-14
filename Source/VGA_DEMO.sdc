@@ -25,6 +25,8 @@
 
 create_clock -name "clk" -period 20.000ns [get_ports {clk}] -waveform {0.000 10.000}
 
+set vga_clk { PLL1|altpll_component|auto_generated|pll1|clk[0] } 
+
 
 # Automatically constrain PLL and other generated clocks
 derive_pll_clocks -create_base_clocks
@@ -34,14 +36,14 @@ derive_clock_uncertainty
 
 # tsu/th constraints
 
-set_input_delay -clock "clk" -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
-set_input_delay -clock "clk" -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
+set_input_delay -clock $vga_clk -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
+set_input_delay -clock $vga_clk -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
 
 
 # tco constraints
 
-set_output_delay -clock "clk" -max 0ns [get_ports {B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
-set_output_delay -clock "clk" -min -0.000ns [get_ports { B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
+set_output_delay -clock $vga_clk -max 0ns [get_ports { B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
+set_output_delay -clock $vga_clk -min -0.000ns [get_ports { B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
 
 
 # tpd constraints
