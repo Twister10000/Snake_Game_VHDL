@@ -146,13 +146,12 @@ begin
 								if	i < Test	then
 									x_snake(i)	<=	x_snake(i-1);
 									y_snake(i)	<=	y_snake(i-1);	
---								else
---									x_snake(i)	<= x_snake(i);
---									y_snake(i)	<= y_snake(i);
 								end if;
 							end loop;
+							/*For Loop for Snake Crasch Detection*/
 							for i in 1 to lange loop
 								if x_snake(0) = x_snake(i) and y_snake(0) = y_Snake(i)	then
+									/*Test Code Final = Game Mode go to End Screen*/
 									Test <= 2;
 									x_snake <= (others 		=>	1900);
 									y_snake	<= (others		=>	1900);
@@ -160,8 +159,6 @@ begin
 									x_snake(1)	<=	0;
 									y_snake(0)	<= 	0;
 									y_snake(1)	<=	0;
-									
-
 								end if;
 							end loop;
 							
