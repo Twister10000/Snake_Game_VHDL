@@ -5,6 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
+use work.Game_State_PKG.all;
 
 entity VGA_SNAKE_TOP is
 
@@ -37,14 +38,16 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 
 		-- Declarations Signal
 
-		signal			xpos_top     					:  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
-		signal			ypos_top     					:  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich	
-		signal			videoOn_top  					:  	std_logic;               							-- 1 = Bildbereich
-		signal			vga_clk								:		std_logic;
-		signal			NewFrame_top					:		std_logic;
-		signal			Draw_Snake						:		std_logic	:= 	'0';
+		signal			xpos_top     							:  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
+		signal			ypos_top     							:  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich	
+		signal			videoOn_top  							:  	std_logic;               							-- 1 = Bildbereich
+		signal			vga_clk										:		std_logic;
+		signal			NewFrame_top							:		std_logic;
+		signal			Game_On										:		std_logic := '0';
+		signal			Draw_Snake								:		std_logic	:= 	'0';
 		signal			Draw_Snake_Zero						:		std_logic	:= 	'0';
-		signal			Draw_Apple						:		std_logic	:=	'0';
+		signal			Draw_Apple								:		std_logic	:=	'0';
+		signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 
 begin
 		/*VGA_SYNC Instantiation*/
@@ -94,22 +97,34 @@ begin
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
-				
+				Game_On	<=	'0';
+				BTN_RESET_SYNC(0) <= Reset;
+				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
+					
+
 				if videoOn_top = '1' then
 					
+					case	Game_State	is
+						when	Startscreen		=> B <= x"F";
+						when	Game					=> Game_On <= '1';
+						when	Endscreen			=> R <= x"F";	
+						when	others				=> Null;					
+					end case;
 					if xpos_top = 640 then
 						R <= x"F";
 					end if;
+					if Game_On	= '1' then
+						if Draw_Snake = '1' then -- Schlange zeichnen
+							G <= x"F";
+						end if;
+						if Draw_Snake_Zero = '1' then -- Schlange zeichnen
+							G <= x"F";
+						end if;
+						if	Draw_Apple	= '1'	then
+							R <= x"F";
+						end if;
+					end if;
 					
-					if Draw_Snake = '1' then -- Schlange zeichnen
-						G <= x"F";
-					end if;
-					if Draw_Snake_Zero = '1' then -- Schlange zeichnen
-						G <= x"F";
-					end if;
-					if	Draw_Apple	= '1'	then
-						R <= x"F";
-					end if;
 					
 					if ypos_top	= 512 then
 						B	<= x"F";

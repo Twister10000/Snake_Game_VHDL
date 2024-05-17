@@ -6,6 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
 use	work.Movement_PKG.all;
+use work.Game_State_PKG.all;
 
 -- Library Clause(s) (optional)
 -- Use Clause(s) (optional)
@@ -58,7 +59,6 @@ begin
 					vga_clk									=>	vga_clk,
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
-					Draw_Snake_Zero					=>	Draw_Snake_Zero_In,
 					Reset										=>	Reset,
 					add_snake								=>	add);
 					
@@ -85,14 +85,33 @@ begin
 							
 							Draw_Apple_Out 				<=	Draw_Apple_In;
 							Draw_Snake_Out 				<=	Draw_Snake_In;
-							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero_In;
-							/*Schlangen Wachstum wenn Schlange Apfel isst*/
-
-							if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
-								Add <= '1';
-							else
-								Add <= '0';
+							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
+							
+							
+							BTN_RESET_SYNC(0) <= Reset;
+							BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
+--							/*Schlangen Wachstum wenn Schlange Apfel isst*/
+--							if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
+--								Add <= '1';
+--							else
+--								Add <= '0';
+--							end if;
+							
+							if BTN_RESET_SYNC(1) = '0' and BTN_RESET_SYNC(0) = '1' then
+								case	Game_State	is
+									when	Startscreen		=> Game_State <= 	Game;
+									when	Endscreen			=> Game_State	<=	startscreen;	
+									when	others				=> Null;
+								end case;
 							end if;
+							if Game_state	= Game	then
+							
+														/*Schlangen Wachstum wenn Schlange Apfel isst*/
+								if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
+									Add <= '1';
+								else
+									Add <= '0';
+								end if;
 							
 						end if;
 						

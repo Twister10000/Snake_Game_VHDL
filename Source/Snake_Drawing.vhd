@@ -3,6 +3,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
 use	work.Movement_PKG.all;
+use work.Game_State_PKG.all;
+
 
 entity snake_drawing is
 	
@@ -84,9 +86,18 @@ begin
 					
 					Draw_Snake 				<= 	'0';
 					Draw_Snake_Zero		<=	'0';
+					if Game_state = startscreen	then
+						Test	<= 2;
+						x_snake <= (others 		=>	1900);
+						y_snake	<= (others		=>	1900);
+						x_snake(0)	<= 	40;
+						x_snake(1)	<=	0;
+						y_snake(0)	<= 	0;
+						y_snake(1)	<=	0;
+					end if;
 					
+					Draw_Snake 				<= 	'0';
 
-					
 					case CLK_ENA_1 is
 						when '1'							=>	Update_sig	<= '1';
 						when others						=>	Null;
@@ -95,7 +106,7 @@ begin
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 				
 					--if videoOn_snake = '1' then		
-						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
+						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
