@@ -5,6 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
+use	work.Movement_PKG.all;
 
 -- Library Clause(s) (optional)
 -- Use Clause(s) (optional)
@@ -40,8 +41,6 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Add												:	std_logic	:= '0';
 	signal			x_Apple_Game							:	integer range	0	to	2000 := 0;
 	signal			y_Apple_Game							:	integer range	0	to	2000 := 0;
-	signal			x_snake_Game							:	integer range	0	to	2000 := 0;
-	signal			y_snake_Game							:	integer range	0	to	2000 := 0;
 
 begin
 
@@ -58,8 +57,6 @@ begin
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
 					Reset										=>	Reset,
-					x_pos_snake							=>	x_snake_Game,
-					y_pos_snake							=>	y_snake_Game,
 					add_snake								=>	add);
 					
 	/*Apple_Drawing Instantiation*/
@@ -86,12 +83,12 @@ begin
 							Draw_Apple_Out <= Draw_Apple_In;
 							Draw_Snake_Out <=	Draw_Snake_In;
 							/*Schlangen Wachstum wenn Schlange Apfel isst*/
-							if x_apple_Game = x_snake_Game and y_apple_Game = y_snake_Game	then
+
+							if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
 								Add <= '1';
 							else
 								Add <= '0';
 							end if;
-							
 							
 						end if;
 						

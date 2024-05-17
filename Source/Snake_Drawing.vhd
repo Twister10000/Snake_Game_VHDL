@@ -1,7 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.std_logic_signed.all;
+use ieee.std_logic_unsigned.all;
+use	work.Movement_PKG.all;
 
 entity snake_drawing is
 	
@@ -22,19 +23,13 @@ entity snake_drawing is
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0';
-			x_pos_snake							:	out		integer	range	0	to 1800;
-			y_pos_snake							:	out		integer	range	0	to 1800
-	);
+			Draw_Snake							: out 	std_logic := 	'0');
 end snake_drawing;
 
 architecture beh_snake_drawing of snake_drawing is
 
 	-- Declarations (optional)
 		-- Declarations Own Var Types
-			type 				Direction						is	(Rechts, Links, UP, Down);
-			type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 2000;
-			type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 2000;
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 56e6;--27e6; 		-- CLK MAX COUNTER
@@ -52,8 +47,6 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal 			x_snake													:	x_pos_arr := (0,0,others => 1900);
-			signal 			y_snake													:	y_pos_arr := (0,0,others => 1900);
 			signal			Test														:		integer	range	0	to 150	:= 2;
 				
 begin
@@ -88,9 +81,6 @@ begin
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
 					
-					x_pos_snake	<= x_snake(0);
-					y_pos_snake	<= y_snake(0);
-					
 					Draw_Snake 	<= 	'0';			
 					
 
@@ -99,28 +89,8 @@ begin
 						when '1'							=>	Update_sig	<= '1';
 						when others						=>	Null;
 					end case;
-							
-							/*FSM Direction*/
-							if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
-								case Move_Direction is
-									when Rechts							=>	Move_Direction <= Links; --Right and Left wechseln!
-									when Links							=>	Move_Direction <= Rechts;
-									when Up									=>	Move_Direction <= Rechts;
-									when Down								=>	Move_Direction <= Links;
-									when others							=>	Null;
-								end case;
-
-							elsif BTN_LEFT_SYNC(1) = '0' and BTN_LEFT_SYNC(0) = '1' then
-								
-								case Move_Direction is
-									when Up									=>	Move_Direction	<= Down;
-									when Down								=>	Move_Direction	<= Up;
-									when Links							=>	Move_Direction	<= Up;
-									when Rechts							=>	Move_Direction	<= Down;
-									when others							=>	Null;
-								end case;
-							end if;
-							/*FSM Direction END*/
+						/*FSM Direction Function*/
+					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 				
 					if videoOn_snake = '1' then		
 						
