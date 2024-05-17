@@ -1,0 +1,42 @@
+-- A library clause declares a name as a library.  It 
+-- does not create the library; it simply forward declares 
+-- it. 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_signed.all;
+
+-- Library Clause(s) (optional)
+-- Use Clause(s) (optional)
+
+package <package_name> is
+
+	-- Type Declaration (optional)
+
+	-- Subtype Declaration (optional)
+
+	-- Constant Declaration (optional)
+
+	-- Signal Declaration (optional)
+
+	-- Component Declaration (optional)
+
+end <package_name>;
+
+package body <package_name> is
+
+	-- Type Declaration (optional)
+
+	-- Subtype Declaration (optional)
+
+	-- Constant Declaration (optional)
+
+	-- Function Declaration (optional)
+
+	-- Function Body (optional)
+
+	-- Procedure Declaration (optional)
+
+	-- Procedure Body (optional)
+
+end <package_name>;
