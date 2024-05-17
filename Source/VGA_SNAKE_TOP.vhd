@@ -32,12 +32,14 @@ end VGA_SNAKE_TOP;
 
 
 architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
-		-- Declarations Own Var Types
-
 		-- Declarations Constant
+		constant MAX_Y : integer := 6; -- number of Pixels in y dir
+		constant MAX_X : integer := 6; -- number of Pixels in x dir
+		
+		-- Declarations Own Var Types
+		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);
 
 		-- Declarations Signal
-
 		signal			xpos_top     							:  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 		signal			ypos_top     							:  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich	
 		signal			videoOn_top  							:  	std_logic;               							-- 1 = Bildbereich
@@ -49,6 +51,29 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Apple								:		std_logic	:=	'0';
 		signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 
+		
+		-- Declarations BoxGraphics
+		signal			BoxGraphics_R							:	graphicsRGB	:=(
+															(x"F", x"F", x"F", x"F", x"F", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"F", x"F", x"F", x"F", x"F"));
+		signal			BoxGraphics_G							:	graphicsRGB	:=(
+															(x"F", x"F", x"F", x"F", x"F", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"F", x"F", x"F", x"F", x"F"));
+		signal			BoxGraphics_B							:	graphicsRGB	:=(
+															(x"F", x"F", x"F", x"F", x"F", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"0", x"0", x"0", x"0", x"F"),
+															(x"F", x"F", x"F", x"F", x"F", x"F"));
 begin
 		/*VGA_SYNC Instantiation*/
 	 VGA_SYNC : entity work.vga_sync
@@ -110,6 +135,21 @@ begin
 						when	Endscreen			=> R <= x"F";	
 						when	others				=> Null;					
 					end case;
+					
+					if Game_State = Startscreen then
+						
+						if xpos_top	>= 300 and xpos_top < 300 + MAX_X then
+							if	ypos_top >= 412 and ypos_top	< 412 + MAX_Y	then
+								R <=	BoxGraphics_R(ypos_top - 412, xpos_top - 300);
+								G	<=	BoxGraphics_G(ypos_top - 412, xpos_top - 300);
+								B	<=	BoxGraphics_B(ypos_top - 412, xpos_top - 300);
+							end if;
+						
+						end if;
+						
+					end if;
+					
+					
 					if xpos_top = 640 then
 						R <= x"F";
 					end if;
