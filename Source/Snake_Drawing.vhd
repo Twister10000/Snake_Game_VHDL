@@ -23,7 +23,8 @@ entity snake_drawing is
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0');
+			Draw_Snake							: out 	std_logic := 	'0';
+			Draw_Snake_Zero					:	out		std_logic	:=	'0');
 end snake_drawing;
 
 architecture beh_snake_drawing of snake_drawing is
@@ -81,7 +82,8 @@ begin
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
 					
-					Draw_Snake 	<= 	'0';			
+					Draw_Snake 				<= 	'0';
+					Draw_Snake_Zero		<=	'0';
 					
 
 					
@@ -94,7 +96,7 @@ begin
 				
 					if videoOn_snake = '1' then		
 						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
-						for i in 0 to lange	loop
+						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
 									Draw_Snake <= '1';
@@ -109,29 +111,14 @@ begin
 							if Add_Snake = '1' then
 								Test <= Test + 1;
 							end if;
---							if (xpos_Apple = x_snake(0)) and (ypos_Apple = y_snake(0))	then
---								Test	<= Test + 1;
---							end if;
+
 							for i in 1 to lange loop
 								if	i < Test	then
 									x_snake(i)	<=	x_snake(i-1);
 									y_snake(i)	<=	y_snake(i-1);	
 								end if;
 							end loop;
-							/*For Loop for Snake Crasch Detection*/
-							for i in 1 to lange loop
-								if x_snake(0) = x_snake(i) and y_snake(0) = y_Snake(i)	then
-									/*Test Code Final = Game Mode go to End Screen*/
-									Test <= 2;
-									x_snake <= (others 		=>	1900);
-									y_snake	<= (others		=>	1900);
-									x_snake(0)	<= 	0;
-									x_snake(1)	<=	0;
-									y_snake(0)	<= 	0;
-									y_snake(1)	<=	0;
-								end if;
-							end loop;
-							
+
 							case Move_Direction is
 								when Links								=> 	x_snake(0) <=	x_snake(0) - stepsize_x;
 																							y_snake(0) <= y_snake(0);
@@ -163,17 +150,27 @@ begin
 																							
 								when others								=> Null;
 							end case;
-						end if;
-						
-						
 
-						
-					end if;
-					/*FSM Moving ENDE*/
-					
-					
-					
-				end if;
+						end if; -- Update_Sig
+
+					end if; -- NewFrame_snake
+								/*Snake Crasch Detection*/
+							if xpos_snake	> x_snake(0) and xpos_snake < (x_snake(0)+40) then
+								if ypos_snake > y_snake(0) and ypos_snake < (y_snake(0)+40) then -- Quadrat
+									Draw_Snake_Zero <= '1';
+								end if;
+							end if;
+							if Draw_Snake and Draw_Snake_Zero	then	
+									Test	<= 2;
+									x_snake <= (others 		=>	1900);
+									y_snake	<= (others		=>	1900);
+									x_snake(0)	<= 	0;
+									x_snake(1)	<=	0;
+									y_snake(0)	<= 	0;
+									y_snake(1)	<=	0;
+							end if;
+							/*Snake Crasch Detection END*/
+				end if; -- rising_edge vga_clk 
 		
 		end process Snake_drawing;
 	

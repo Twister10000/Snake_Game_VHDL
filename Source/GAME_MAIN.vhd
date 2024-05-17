@@ -27,8 +27,9 @@ entity Game_Main is
 
 
 		-- Output ports
-			Draw_Snake_Out							: out 	std_logic := 	'0';
-			Draw_Apple_Out							:	out		std_logic	:=	'0');
+			Draw_Snake_Out									: out 	std_logic := 	'0';
+			Draw_Snake_Zero_Out							: out 	std_logic := 	'0';
+			Draw_Apple_Out									:	out		std_logic	:=	'0');
 end Game_Main;
 
 architecture beh_Game_Main of Game_Main is
@@ -36,11 +37,12 @@ architecture beh_Game_Main of Game_Main is
 	-- Declarations (optional)
 	-- Signal Declarations
 	
-	signal 			Draw_Apple_In							:	std_logic	:= '0';
-	signal 			Draw_Snake_In							:	std_logic	:= '0';
-	signal 			Add												:	std_logic	:= '0';
-	signal			x_Apple_Game							:	integer range	0	to	2000 := 0;
-	signal			y_Apple_Game							:	integer range	0	to	2000 := 0;
+	signal 			Draw_Apple_In										:	std_logic	:= '0';
+	signal 			Draw_Snake_In										:	std_logic	:= '0';
+	signal 			Draw_Snake_Zero_In							:	std_logic	:= '0';
+	signal 			Add															:	std_logic	:= '0';
+	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;
+	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;
 
 begin
 
@@ -56,6 +58,7 @@ begin
 					vga_clk									=>	vga_clk,
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
+					Draw_Snake_Zero					=>	Draw_Snake_Zero_In,
 					Reset										=>	Reset,
 					add_snake								=>	add);
 					
@@ -80,8 +83,9 @@ begin
 						
 						if rising_edge(vga_clk)	then
 							
-							Draw_Apple_Out <= Draw_Apple_In;
-							Draw_Snake_Out <=	Draw_Snake_In;
+							Draw_Apple_Out 				<=	Draw_Apple_In;
+							Draw_Snake_Out 				<=	Draw_Snake_In;
+							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero_In;
 							/*Schlangen Wachstum wenn Schlange Apfel isst*/
 
 							if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then

@@ -43,6 +43,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			vga_clk								:		std_logic;
 		signal			NewFrame_top					:		std_logic;
 		signal			Draw_Snake						:		std_logic	:= 	'0';
+		signal			Draw_Snake_Zero						:		std_logic	:= 	'0';
 		signal			Draw_Apple						:		std_logic	:=	'0';
 
 begin
@@ -79,6 +80,7 @@ begin
 					vga_clk										=>	vga_clk,
 					NewFrame_game							=>	NewFrame_top,
 					Draw_Snake_Out						=>	Draw_Snake,
+					Draw_Snake_Zero_Out				=>	Draw_Snake_Zero,
 					Draw_Apple_Out						=>	Draw_Apple,
 					Reset											=>	Reset);
 		
@@ -102,7 +104,9 @@ begin
 					if Draw_Snake = '1' then -- Schlange zeichnen
 						G <= x"F";
 					end if;
-					
+					if Draw_Snake_Zero = '1' then -- Schlange zeichnen
+						G <= x"F";
+					end if;
 					if	Draw_Apple	= '1'	then
 						R <= x"F";
 					end if;
