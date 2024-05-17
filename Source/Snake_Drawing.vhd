@@ -44,9 +44,9 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Declarations Signal
 			signal 			Move_Direction									:		Direction := Rechts;
-			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0);
-			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0);
-			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
+			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0)	:= "11";
+			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0)	:= "11";
+			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0)	:= "11";
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
 			signal			Test														:		integer	range	0	to 40	:= 2;

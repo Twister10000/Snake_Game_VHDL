@@ -42,7 +42,7 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Draw_Snake_In										:	std_logic	:=	'0';
 	signal			Draw_Snake_Zero									:	std_logic	:=	'0';
 	signal 			Add															:	std_logic	:=	'0';
-	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0);
+	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;
 
