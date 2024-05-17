@@ -95,6 +95,8 @@ begin
 					
 					Draw_Snake 				<= 	'0';
 
+					if Game_state	= Game then
+					
 					case CLK_ENA_1 is
 						when '1'							=>	Update_sig	<= '1';
 						when others						=>	Null;
@@ -163,7 +165,7 @@ begin
 						end if; -- Update_Sig
 
 					--end if; -- NewFrame_snake
-
+					end if;
 				end if; -- rising_edge vga_clk 
 		
 		end process Snake_drawing;
