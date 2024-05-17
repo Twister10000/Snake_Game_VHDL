@@ -85,6 +85,7 @@ begin
 					
 					if Game_state = startscreen	then
 						Test	<= 2;
+						Move_Direction	<= Rechts;
 						x_snake <= (others 		=>	1900);
 						y_snake	<= (others		=>	1900);
 						x_snake(0)	<= 	40;
