@@ -102,8 +102,9 @@ begin
 						/*FSM Direction Function*/
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 				
-					--if videoOn_snake = '1' then		
-						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt*/
+					--if videoOn_snake = '1' then
+						
+						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
