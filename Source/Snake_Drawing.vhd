@@ -94,7 +94,7 @@ begin
 						/*FSM Direction Function*/
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 				
-					if videoOn_snake = '1' then		
+					--if videoOn_snake = '1' then		
 						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
@@ -103,9 +103,9 @@ begin
 								end if;
 							end if;
 						end loop;
-					end if;
+					--end if;
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
-					if NewFrame_snake = '1' then
+					--if NewFrame_snake = '1' then
 						if Update_sig = '1' then
 							Update_sig <= '0';
 							if Add_Snake = '1' then
@@ -153,7 +153,7 @@ begin
 
 						end if; -- Update_Sig
 
-					end if; -- NewFrame_snake
+					--end if; -- NewFrame_snake
 								/*Snake Crasch Detection*/
 							if xpos_snake	> x_snake(0) and xpos_snake < (x_snake(0)+40) then
 								if ypos_snake > y_snake(0) and ypos_snake < (y_snake(0)+40) then -- Quadrat
