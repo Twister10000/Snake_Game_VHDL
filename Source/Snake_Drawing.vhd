@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_signed.all;
 use	work.Movement_PKG.all;
 
 entity snake_drawing is
@@ -47,7 +47,7 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal			Test														:		integer	range	0	to 150	:= 2;
+			signal			Test														:		integer	range	0	to 40	:= 2;
 				
 begin
 
@@ -93,7 +93,7 @@ begin
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 				
 					if videoOn_snake = '1' then		
-						
+						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
 						for i in 0 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat

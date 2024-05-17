@@ -13,8 +13,8 @@ package Movement_PKG is
 
 	-- Type Declaration (optional)
 				type 				Direction						is	(Rechts, Links, UP, Down);
-				type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range 0 to 2000;
-				type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range 0 to 2000;
+				type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 2000;
+				type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 2000;
 
 	-- Subtype Declaration (optional)
 
