@@ -38,10 +38,11 @@ architecture beh_Game_Main of Game_Main is
 	-- Declarations (optional)
 	-- Signal Declarations
 	
-	signal 			Draw_Apple_In										:	std_logic	:= '0';
-	signal 			Draw_Snake_In										:	std_logic	:= '0';
-	signal 			Draw_Snake_Zero_In							:	std_logic	:= '0';
-	signal 			Add															:	std_logic	:= '0';
+	signal 			Draw_Apple_In										:	std_logic	:=	'0';
+	signal 			Draw_Snake_In										:	std_logic	:=	'0';
+	signal			Draw_Snake_Zero									:	std_logic	:=	'0';
+	signal 			Add															:	std_logic	:=	'0';
+	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0);
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;
 
@@ -82,7 +83,8 @@ begin
 				begin
 						
 						if rising_edge(vga_clk)	then
-							
+						
+							Draw_Snake_Zero 			<= '0';
 							Draw_Apple_Out 				<=	Draw_Apple_In;
 							Draw_Snake_Out 				<=	Draw_Snake_In;
 							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
@@ -113,7 +115,19 @@ begin
 									Add <= '0';
 								end if;
 							
-						end if;
+																						/*Snake Crasch Detection*/
+								if xpos_game	> x_snake(0) and xpos_game < (x_snake(0)+40) then
+									if ypos_game > y_snake(0) and ypos_game < (y_snake(0)+40) then -- Quadrat
+										Draw_Snake_Zero <= '1';
+									end if;
+								end if;
+								if Draw_Snake_In and Draw_Snake_Zero	then	
+										Game_state <= Endscreen;
+								end if;
+																						/*Snake Crasch Detection END*/
+							end if;
+
+						end if; -- VGA CLK
 						
 				end process Game_Main;
 	-- Process Statement (optional)

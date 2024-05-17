@@ -25,8 +25,7 @@ entity snake_drawing is
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0';
-			Draw_Snake_Zero					:	out		std_logic	:=	'0');
+			Draw_Snake							: out 	std_logic := 	'0');
 end snake_drawing;
 
 architecture beh_snake_drawing of snake_drawing is
@@ -84,8 +83,6 @@ begin
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
 					
-					Draw_Snake 				<= 	'0';
-					Draw_Snake_Zero		<=	'0';
 					if Game_state = startscreen	then
 						Test	<= 2;
 						x_snake <= (others 		=>	1900);
@@ -165,22 +162,7 @@ begin
 						end if; -- Update_Sig
 
 					--end if; -- NewFrame_snake
-								/*Snake Crasch Detection*/
-							if xpos_snake	> x_snake(0) and xpos_snake < (x_snake(0)+40) then
-								if ypos_snake > y_snake(0) and ypos_snake < (y_snake(0)+40) then -- Quadrat
-									Draw_Snake_Zero <= '1';
-								end if;
-							end if;
-							if Draw_Snake and Draw_Snake_Zero	then	
-									Test	<= 2;
-									x_snake <= (others 		=>	1900);
-									y_snake	<= (others		=>	1900);
-									x_snake(0)	<= 	0;
-									x_snake(1)	<=	0;
-									y_snake(0)	<= 	0;
-									y_snake(1)	<=	0;
-							end if;
-							/*Snake Crasch Detection END*/
+
 				end if; -- rising_edge vga_clk 
 		
 		end process Snake_drawing;
