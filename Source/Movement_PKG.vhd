@@ -48,20 +48,20 @@ package body Movement_PKG is
 			begin
 				if BTN_RIGHT(1) = '0' and BTN_RIGHT(0) = '1' then
 					case Current_Move is
-						when Rechts							=>	return Links; --Right and Left wechseln!
-						when Links							=>	return Rechts;
+						when Rechts							=>	return Down; --Right and Left wechseln!
+						when Links							=>	return Up;
 						when Up									=>	return Rechts;
-						when Down								=>	return Links;
+						when Down								=>	return Rechts;
 						when others							=>	return Current_Move;
 					end case;
 	
 				elsif BTN_LEFT(1) = '0' and BTN_LEFT(0) = '1' then
 					
 					case Current_Move is
-						when Up									=>	return Down;
-						when Down								=>	return Up;
-						when Links							=>	return Up;
-						when Rechts							=>	return Down;
+						when Up									=>	return Links;
+						when Down								=>	return Links;
+						when Links							=>	return Down;
+						when Rechts							=>	return Up;
 						when others							=>	return Current_Move;
 					end case;
 				else
