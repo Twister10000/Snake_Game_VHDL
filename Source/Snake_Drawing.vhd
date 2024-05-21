@@ -103,8 +103,7 @@ begin
 					end case;
 						/*FSM Direction Function*/
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
-				
-					--if videoOn_snake = '1' then
+
 						
 						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
@@ -114,9 +113,7 @@ begin
 								end if;
 							end if;
 						end loop;
-					--end if;
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
-					--if NewFrame_snake = '1' then
 						if Update_sig = '1' then
 							Update_sig <= '0';
 							if Add_Snake = '1' then
@@ -164,7 +161,6 @@ begin
 
 						end if; -- Update_Sig
 
-					--end if; -- NewFrame_snake
 					end if;
 				end if; -- rising_edge vga_clk 
 		
