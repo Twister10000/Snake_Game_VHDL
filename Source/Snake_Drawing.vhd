@@ -50,6 +50,7 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
 			signal			Test														:		integer	range	0	to 40	:= 2;
+			signal			Update_length										:		std_logic	:=	'0';
 				
 begin
 
@@ -72,6 +73,12 @@ begin
 				-- Concurrent Signal Assignment (optional)
 				
 				if rising_edge(vga_clk) then
+					
+					
+					if Add_Snake	= '1'	then
+						Update_length	<= '1';
+					end if;
+					
 					
 					/*Buttons Synchronisieren*/
 					BTN_LEFT_SYNC(0) <= BTN_LEFT;
@@ -105,7 +112,7 @@ begin
 					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 
 						
-						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
+						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
@@ -116,8 +123,9 @@ begin
 					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
 						if Update_sig = '1' then
 							Update_sig <= '0';
-							if Add_Snake = '1' then
+							if Update_length = '1' then
 								Test <= Test + 1;
+								Update_length	<= '0';
 							end if;
 
 							for i in 1 to lange loop
