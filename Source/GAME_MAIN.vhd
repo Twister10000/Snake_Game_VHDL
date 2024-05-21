@@ -42,6 +42,7 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Draw_Snake_In										:	std_logic	:=	'0';
 	signal			Draw_Snake_Zero									:	std_logic	:=	'0';
 	signal 			Add															:	std_logic	:=	'0';
+	signal			Apple_Update										:	std_logic	:=	'0';								
 	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;
@@ -74,6 +75,7 @@ begin
 					Draw_apple							=>	Draw_Apple_In,
 					Reset										=>	Reset,
 					x_Apple_OUT							=>	x_apple_Game,
+					Apple_Update						=>	Apple_Update,
 					y_apple_Out							=>	y_apple_Game
 			);
 			
@@ -84,7 +86,8 @@ begin
 						
 						if rising_edge(vga_clk)	then
 						
-							Draw_Snake_Zero 			<= '0';
+							Draw_Snake_Zero 			<=	'0';
+							Apple_Update					<=	'0';
 							Draw_Apple_Out 				<=	Draw_Apple_In;
 							Draw_Snake_Out 				<=	Draw_Snake_In;
 							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
@@ -110,9 +113,11 @@ begin
 							
 														/*Schlangen Wachstum wenn Schlange Apfel isst*/
 								if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
-									Add <= '1';
+									Add 					<=	'1';
+									Apple_Update	<=	'1';
 								else
-									Add <= '0';
+									Add 					<=	'0';
+									Apple_Update	<=	'0';
 								end if;
 							
 																						/*Snake Crasch Detection*/

@@ -12,10 +12,11 @@ entity Apple_Drawing is
 		-- Input ports
 			xpos_apple     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 			ypos_apple     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-			Reset										:	in		std_logic;
-			videoOn_apple  					:	in  	std_logic;               							-- 1 = Bildbereich
-			vga_clk									:	in		std_logic;
-			NewFrame_apple					:	in		std_logic;
+			Reset										:	in		std_logic	:= '0';
+			videoOn_apple  					:	in  	std_logic	:= '0';               							-- 1 = Bildbereich
+			vga_clk									:	in		std_logic	:= '0';
+			NewFrame_apple					:	in		std_logic	:= '0';
+			Apple_Update						:	in		std_logic	:= '0';
 
 		-- Inout ports
 
@@ -34,8 +35,9 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 
 			
 		-- Constants
-			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
-			constant		Y_range								:		integer	range 0 to 1024		:= 984;
+			constant		X_range								:		integer	range 0	to 	1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
+			constant		Y_range								:		integer	range 0 to 	1024		:= 984;
+			constant		CNT_MAX								:		integer	range	0	to	41			:= 0;
 			
 			
 		-- Declarations Signal
@@ -43,6 +45,7 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 			signal			CLK_ENA_1												:		std_logic := '0';
 			signal 			x_apple													:		integer	range 0 to 1280		:= 600;
 			signal 			y_apple													:		integer	range 0 to 1024		:= 492;
+			signal			Random_Num											:		integer	range	0	to 41			:= 20;
 begin
 
 	-- Process Statement (optional)
@@ -56,7 +59,6 @@ begin
 				x_apple_OUT	<= 	x_Apple;
 				y_apple_OUT	<=	y_apple;
 				if videoOn_apple = '1'	then
-					
 					if xpos_apple	> x_apple and xpos_apple < (x_apple + 40) then
 						if ypos_apple > y_apple and ypos_apple < (y_apple + 40) then -- Quadrat
 							Draw_Apple <= '1';
@@ -66,6 +68,19 @@ begin
 			end if;
 			
 		end process Apple_Drawing;
+		
+		
+		
+		
+		Random_GENI	:	process(all)
+		
+			begin
+			
+				if rising_edge(vga_clk)	then
+					
+				end if;
+			
+			end process Random_GENI;
 
 	-- Concurrent Procedure Call (optional)
 
