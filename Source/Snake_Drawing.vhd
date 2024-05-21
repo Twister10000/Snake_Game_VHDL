@@ -35,11 +35,11 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Constants
 			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 56e6;--27e6; 		-- CLK MAX COUNTER
-			constant		Stepsize_x						:		integer range 0 to 128		:= 40;			-- Wie viel sich der Balken bewegen darf
-			constant		Stepsize_y						:		integer range 0 to 128		:= 41;	
+			constant		Stepsize_x						:		integer range 0 to 40			:= 40;			-- Wie viel sich der Balken bewegen darf
+			constant		Stepsize_y						:		integer range 0 to 41			:= 41;	
 			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 			constant		Y_range								:		integer	range 0 to 1024		:= 984;
-			constant		lange									:		integer range 0 to 50	:= 40;
+			constant		lange									:		integer range 0 to 40			:= 40;
 			
 			
 		-- Declarations Signal
@@ -93,7 +93,6 @@ begin
 						y_snake(0)	<= 	0;
 						y_snake(1)	<=	0;
 					end if;
-					
 					Draw_Snake 				<= 	'0';
 
 					if Game_state	= Game then

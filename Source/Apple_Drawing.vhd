@@ -37,15 +37,19 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 		-- Constants
 			constant		X_range								:		integer	range 0	to 	1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
 			constant		Y_range								:		integer	range 0 to 	1024		:= 984;
-			constant		CNT_MAX								:		integer	range	0	to	41			:= 0;
+			constant		Stepsize_x						:		integer range 0 to 40				:= 40;			-- Wie viel sich der Balken bewegen darf
+			constant		Stepsize_y						:		integer range 0 to 41				:= 41;	
+			constant		CNT_MAX_x							:		integer	range	0	to	40			:= 31;
+			constant		CNT_MAX_y							:		integer	range	0	to	41			:= 24;
 			
 			
 		-- Declarations Signal
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
 			signal			CLK_ENA_1												:		std_logic := '0';
-			signal 			x_apple													:		integer	range 0 to 1280		:= 600;
-			signal 			y_apple													:		integer	range 0 to 1024		:= 492;
-			signal			Random_Num											:		integer	range	0	to 41			:= 20;
+			signal 			x_apple													:		integer	range 0 to	1280		:=	600;
+			signal 			y_apple													:		integer	range 0 to	1024		:=	492;
+			signal			Random_Num_x										:		integer	range	0	to	40			:=	20;
+			signal			Random_Num_y										:		integer	range	0	to	41			:=	20;
 begin
 
 	-- Process Statement (optional)
@@ -77,7 +81,22 @@ begin
 			begin
 			
 				if rising_edge(vga_clk)	then
-					
+						Random_Num_x	<=	Random_Num_x	+	1;
+						Random_Num_y	<=	Random_Num_y	+	1;
+						
+						if Random_Num_x	= CNT_MAX_x	then
+							Random_Num_x	<= 0;
+						end if;
+						
+						if Random_Num_y	= CNT_MAX_y	then
+							Random_Num_y	<= 0;
+						end if;
+						
+						
+						if Apple_Update	=	'1'	then
+							x_apple	<=	Random_Num_x*Stepsize_x;
+							y_apple	<=	Random_Num_y*stepsize_y;
+						end if;
 				end if;
 			
 			end process Random_GENI;
