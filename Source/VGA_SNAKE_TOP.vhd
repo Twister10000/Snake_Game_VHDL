@@ -12,7 +12,7 @@ entity VGA_SNAKE_TOP is
 	port
 	(
 		-- Input ports
-			clk  					: 		in   	std_logic;                 										-- vga clock 
+			clk  					: 		in   	std_logic;                 										-- 50Mhz CLOCK DE0 Board 
 			Reset    			: 		in   	std_logic;                 										-- 1 = Reset Button 00
 			BTN_LEFT    	:			in 		std_logic;								 										-- Button 02	
 			BTN_RIGHT			:			in 		std_logic;																		-- Button 01
