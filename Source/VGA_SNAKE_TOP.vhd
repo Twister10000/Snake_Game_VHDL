@@ -35,7 +35,8 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		-- Declarations Constant
 		constant MAX_Y : integer := 6; -- number of Pixels in y dir
 		constant MAX_X : integer := 6; -- number of Pixels in x dir
-		
+		constant PIC_MAX_X  : integer := 256;                 -- Bildgroesse in x Richtung (horizontal)
+    constant PIC_MAX_Y  : integer := 128;                 -- Bildgroesse in y Richtung (vertikal)
 		-- Declarations Own Var Types
 		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);
 
@@ -49,7 +50,12 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Snake								:		std_logic	:= 	'0';
 		signal			Draw_Snake_Zero						:		std_logic	:= 	'0';
 		signal			Draw_Apple								:		std_logic	:=	'0';
-		signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);
+		signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0);    
+
+    signal   x_start    : integer := 620;                  -- Bildkoordinate x = 50 
+    signal   y_start    : integer := 512;                  -- Bildkoordinate y = 10 
+    signal   Adr        : std_logic_vector(14 downto 0);  -- Adressen 
+    signal   q          : std_logic_vector(0 downto 0);  -- Daten  
 
 		
 		-- Declarations BoxGraphics
@@ -111,7 +117,14 @@ begin
 					Draw_Snake_Zero_Out				=>	Draw_Snake_Zero,
 					Draw_Apple_Out						=>	Draw_Apple,
 					Reset											=>	Reset);
+		/*Grafik Instantiation*/
 		
+		 grafik: entity work.FONTS               -- Name des ROMs: FONTS.vhd
+				port map (
+                clock     => vga_clk,       -- ROM Clock mit vgaclk verbinden
+                address   => Adr,          -- Adresse);
+                q         => q             -- Daten 
+              );
 	-- Process Statement (optional)
 		Drawing	:	process(all)
 		
@@ -137,6 +150,28 @@ begin
 					end case;
 					
 					if Game_State = Startscreen then
+						
+						/*Grafik Output*/
+						
+						  if  ypos_top = 0 then
+								Adr <= (others => '0');   -- reset rom address
+              end if; 
+
+              if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then 
+                  if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then  
+
+                      if q /= "0" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
+                          R  <= q(0) & q(0) & q(0) & q(0);
+                          G  <= q(0) & q(0) & q(0) & q(0);
+                          B  <= q(0) & q(0) & q(0) & q(0);
+                      end if;
+                          Adr <= Adr + 1;                                              -- ROM Adresse erhoehen
+                   end if;
+              end if;
+						
+						/*Grafik Output END*/
+						
+						
 						
 						if xpos_top	>= 300 and xpos_top < 300 + MAX_X then
 							if	ypos_top >= 412 and ypos_top	< 412 + MAX_Y	then
