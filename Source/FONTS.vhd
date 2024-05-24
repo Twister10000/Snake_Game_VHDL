@@ -44,33 +44,33 @@ ENTITY FONTS IS
 	(
 		address		: IN STD_LOGIC_VECTOR (14 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
-		q		: OUT STD_LOGIC_VECTOR (0 DOWNTO 0)
+		q		: OUT STD_LOGIC_VECTOR (13 DOWNTO 0)
 	);
 END FONTS;
 
 
 ARCHITECTURE SYN OF fonts IS
 
-	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (0 DOWNTO 0);
+	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (13 DOWNTO 0);
 
 BEGIN
-	q    <= sub_wire0(0 DOWNTO 0);
+	q    <= sub_wire0(13 DOWNTO 0);
 
 	altsyncram_component : altsyncram
 	GENERIC MAP (
 		address_aclr_a => "NONE",
 		clock_enable_input_a => "BYPASS",
 		clock_enable_output_a => "BYPASS",
-		init_file => "C:\Users\mikaj\OneDrive - Juventus Schulen\Dokumente\Juventus\4_Semester\FPGA\Semesterarbeit\Snake_Game_VHDL\Source\COMIC.mif",
+		init_file => "../COMIC.mif",
 		intended_device_family => "Cyclone III",
-		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
+		lpm_hint => "ENABLE_RUNTIME_MOD=YES,INSTANCE_NAME=FONT",
 		lpm_type => "altsyncram",
 		numwords_a => 32768,
 		operation_mode => "ROM",
 		outdata_aclr_a => "NONE",
 		outdata_reg_a => "CLOCK0",
 		widthad_a => 15,
-		width_a => 1,
+		width_a => 14,
 		width_byteena_a => 1
 	)
 	PORT MAP (
@@ -100,10 +100,10 @@ END SYN;
 -- Retrieval info: PRIVATE: INIT_FILE_LAYOUT STRING "PORT_A"
 -- Retrieval info: PRIVATE: INIT_TO_SIM_X NUMERIC "0"
 -- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
--- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
+-- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "1"
 -- Retrieval info: PRIVATE: JTAG_ID STRING "FONT"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
--- Retrieval info: PRIVATE: MIFfilename STRING "../OneDrive - Juventus Schulen/Dokumente/Juventus/4_Semester/FPGA/Semesterarbeit/Snake_Game_VHDL/Source/COMIC.mif"
+-- Retrieval info: PRIVATE: MIFfilename STRING "../COMIC.mif"
 -- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "32768"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 -- Retrieval info: PRIVATE: RegAddr NUMERIC "1"
@@ -112,29 +112,29 @@ END SYN;
 -- Retrieval info: PRIVATE: SingleClock NUMERIC "1"
 -- Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
 -- Retrieval info: PRIVATE: WidthAddr NUMERIC "15"
--- Retrieval info: PRIVATE: WidthData NUMERIC "1"
+-- Retrieval info: PRIVATE: WidthData NUMERIC "14"
 -- Retrieval info: PRIVATE: rden NUMERIC "0"
 -- Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 -- Retrieval info: CONSTANT: ADDRESS_ACLR_A STRING "NONE"
 -- Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
 -- Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
--- Retrieval info: CONSTANT: INIT_FILE STRING "../OneDrive - Juventus Schulen/Dokumente/Juventus/4_Semester/FPGA/Semesterarbeit/Snake_Game_VHDL/Source/COMIC.mif"
+-- Retrieval info: CONSTANT: INIT_FILE STRING "../COMIC.mif"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
--- Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
+-- Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=YES,INSTANCE_NAME=FONT"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
 -- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "32768"
 -- Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 -- Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
 -- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "CLOCK0"
 -- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "15"
--- Retrieval info: CONSTANT: WIDTH_A NUMERIC "1"
+-- Retrieval info: CONSTANT: WIDTH_A NUMERIC "14"
 -- Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
 -- Retrieval info: USED_PORT: address 0 0 15 0 INPUT NODEFVAL "address[14..0]"
 -- Retrieval info: USED_PORT: clock 0 0 0 0 INPUT VCC "clock"
--- Retrieval info: USED_PORT: q 0 0 1 0 OUTPUT NODEFVAL "q[0..0]"
+-- Retrieval info: USED_PORT: q 0 0 14 0 OUTPUT NODEFVAL "q[13..0]"
 -- Retrieval info: CONNECT: @address_a 0 0 15 0 address 0 0 15 0
 -- Retrieval info: CONNECT: @clock0 0 0 0 0 clock 0 0 0 0
--- Retrieval info: CONNECT: q 0 0 1 0 @q_a 0 0 1 0
+-- Retrieval info: CONNECT: q 0 0 14 0 @q_a 0 0 14 0
 -- Retrieval info: GEN_FILE: TYPE_NORMAL FONTS.vhd TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL FONTS.inc FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL FONTS.cmp TRUE

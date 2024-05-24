@@ -55,7 +55,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
     signal   x_start    : integer := 620;                  -- Bildkoordinate x = 50 
     signal   y_start    : integer := 512;                  -- Bildkoordinate y = 10 
     signal   Adr        : std_logic_vector(14 downto 0);  -- Adressen 
-    signal   q          : std_logic_vector(0 downto 0);  -- Daten  
+    signal   q          : std_logic_vector(13 downto 0);  -- Daten  
 
 		
 		-- Declarations BoxGraphics
@@ -160,10 +160,10 @@ begin
               if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then 
                   if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then  
 
-                      if q /= "0" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
-                          R  <= q(0) & q(0) & q(0) & q(0);
-                          G  <= q(0) & q(0) & q(0) & q(0);
-                          B  <= q(0) & q(0) & q(0) & q(0);
+                      if q /= x"0000" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
+                          R  <= q(3) & q(2) & q(1) & q(0);
+                          G  <= q(3) & q(2) & q(1) & q(0);
+                          B  <= q(3) & q(2) & q(1) & q(0);
                       end if;
                           Adr <= Adr + 1;                                              -- ROM Adresse erhoehen
                    end if;
