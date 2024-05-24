@@ -36,7 +36,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		constant MAX_Y : integer := 6; -- number of Pixels in y dir
 		constant MAX_X : integer := 6; -- number of Pixels in x dir
 		constant PIC_MAX_X  : integer := 256;                 -- Bildgroesse in x Richtung (horizontal)
-    constant PIC_MAX_Y  : integer := 128;                 -- Bildgroesse in y Richtung (vertikal)
+    constant PIC_MAX_Y  : integer := 272;                 -- Bildgroesse in y Richtung (vertikal)
 		-- Declarations Own Var Types
 		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);
 
@@ -127,7 +127,9 @@ begin
               );
 	-- Process Statement (optional)
 		Drawing	:	process(all)
-		
+						/*Declarations Variable*/
+						variable cbit: integer range 0 to 15 := 0;
+						variable x1: integer range 0 to 1300 := 0;
 		begin
 		
 			if rising_edge(vga_clk) then
@@ -153,21 +155,25 @@ begin
 						
 						/*Grafik Output*/
 						
-						  if  ypos_top = 0 then
-								Adr <= (others => '0');   -- reset rom address
-              end if; 
-
-              if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then 
-                  if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then  
-
-                      if q /= x"0000" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
-                          R  <= q(3) & q(2) & q(1) & q(0);
-                          G  <= q(3) & q(2) & q(1) & q(0);
-                          B  <= q(3) & q(2) & q(1) & q(0);
-                      end if;
-                          Adr <= Adr + 1;                                              -- ROM Adresse erhoehen
-                   end if;
-              end if;
+						if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
+							x1 := x_start;
+							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
+								cbit := 14 - (xpos_top  - x1 );    -- aktuelles Bit berechnen
+								if cbit = 0 then
+										x1 := xpos_top;                -- Zaehler zurücksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+								end if;
+								if q(cbit) = '1' then              -- falls bit = 1:  weiss ausgeben
+										R  <= x"f";
+										G  <= x"f";
+										B  <= x"f";
+								end if;
+							end if;
+							if  xpos_top = x_start + PIC_MAX_X then      -- nach Ende x-Bereich: Adresse erhöhen
+									Adr <= Adr + 1;  
+							end if;
+            else
+                Adr <= (others => '0');   -- reset rom address    -- auuserhalb Bild: Adresse resetieren
+            end if;
 						
 						/*Grafik Output END*/
 						
