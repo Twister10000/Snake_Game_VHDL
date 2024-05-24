@@ -15,22 +15,22 @@ entity Game_Main is
 	port
 	(
 		-- Input ports
-			xpos_game     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
-			ypos_game     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-			BTN_LEFT								:	in	 	std_logic;
-			BTN_RIGHT								:	in	 	std_logic;
-			Reset										:	in		std_logic;
-			videoOn_game  					:	in  	std_logic;               							-- 1 = Bildbereich
-			vga_clk									:	in		std_logic;
-			NewFrame_game						:	in		std_logic;	
-
-		-- Inout ports
-
-
-		-- Output ports
-			Draw_Snake_Out									: out 	std_logic := 	'0';
-			Draw_Snake_Zero_Out							: out 	std_logic := 	'0';
-			Draw_Apple_Out									:	out		std_logic	:=	'0');
+			xpos_game     													:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
+			ypos_game     													:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
+			BTN_LEFT																:	in	 	std_logic;														-- Button 02	
+			BTN_RIGHT																:	in	 	std_logic;														-- Button 01
+			Reset																		:	in		std_logic;														-- Button 00
+			videoOn_game  													:	in  	std_logic;               							-- 1 = Bildbereich
+			vga_clk																	:	in		std_logic;														-- Global CLK
+			NewFrame_game														:	in		std_logic;														-- 1 = NewFrame on VGA	
+				
+		-- Inout ports				
+				
+				
+		-- Output ports				
+			Draw_Snake_Out													: out 	std_logic := 	'0';										-- Signal for Snake-Body Drawing on VGA Output
+			Draw_Snake_Zero_Out											: out 	std_logic := 	'0';										-- Signal for Snake-Head Drawing on VGA Output
+			Draw_Apple_Out													:	out		std_logic	:=	'0');										-- Signal for Apple Drawing on VGA Output
 end Game_Main;
 
 architecture beh_Game_Main of Game_Main is
@@ -38,14 +38,14 @@ architecture beh_Game_Main of Game_Main is
 	-- Declarations (optional)
 	-- Signal Declarations
 	
-	signal 			Draw_Apple_In										:	std_logic	:=	'0';
-	signal 			Draw_Snake_In										:	std_logic	:=	'0';
-	signal			Draw_Snake_Zero									:	std_logic	:=	'0';
-	signal 			Add															:	std_logic	:=	'0';
-	signal			Apple_Update										:	std_logic	:=	'0';								
-	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";
-	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;
-	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;
+	signal 			Draw_Apple_In										:	std_logic	:=	'0';													-- Signal for Apple Drawing on VGA Output
+	signal 			Draw_Snake_In										:	std_logic	:=	'0';													-- Signal for Snake-Body Drawing on VGA Output
+	signal			Draw_Snake_Zero									:	std_logic	:=	'0';													-- Signal for Snake-Head Drawing on VGA Output
+	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
+	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
+	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;							-- x Kordinate from Apple
+	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;							-- y Kordinate from Apple
 
 begin
 
@@ -80,74 +80,67 @@ begin
 			);
 			
 					
-				Game_Main : process(all)
+		Game_Main : process(all)
+		
+		begin
 				
-				begin
+				if rising_edge(vga_clk)	then
+				
+					Draw_Snake_Zero 			<=	'0';
+					Apple_Update					<=	'0';
+					Draw_Apple_Out 				<=	Draw_Apple_In;
+					Draw_Snake_Out 				<=	Draw_Snake_In;
+					Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
+					
+					
+					BTN_RESET_SYNC(0) <= Reset;
+					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
+					
+					/*GameState Change*/
+					
+					if BTN_RESET_SYNC(1) = '0' and BTN_RESET_SYNC(0) = '1' then
+						case	Game_State	is
+							when	Startscreen		=> Game_State <= 	Game;
+							when	Endscreen			=> Game_State	<=	startscreen;	
+							when	others				=> Null;
+						end case;
+					end if;
+					
+					/*GameState Change END*/
+					
+					
+					/*Code for Actual Game*/
+					if Game_state	= Game	then
+					
+												/*Schlangen Wachstum wenn Schlange Apfel isst*/
+						if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
 						
-						if rising_edge(vga_clk)	then
+							Add 					<=	'1';
+							Apple_Update	<=	'1';
+							
+						else
 						
-							Draw_Snake_Zero 			<=	'0';
-							Apple_Update					<=	'0';
-							Draw_Apple_Out 				<=	Draw_Apple_In;
-							Draw_Snake_Out 				<=	Draw_Snake_In;
-							Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
+							Add 					<=	'0';
+							Apple_Update	<=	'0';
 							
+						end if;
+					
+																				/*Snake Crasch Detection*/
+						if xpos_game	> x_snake(0) and xpos_game < (x_snake(0)+40) then
+							if ypos_game > y_snake(0) and ypos_game < (y_snake(0)+40) then -- Quadrat
 							
-							BTN_RESET_SYNC(0) <= Reset;
-							BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
---							/*Schlangen Wachstum wenn Schlange Apfel isst*/
---							if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
---								Add <= '1';
---							else
---								Add <= '0';
---							end if;
-							
-							if BTN_RESET_SYNC(1) = '0' and BTN_RESET_SYNC(0) = '1' then
-								case	Game_State	is
-									when	Startscreen		=> Game_State <= 	Game;
-									when	Endscreen			=> Game_State	<=	startscreen;	
-									when	others				=> Null;
-								end case;
+								Draw_Snake_Zero <= '1';
+								
 							end if;
-							if Game_state	= Game	then
-							
-														/*Schlangen Wachstum wenn Schlange Apfel isst*/
-								if x_apple_Game = x_snake(0) and y_apple_Game = y_snake(0)	then
-									Add 					<=	'1';
-									Apple_Update	<=	'1';
-								else
-									Add 					<=	'0';
-									Apple_Update	<=	'0';
-								end if;
-							
-																						/*Snake Crasch Detection*/
-								if xpos_game	> x_snake(0) and xpos_game < (x_snake(0)+40) then
-									if ypos_game > y_snake(0) and ypos_game < (y_snake(0)+40) then -- Quadrat
-										Draw_Snake_Zero <= '1';
-									end if;
-								end if;
-								if Draw_Snake_In and Draw_Snake_Zero	then	
-										Game_state <= Endscreen;
-								end if;
-																						/*Snake Crasch Detection END*/
-							end if;
-
-						end if; -- VGA CLK
-						
-				end process Game_Main;
-	-- Process Statement (optional)
-
-	-- Concurrent Procedure Call (optional)
-
-	-- Concurrent Signal Assignment (optional)
-
-	-- Conditional Signal Assignment (optional)
-
-	-- Selected Signal Assignment (optional)
-
-	-- Component Instantiation Statement (optional)
-
-	-- Generate Statement (optional)
-
+						end if;
+						if Draw_Snake_In and Draw_Snake_Zero	then	
+								Game_state <= Endscreen;
+						end if;
+																				/*Snake Crasch Detection END*/
+					end if;
+					/*Code for Actual Game END*/
+				end if; -- VGA CLK
+				
+		end process Game_Main;
 end beh_Game_Main;
 
