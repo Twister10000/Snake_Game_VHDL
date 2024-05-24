@@ -31,8 +31,6 @@ begin
               );
 
     process (vgaclk, xpos, ypos)
-        variable scale1 : std_logic_vector(9 downto 0);      -- Hilfsvariablen, notwendig wegen Modelsim
-        variable scale2 : std_logic_vector(9 downto 0);
     begin  
          if rising_edge(vgaclk) then
               R  <= x"0";
@@ -42,29 +40,14 @@ begin
                   Adr <= (others => '0');   -- reset rom address
               end if; 
 
-
-              if xpos >= x_start  and xpos < x_start + PIC_MAX_X + PIC_MAX_X then            -- Skalierung x2: 2x + PIC_MAX_X
-                  if ypos >= y_start and ypos < y_start + PIC_MAX_Y + PIC_MAX_Y then         -- Skalierung x2: 2x + PIC_MAX_Y  
+              if xpos >= x_start  and xpos < x_start + PIC_MAX_X then 
+                  if ypos >= y_start and ypos < y_start + PIC_MAX_Y then  
 
                       if q /= x"000" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
                       end if;
-
-                      scale1  := std_logic_vector(to_unsigned(xpos,10));   
-                      if scale1(0) = '1' then                                      -- Skalierung x 2: Nur bei geradzahligen xpos Adr erhoehen
                           Adr <= Adr + 1;                                          -- ROM Adresse erhoehen
-                      end if;
                    end if;
               end if;
-
-              if xpos = 2*PIC_MAX_X then 
-                  if Adr > PIC_MAX_X then 
-                       scale2  := std_logic_vector(to_unsigned(ypos,10));   
-                       if scale2(0) = '0' then                                     -- Skalierung x2: 2x Adr n jede zweite Zeile zuruecksetzen
-                           Adr <=  Adr - PIC_MAX_X;                                -- Adr - 1Zeile: Zeile wiederholen 
-                       end if;
-                  end if;
-              end if;
-
           end if;   -- rising_edge(vgaclk)
     end process;
 end Beh_ROM_test;

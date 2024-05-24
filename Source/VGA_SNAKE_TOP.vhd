@@ -55,7 +55,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
 		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 downto 0);														-- Vektor for Syncing    
-    signal   		Adr								        : 	std_logic_vector	(14 downto 0);													-- Adressen 
+    signal   		Adr								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
     signal   		q  								        : 	std_logic_vector	(13 downto 0);													-- Daten  
 
 		
