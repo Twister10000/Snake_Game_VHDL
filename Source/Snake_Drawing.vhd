@@ -13,19 +13,18 @@ entity snake_drawing is
 		-- Input ports
 			xpos_snake     					:	in  	integer range 0 to 1300;   						-- Pixel Pos x Bildbereich
 			ypos_snake     					:	in  	integer range 0 to 1033;    					-- Pixel Pos y Bildbereich
-			BTN_LEFT								:	in	 	std_logic;
-			BTN_RIGHT								:	in	 	std_logic;
-			Reset										:	in		std_logic;
-			videoOn_snake  					:	in  	std_logic;               							-- 1 = Bildbereich
-			vga_clk									:	in		std_logic;
-			NewFrame_snake					:	in		std_logic;
-			Add_Snake								:	in 		std_logic;
+			BTN_LEFT								:	in	 	std_logic;														-- Button 02
+			BTN_RIGHT								:	in	 	std_logic;														-- Button 01
+			Reset										:	in		std_logic;														-- Button 00
+			vga_clk									:	in		std_logic;														-- Global CLK
+			NewFrame_snake					:	in		std_logic;														-- 1 = NewFrame on VGA	
+			Add_Snake								:	in 		std_logic;														-- Signal for Update Snake Length
 
 		-- Inout ports
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0');
+			Draw_Snake							: out 	std_logic := 	'0');										-- Signal for Snake Drawing on VGA Output
 end snake_drawing;
 
 architecture beh_snake_drawing of snake_drawing is
@@ -34,23 +33,22 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			
 		-- Constants
-			constant 		CLK_div1_MAX					:		integer range 0 to 108e6 	:= 56e6;--27e6; 		-- CLK MAX COUNTER
-			constant		Stepsize_x						:		integer range 0 to 40			:= 40;			-- Wie viel sich der Balken bewegen darf
-			constant		Stepsize_y						:		integer range 0 to 41			:= 41;	
-			constant		X_range								:		integer	range 0	to 1280		:= 1240;		-- Von wo bis wo darf sich der Balken bewegen
-			constant		Y_range								:		integer	range 0 to 1024		:= 984;
-			constant		lange									:		integer range 0 to 40			:= 40;
-			
+			constant 		CLK_div1_MAX										:		integer range 0 to 108e6 	:= 56e6;										--27e6; 		-- CLK MAX COUNTER Speed Control for the snake
+			constant		Stepsize_x											:		integer range 0 to 40			:= 40;											-- Stepsize for X
+			constant		Stepsize_y											:		integer range 0 to 41			:= 41;											-- Stepsize for Y
+			constant		X_range													:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
+			constant		Y_range													:		integer	range 0 to 1024		:= 984;											-- Moving Range for Y
+			constant		lange														:		integer range 0 to 40			:= 40;											-- MAX SNAKE Length
 			
 		-- Declarations Signal
-			signal 			Move_Direction									:		Direction := Rechts;
-			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0)	:= "11";
-			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0)	:= "11";
-			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0)	:= "11";
+			signal 			Move_Direction									:		Direction := Rechts;																	-- Current Moving Direction
+			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
+			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
+			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
 			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
-			signal			CLK_ENA_1												:		std_logic := '0';
-			signal			Test														:		integer	range	0	to 40	:= 2;
-			signal			Update_length										:		std_logic	:=	'0';
+			signal			CLK_ENA_1												:		std_logic := '0';																			-- Enabel Signal for CLK DIivder
+			signal			Update_length										:		std_logic	:=	'0';																		-- Signale for Update Snake Length
+			signal			Test														:		integer	range	0	to 40	:= 2;														-- Current Snake Length
 				
 begin
 
@@ -74,11 +72,11 @@ begin
 				
 				if rising_edge(vga_clk) then
 					
+					Draw_Snake 				<= 	'0';
 					
 					if Add_Snake	= '1'	then
 						Update_length	<= '1';
 					end if;
-					
 					
 					/*Buttons Synchronisieren*/
 					BTN_LEFT_SYNC(0) <= BTN_LEFT;
@@ -90,6 +88,8 @@ begin
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
 					
+					
+					/*Default Values befor a new game Starts*/
 					if Game_state = startscreen	then
 						Test	<= 2;
 						Move_Direction	<= Rechts;
@@ -100,19 +100,22 @@ begin
 						y_snake(0)	<= 	0;
 						y_snake(1)	<=	0;
 					end if;
-					Draw_Snake 				<= 	'0';
+					/*Default Values befor a new game Starts END*/
 
+					/*Actual Game Logic*/
 					if Game_state	= Game then
-					
-					case CLK_ENA_1 is
-						when '1'							=>	Update_sig	<= '1';
-						when others						=>	Null;
-					end case;
-						/*FSM Direction Function*/
-					Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
+						
+						/*Check for need to Update Snake*/
+						case CLK_ENA_1 is
+							when '1'							=>	Update_sig	<= '1';
+							when others						=>	Null;
+						end case;
+						
+						/*Function call for changing directions*/
+						Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 
 						
-						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt*/
+						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
@@ -120,14 +123,24 @@ begin
 								end if;
 							end if;
 						end loop;
-					/*FSM Moving*/ -- Update to Switch Case Statements!!!!
+						
+						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt END*/
+						
+						
+						/*Update Snake*/
 						if Update_sig = '1' then
 							Update_sig <= '0';
+							
+							/*Check for Snake Growing*/
+							
 							if Update_length = '1' then
 								Test <= Test + 1;
 								Update_length	<= '0';
 							end if;
-
+							
+							/*Check for Snake Growing END*/
+							
+							/*Snake moving*/
 							for i in 1 to lange loop
 								if	i < Test	then
 									x_snake(i)	<=	x_snake(i-1);
@@ -166,24 +179,11 @@ begin
 																							
 								when others								=> Null;
 							end case;
-
-						end if; -- Update_Sig
-
+							/*Snake moving END*/
+						end if;
+						/*Update Snake*/
 					end if;
+					/*Actual Game Logic END*/
 				end if; -- rising_edge vga_clk 
-		
 		end process Snake_drawing;
-	
-	-- Process Statement (optional)
-
-	-- Concurrent Procedure Call (optional)
-
-	-- Conditional Signal Assignment (optional)
-
-	-- Selected Signal Assignment (optional)
-
-	-- Component Instantiation Statement (optional)
-
-	-- Generate Statement (optional)
-
 end beh_snake_drawing;

@@ -57,7 +57,6 @@ begin
 					ypos_snake     					=>	ypos_game,
 					BTN_LEFT								=>	BTN_LEFT,
 					BTN_RIGHT								=>	BTN_RIGHT,
-					videoOn_snake  					=>	videoOn_game,
 					vga_clk									=>	vga_clk,
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
