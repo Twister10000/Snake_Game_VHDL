@@ -6,39 +6,31 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
 
--- Library Clause(s) (optional)
--- Use Clause(s) (optional)
-
 package Movement_PKG is
 
 	-- Type Declaration (optional)
-				type 				Direction						is	(Rechts, Links, UP, Down);
-				type 				x_pos_arr 					is array (0 to 41/*Nachrechnen*/) of integer range -100 to 2000;
-				type 				y_pos_arr 					is array (0 to 40/*Nachrechnen*/) of integer range -100 to 2000;
+				type 				Direction											is	(Rechts, Links, UP, Down);												-- FSM STate for Snake Direction
+				type 				x_pos_arr 										is array (0 to 41) of integer range -100 to 2000;			-- Array for X Kordinate for Snake
+				type 				y_pos_arr 										is array (0 to 40) of integer range -100 to 2000;			-- Array for Y Kordinate for Snake
 
 	-- Subtype Declaration (optional)
 
 	-- Constant Declaration (optional)
 
 	-- Signal Declaration (optional)
-			signal 			x_snake													:	x_pos_arr := (0,0,others => 1900);
-			signal 			y_snake													:	y_pos_arr := (0,0,others => 1900);
+	
+			signal 			x_snake													:	x_pos_arr := (0,0,others => 1900);									-- Signal for X Kordinate for Snake
+			signal 			y_snake													:	y_pos_arr := (0,0,others => 1900);									-- Signal for Y Kordinate for Snake
 	-- Component Declaration (optional)
-		function	Movement	(BTN_Right	:	std_logic_vector	(1 downto 0);
-											 BTN_Left		:	std_logic_vector	(1 downto 0);
-											 Current_Move	: Direction) return Direction;
+	
+	-- Function Declaration
+		function	Movement	(	BTN_Right			:	std_logic_vector	(1 downto 0);																-- Function Declaration for Snake Control
+													BTN_Left			:	std_logic_vector	(1 downto 0);
+													Current_Move	: Direction) return Direction;
 
 end Movement_PKG;
 
 package body Movement_PKG is
-
-	-- Type Declaration (optional)
-
-	-- Subtype Declaration (optional)
-
-	-- Constant Declaration (optional)
-
-	-- Function Declaration (optional)
 	
 		/*FSM Direction END*/
 		function	Movement	(BTN_Right	:	std_logic_vector	(1 downto 0);
@@ -46,9 +38,12 @@ package body Movement_PKG is
 												Current_Move	: Direction) return Direction	is
 		
 			begin
+			
+				/*FSM for Snake Controll*/
+			
 				if BTN_RIGHT(1) = '0' and BTN_RIGHT(0) = '1' then
 					case Current_Move is
-						when Rechts							=>	return Down; --Right and Left wechseln!
+						when Rechts							=>	return Down; 
 						when Links							=>	return Up;
 						when Up									=>	return Rechts;
 						when Down								=>	return Rechts;
@@ -67,13 +62,6 @@ package body Movement_PKG is
 				else
 					return Current_Move;
 				end if;
-				/*FSM Direction END*/
+				/*FSM for Snake Controll END*/
 		end function;
-
-	-- Function Body (optional)
-
-	-- Procedure Declaration (optional)
-
-	-- Procedure Body (optional)
-
 end Movement_PKG;

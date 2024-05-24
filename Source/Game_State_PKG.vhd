@@ -12,13 +12,13 @@ use ieee.std_logic_signed.all;
 package Game_State_PKG is
 
 	-- Type Declaration (optional)
-		type 				Game_FSM						is	(Startscreen, Game, Endscreen);
+		type 				Game_FSM						is	(Startscreen, Game, Endscreen);  	-- FSM for Game-State
 	-- Subtype Declaration (optional)
 
 	-- Constant Declaration (optional)
 
 	-- Signal Declaration (optional)
-		signal			Game_State				:	Game_FSM := Startscreen;
+		signal			Game_State				:	Game_FSM := Startscreen;							-- Signal for current Game_State
 	-- Component Declaration (optional)
 
 end Game_State_PKG;
