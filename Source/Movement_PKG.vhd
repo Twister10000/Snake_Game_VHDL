@@ -46,7 +46,7 @@ package body Movement_PKG is
 						when Rechts							=>	return Down; 
 						when Links							=>	return Up;
 						when Up									=>	return Rechts;
-						when Down								=>	return Rechts;
+						when Down								=>	return Links;
 						when others							=>	return Current_Move;
 					end case;
 	
@@ -54,7 +54,7 @@ package body Movement_PKG is
 					
 					case Current_Move is
 						when Up									=>	return Links;
-						when Down								=>	return Links;
+						when Down								=>	return Rechts;
 						when Links							=>	return Down;
 						when Rechts							=>	return Up;
 						when others							=>	return Current_Move;
