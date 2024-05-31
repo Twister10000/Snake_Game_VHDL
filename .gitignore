@@ -89,3 +89,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,alteraquartusii
 Source/VGA_DEMO.qws
 *.zip
+Source/output_files/VGA_DEMO.sof
