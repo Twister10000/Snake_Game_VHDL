@@ -102,7 +102,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
 								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
 								if cbit = 0 then																					
-										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
 								end if;																					
 								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
 										R  <= x"f";
@@ -110,11 +110,11 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 										B  <= x"f";
 								end if;
 							end if;
-							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã‚Â¶hen
+							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶hen
 									Adr <= Adr + 1;  
 							end if;
             else
-                Adr <= std_logic_vector(to_unsigned(char_adr,12));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
+                Adr <= std_logic_vector(to_unsigned(char_adr,Adr'length));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
             end if;
 			
 		end Print_char;
