@@ -36,7 +36,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		constant 		MAX_Y 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in y dir
 		constant 		MAX_X 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in x dir
 		constant 		PIC_MAX_X  								:		integer	range	0	to	300 	:= 14;                 				-- Bildgroesse in x Richtung (horizontal)
-    constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 272;                 				-- Bildgroesse in y Richtung (vertikal)
+    constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 16;                 				-- Bildgroesse in y Richtung (vertikal)
 		-- Declarations Own Var Types
 		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);							-- 
 
@@ -45,6 +45,8 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			ypos_top     							:  	integer range 0 to	1033 	:= 0;    												-- Pixel Pos y Bildbereich
     signal   		x_start								    : 	integer range	0	to	800 	:= 620;													-- Bildkoordinate x = 50 
     signal   		y_start								    : 	integer	range	0	to	700 	:= 512;													-- Bildkoordinate y = 10
+		
+		signal			Char_Test									:		character;
 																									
 		signal			videoOn_top  							:  	std_logic :=	'0';              													-- 1 = Bildbereich
 		signal			vga_clk										:		std_logic :=	'0';																				-- Global Clock
@@ -55,7 +57,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
 		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 downto 0);														-- Vektor for Syncing    
-    signal   		Adr								        : 	std_logic_vector	(11 downto 0) := "000000010000";													-- Adressen 
+    signal   		Adr								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
     signal   		q  								        : 	std_logic_vector	(13 downto 0);													-- Daten  
 
 		
@@ -81,6 +83,44 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 															(x"F", x"0", x"0", x"0", x"0", x"F"),
 															(x"F", x"0", x"0", x"0", x"0", x"F"),
 															(x"F", x"F", x"F", x"F", x"F", x"F"));
+															
+															
+	-- Declarations Functions
+		
+		procedure	Print_char	(signal char :	character)	is
+		variable	cbit	: integer range 0 to 15 	:= 0;
+		variable	x1		: integer range 0 to 1300 := 0;
+		variable	Char_adr	:	integer	range	0	to	650000;
+		begin
+			
+			
+			Char_adr	:= character'pos(char);
+			Char_adr	:=	(char_adr - 33)*16;
+			
+			if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
+							x1 := x_start;
+							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
+								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
+								if cbit = 0 then																					
+										x1 := xpos_top;                																					-- Zaehler zurÃƒÂ¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+								end if;																					
+								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
+										R  <= x"f";
+										G  <= x"f";
+										B  <= x"f";
+								end if;
+							end if;
+							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÂ¶hen
+									Adr <= Adr + 1;  
+							end if;
+            else
+                Adr <= std_logic_vector(to_unsigned(char_adr,12));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
+            end if;
+			
+		end Print_char;
+	
+	
+	
 begin
 		/*VGA_SYNC Instantiation*/
 	 VGA_SYNC : entity work.vga_sync
@@ -131,8 +171,8 @@ begin
 		
 						/*Declarations Variable*/
 						
-		variable	cbit	: integer range 0 to 15 	:= 0;
-		variable	x1		: integer range 0 to 1300 := 0;
+--		variable	cbit	: integer range 0 to 15 	:= 0;
+--		variable	x1		: integer range 0 to 1300 := 0;
 		begin
 		
 			if rising_edge(vga_clk) then
@@ -140,6 +180,7 @@ begin
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
+				Char_Test	<= 'H';
 				Game_On	<=	'0';
 				BTN_RESET_SYNC(0) <= Reset;
 				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
@@ -159,26 +200,26 @@ begin
 					if Game_State = Startscreen then
 						
 						/*Grafik Output*/
-						
-						if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
-							x1 := x_start;
-							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
-								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
-								if cbit = 0 then																					
-										x1 := xpos_top;                																					-- Zaehler zurÃ¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
-								end if;																					
-								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
-										R  <= x"f";
-										G  <= x"f";
-										B  <= x"f";
-								end if;
-							end if;
-							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃ¶hen
-									Adr <= Adr + 1;  
-							end if;
-            else
-                Adr <= "000000010000";   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
-            end if;
+						print_char(Char_Test);
+--						if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
+--							x1 := x_start;
+--							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
+--								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
+--								if cbit = 0 then																					
+--										x1 := xpos_top;                																					-- Zaehler zurÃƒÂ¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+--								end if;																					
+--								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
+--										R  <= x"f";
+--										G  <= x"f";
+--										B  <= x"f";
+--								end if;
+--							end if;
+--							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÂ¶hen
+--									Adr <= Adr + 1;  
+--							end if;
+--            else
+--                Adr <= std_logic_vector(to_unsigned(1088,12));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
+--            end if;
 						
 						/*Grafik Output END*/
 
