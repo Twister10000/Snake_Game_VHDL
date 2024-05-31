@@ -102,7 +102,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
 								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
 								if cbit = 0 then																					
-										x1 := xpos_top;                																					-- Zaehler zurÃƒÂ¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
 								end if;																					
 								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
 										R  <= x"f";
@@ -110,7 +110,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 										B  <= x"f";
 								end if;
 							end if;
-							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÂ¶hen
+							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã‚Â¶hen
 									Adr <= Adr + 1;  
 							end if;
             else
@@ -200,13 +200,13 @@ begin
 					if Game_State = Startscreen then
 						
 						/*Grafik Output*/
-						print_char(Char_Test);
+						print_char(char_Test);
 --						if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
 --							x1 := x_start;
 --							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
 --								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
 --								if cbit = 0 then																					
---										x1 := xpos_top;                																					-- Zaehler zurÃƒÂ¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+--										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
 --								end if;																					
 --								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
 --										R  <= x"f";
@@ -214,7 +214,7 @@ begin
 --										B  <= x"f";
 --								end if;
 --							end if;
---							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÂ¶hen
+--							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã‚Â¶hen
 --									Adr <= Adr + 1;  
 --							end if;
 --            else
