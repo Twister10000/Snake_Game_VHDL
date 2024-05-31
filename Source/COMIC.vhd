@@ -16,12 +16,12 @@ port (
 end ROM_test;
 
 architecture Beh_ROM_test of ROM_test is
-    constant PIC_MAX_X  : integer := 256;                    -- Bildgroesse in x Richtung (horizontal)
-    constant PIC_MAX_Y  : integer := 128;                    -- Bildgroesse in y Richtung (vertikal)
+    constant PIC_MAX_X  : integer := 512;                    -- Bildgroesse in x Richtung (horizontal)
+    constant PIC_MAX_Y  : integer := 256;                    -- Bildgroesse in y Richtung (vertikal)
     signal   x_start    : integer := 50;                     -- Bildkoordinate x = 50 
     signal   y_start    : integer := 10;                     -- Bildkoordinate y = 10 
     signal   Adr        : std_logic_vector(11 downto 0);     -- Adressen 
-    signal   q          : std_logic_vector(13 downto 0);     -- Daten    
+    signal   q          : std_logic_vector(31 downto 0);     -- Daten    
 begin
     grafik: entity work.ROM1                                 -- Name des ROMs: ROM1.vhd
     port map (
@@ -43,7 +43,7 @@ begin
               if xpos >= x_start  and xpos < x_start + PIC_MAX_X then 
                   if ypos >= y_start and ypos < y_start + PIC_MAX_Y then  
 
-                      if q /= x"000" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
+                      if q /= x"111" then         -- Grafik Ausgabe, falls nicht transparente Farbe 
                       end if;
                           Adr <= Adr + 1;                                          -- ROM Adresse erhoehen
                    end if;
