@@ -90,3 +90,4 @@ $RECYCLE.BIN/
 Source/VGA_DEMO.qws
 *.zip
 Source/output_files/VGA_DEMO.sof
+*.sof
