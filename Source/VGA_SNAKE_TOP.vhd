@@ -95,7 +95,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 			
 			
 			Char_adr	:= character'pos(char);
-			Char_adr	:=	(char_adr - 33)*16;
+			Char_adr	:=	(char_adr - 33)*16;																											-- 33 wegen des  Offset vom Attribute pos
 			
 			if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
 							x1 := x_start;
@@ -168,11 +168,7 @@ begin
               );
 	-- Process Statement (optional)
 		Drawing	:	process(all)
-		
-						/*Declarations Variable*/
 						
---		variable	cbit	: integer range 0 to 15 	:= 0;
---		variable	x1		: integer range 0 to 1300 := 0;
 		begin
 		
 			if rising_edge(vga_clk) then
@@ -200,26 +196,8 @@ begin
 					if Game_State = Startscreen then
 						
 						/*Grafik Output*/
+						
 						print_char(char_Test);
---						if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
---							x1 := x_start;
---							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
---								cbit := 14 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
---								if cbit = 0 then																					
---										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
---								end if;																					
---								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
---										R  <= x"f";
---										G  <= x"f";
---										B  <= x"f";
---								end if;
---							end if;
---							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã‚Â¶hen
---									Adr <= Adr + 1;  
---							end if;
---            else
---                Adr <= std_logic_vector(to_unsigned(1088,12));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
---            end if;
 						
 						/*Grafik Output END*/
 
