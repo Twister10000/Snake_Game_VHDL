@@ -1,4 +1,4 @@
-PLL_Name	pll:PLL1|altpll:altpll_component|pll_altpll:auto_generated|pll1
+PLL_Name	pll:\PLL:PLL1|altpll:altpll_component|pll_altpll:auto_generated|pll1
 PLLJITTER	31
 PLLSPEmax	84
 PLLSPEmin	-53

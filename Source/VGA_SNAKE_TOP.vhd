@@ -8,7 +8,7 @@ use ieee.std_logic_unsigned.all;
 use work.Game_State_PKG.all;
 
 entity VGA_SNAKE_TOP is
-
+  generic (USE_PLL : boolean := true);
 	port
 	(
 		-- Input ports
@@ -44,9 +44,10 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			xpos_top     							:  	integer range 0 to	1300 	:= 0;   												-- Pixel Pos x Bildbereich
 		signal			ypos_top     							:  	integer range 0 to	1033 	:= 0;    												-- Pixel Pos y Bildbereich
     signal   		x_start								    : 	integer range	0	to	800 	:= 620;													-- Bildkoordinate x = 50 
-    signal   		y_start								    : 	integer	range	0	to	700 	:= 512;													-- Bildkoordinate y = 10
+    signal   		y_start								    : 	integer	range	0	to	700 	:= 5; --512;													-- Bildkoordinate y = 10
 		
 		signal			Char_Test									:		character;
+    signal			Char_Test2									:		character;
 																									
 		signal			videoOn_top  							:  	std_logic :=	'0';              													-- 1 = Bildbereich
 		signal			vga_clk										:		std_logic :=	'0';																				-- Global Clock
@@ -57,7 +58,10 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
 		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 downto 0);														-- Vektor for Syncing    
-    signal   		Adr								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
+    signal   		Adr								        : 	std_logic_vector	(11 downto 0);					
+    signal   		Adr1								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
+    signal   		Adr2								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
+    signal   		Adr3								        : 	std_logic_vector	(11 downto 0);
     signal   		q  								        : 	std_logic_vector	(31 downto 0);													-- Daten  
 
 		
@@ -84,44 +88,72 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 															(x"F", x"0", x"0", x"0", x"0", x"F"),
 															(x"F", x"F", x"F", x"F", x"F", x"F"));
 															
-															
+		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
+    signal   		x_s2								    : 	integer range	0	to	800 	:= 660;												
+    signal   		x_s3								    : 	integer range	0	to	800 	:= 235;			
 	-- Declarations Functions
 		
-		procedure	Print_char	(signal char :	character)	is
+		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
 		variable	cbit	: integer range 0 to 32 	:= 0;
 		variable	x1		: integer range 0 to 1300 := 0;
 		variable	Char_adr	:	integer	range	0	to	650000;
 		begin
-			
-			
+
 			Char_adr	:= character'pos(char);
 			Char_adr	:=	(char_adr - 33)*32;																											-- 33 wegen des  Offset vom Attribute pos
 			
 			if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
-							x1 := x_start;
-							if xpos_top >= x_start  and xpos_top < x_start + PIC_MAX_X then
-								cbit := 32 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
-								if cbit = 0 then																					
-										x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
-								end if;																					
-								if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
-										R  <= x"f";
-										G  <= x"f";
-										B  <= x"f";
-								end if;
+							x1 := x_s;
+             if xpos_top = x_s -1  then
+                  Adr <= AdrIn;
+              end if;    
+              
+							if xpos_top >= x_s and xpos_top < x_s + PIC_MAX_X then
+                  --Adr <= AdrIn;
+                  cbit := 32 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
+                  if cbit = 0 then																					
+                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+                  end if;																					
+--                  if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
+--                        R  <= x"f";
+--                        G  <= x"f";
+--                        B  <= x"f";
+--                  end if;
 							end if;
-							if  xpos_top = x_start + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
-									Adr <= Adr + 1;  
+              if xpos_top > x_s and xpos_top <= x_s + PIC_MAX_X then
+                   if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
+                        R  <= x"f";
+                        G  <= x"f";
+                        B  <= x"f";
+                  end if;
+              end if;
+							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã‚Â¶hen
+                  AdrIn <= AdrIn + 1;
 							end if;
-            else
-                Adr <= std_logic_vector(to_unsigned(char_adr,Adr'length));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
-            end if;
+        else
+           AdrIn <= std_logic_vector(to_unsigned(char_adr,12));   																									-- reset rom address    -- auuserhalb Bild: Adresse resetieren
+        end if;
 			
 		end Print_char;
 	
 	
 	
 begin
+
+    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgeführt
+        PLL1	:	entity work.pll
+        
+        port map(
+          
+          inclk0 	=> clk,
+          c0			=> vga_clk);
+					
+    end generate PLL;
+   
+    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgeführt
+          vga_clk <= CLK; -- Der Clock input wird direkt mit dem globalen
+    end generate Simu_PLL;
+    
 		/*VGA_SYNC Instantiation*/
 	 VGA_SYNC : entity work.vga_sync
 		
@@ -136,13 +168,7 @@ begin
 				videoOn	=>	videoOn_top);
 				
 		/*PLL Instantiation*/		
-		PLL1	:	entity work.pll
-		
-		port map(
-			
-			inclk0 	=> clk,
-			c0			=> vga_clk);
-					
+
 		/*Game_Main Instantiation*/
 		
 		Game_Main	:	entity	work.Game_Main
@@ -176,7 +202,8 @@ begin
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
-				Char_Test	<= 'H';
+				Char_Test	<= 'A';
+        Char_Test2<= 'N';
 				Game_On	<=	'0';
 				BTN_RESET_SYNC(0) <= Reset;
 				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
@@ -196,8 +223,11 @@ begin
 					if Game_State = Startscreen then
 						
 						/*Grafik Output*/
-						
-						print_char(char_Test);
+						print_char(char_Test,x_s1,Adr1,Adr,R,G,B);
+           
+            print_char(char_Test2,x_s2,Adr2,Adr,R,G,B);
+            
+            print_char(char_Test2,x_s3,Adr3,Adr,R,G,B);
 						
 						/*Grafik Output END*/
 
