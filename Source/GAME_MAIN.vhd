@@ -20,6 +20,9 @@ entity Game_Main is
 			BTN_LEFT																:	in	 	std_logic;														-- Button 02	
 			BTN_RIGHT																:	in	 	std_logic;														-- Button 01
 			Reset																		:	in		std_logic;														-- Button 00
+			SLD_Easy_Game														:	in		std_logic;
+			SLD_Mid_Game														:	in		std_logic;
+			SLD_Hard_Game														:	in		std_logic;
 			videoOn_game  													:	in  	std_logic;               							-- 1 = Bildbereich
 			vga_clk																	:	in		std_logic;														-- Global CLK
 			NewFrame_game														:	in		std_logic;														-- 1 = NewFrame on VGA	
@@ -44,6 +47,9 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
 	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
 	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Easy_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Mid_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Hard_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;							-- x Kordinate from Apple
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;							-- y Kordinate from Apple
 
@@ -94,6 +100,15 @@ begin
 					
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
+					
+					SLD_Easy_SYNC(0)	<=	SLD_Easy_Game;
+					SLD_Easy_SYNC(1)	<=	SLD_Easy_SYNC(0);
+					
+					SLD_Mid_SYNC(0)	<=	SLD_Mid_Game;
+					SLD_Mid_SYNC(1)	<=	SLD_Mid_SYNC(0);
+					
+					SLD_Hard_SYNC(0)	<=	SLD_Hard_Game;
+					SLD_Hard_SYNC(1)	<=	SLD_Hard_SYNC(0);
 					
 					/*GameState Change*/
 					
