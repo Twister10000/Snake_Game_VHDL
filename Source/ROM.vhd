@@ -39,17 +39,17 @@ USE ieee.std_logic_1164.all;
 LIBRARY altera_mf;
 USE altera_mf.altera_mf_components.all;
 
-ENTITY FONTS IS
+ENTITY ROM IS
 	PORT
 	(
 		address		: IN STD_LOGIC_VECTOR (11 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
 		q		: OUT STD_LOGIC_VECTOR (13 DOWNTO 0)
 	);
-END FONTS;
+END ROM;
 
 
-ARCHITECTURE SYN OF fonts IS
+ARCHITECTURE SYN2 OF ROM IS
 
 	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (13 DOWNTO 0);
 
@@ -81,7 +81,7 @@ BEGIN
 
 
 
-END SYN;
+END SYN2;
 
 -- ============================================================
 -- CNX file retrieval info

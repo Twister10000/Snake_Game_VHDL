@@ -25,7 +25,7 @@
 
 create_clock -name "clk" -period 20.000ns [get_ports {clk}] -waveform {0.000 10.000}
 
-set vga_clk { \PLL:PLL1|altpll_component|auto_generated|pll1|clk[0]} 
+set vga_clk { \PLL:PLL1|altpll_component|auto_generated|pll1|clk[0] } 
 
 
 # Automatically constrain PLL and other generated clocks
