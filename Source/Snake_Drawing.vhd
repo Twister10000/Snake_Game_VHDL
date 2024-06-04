@@ -33,7 +33,7 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			
 		-- Constants
-			constant 		CLK_div1_MAX										:		integer range 0 to 108e6 	:= 56e6;										--27e6; 		-- CLK MAX COUNTER Speed Control for the snake
+			constant 		CLK_div1_MAX										:		integer range 0 to 108e6 	:= 27e6;										--27e6; 		-- CLK MAX COUNTER Speed Control for the snake
 			constant		Stepsize_x											:		integer range 0 to 40			:= 40;											-- Stepsize for X
 			constant		Stepsize_y											:		integer range 0 to 41			:= 41;											-- Stepsize for Y
 			constant		X_range													:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
