@@ -36,8 +36,8 @@ derive_clock_uncertainty
 
 # tsu/th constraints
 
-set_input_delay -clock $vga_clk -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
-set_input_delay -clock $vga_clk -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset}] 
+set_input_delay -clock $vga_clk -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset SLD_Easy SLD_Mid SLD_Hard}] 
+set_input_delay -clock $vga_clk -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset SLD_Easy SLD_Mid SLD_Hard}] 
 
 
 # tco constraints
