@@ -33,36 +33,67 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			
 		-- Constants
-			constant 		CLK_div1_MAX										:		integer range 0 to 108e6 	:= 27e6;										--27e6; 		-- CLK MAX COUNTER Speed Control for the snake
-			constant		Stepsize_x											:		integer range 0 to 40			:= 40;											-- Stepsize for X
-			constant		Stepsize_y											:		integer range 0 to 41			:= 41;											-- Stepsize for Y
-			constant		X_range													:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
-			constant		Y_range													:		integer	range 0 to 1024		:= 984;											-- Moving Range for Y
-			constant		lange														:		integer range 0 to 40			:= 40;											-- MAX SNAKE Length
+			constant 		CLK_div1_MAX_Easy										:		integer range 0 to 108e6 	:= 40e6;								-- CLK MAX COUNTER Speed Control for the snake
+			constant 		CLK_div1_MAX_Mid										:		integer range 0 to 108e6 	:= 27e6;
+			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 13e6;
+			constant		Stepsize_x													:		integer range 0 to 40			:= 40;											-- Stepsize for X
+			constant		Stepsize_y													:		integer range 0 to 41			:= 41;											-- Stepsize for Y
+			constant		X_range															:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
+			constant		Y_range															:		integer	range 0 to 1024		:= 984;											-- Moving Range for Y
+			constant		lange																:		integer range 0 to 40			:= 40;											-- MAX SNAKE Length
 			
 		-- Declarations Signal
-			signal 			Move_Direction									:		Direction := Rechts;																	-- Current Moving Direction
-			signal			BTN_LEFT_SYNC										:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
-			signal			BTN_RIGHT_SYNC									:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
-			signal			BTN_RESET_SYNC									:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
-			signal			Update_Sig											:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
-			signal			CLK_ENA_1												:		std_logic := '0';																			-- Enabel Signal for CLK DIivder
-			signal			Update_length										:		std_logic	:=	'0';																		-- Signale for Update Snake Length
-			signal			Test														:		integer	range	0	to 40	:= 2;														-- Current Snake Length
+			signal 			Move_Direction											:		Direction := Rechts;																	-- Current Moving Direction
+			signal			BTN_LEFT_SYNC												:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
+			signal			BTN_RIGHT_SYNC											:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
+			signal			BTN_RESET_SYNC											:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
+			signal			Update_Sig													:		std_logic	:= '0';																			--The update signal is responsible for updating the position of the snake. 
+			signal			CLK_ENA_Easy												:		std_logic := '0';																			-- Enabel Signal for CLK DIivder Easy
+			signal			CLK_ENA_Mid													:		std_logic := '0';																				-- Enabel Signal for CLK DIivder Medium
+			signal			CLK_ENA_Hard												:		std_logic := '0';																			-- Enabel Signal for CLK DIivder Hard
+			signal			CLK_ENA_1														:		std_logic := '0';	
+			signal			Update_length												:		std_logic	:=	'0';																		-- Signale for Update Snake Length
+			signal			Test																:		integer	range	0	to 40	:= 2;														-- Current Snake Length
 				
 begin
 
 
-		/*CLK_DIV Instantiation start*/
-		CLK_div1	:	entity work.GEN_Clockdivider
+		/*CLK_DIV Instantiations start*/
+		
+		/*Easy Mode*/
+		CLK_div1_Easy	:	entity work.GEN_Clockdivider
 		generic map(
 			
-		CNT_MAX => CLK_div1_MAX)
+		CNT_MAX => CLK_div1_MAX_Easy)
 		port map(
 		
 			CLK  		=> 	vga_clk,
 			RST			=>	Reset,
-			Enable	=>	CLK_ENA_1);
+			Enable	=>	CLK_ENA_Easy);
+			
+		/*Medium Mode*/	
+		CLK_div1_Medium	:	entity work.GEN_Clockdivider
+		generic map(
+			
+		CNT_MAX => CLK_div1_MAX_Mid)
+		port map(
+		
+			CLK  		=> 	vga_clk,
+			RST			=>	Reset,
+			Enable	=>	CLK_ENA_Mid);
+			
+			
+		
+		/*Hard Mode*/
+		CLK_div1_Hard	:	entity work.GEN_Clockdivider
+		generic map(
+			
+		CNT_MAX => CLK_div1_MAX_Hard)
+		port map(
+		
+			CLK  		=> 	vga_clk,
+			RST			=>	Reset,
+			Enable	=>	CLK_ENA_Hard);
 	/*CLK_DIV Instantiation end*/
 	
 	Snake_drawing	: process	(all)
