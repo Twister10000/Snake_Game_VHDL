@@ -76,9 +76,13 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
      signal    	Adrtxt								    : 	std_logic_vector	(11 downto 0);		
     
     signal   		q  								        : 	std_logic_vector	(13 downto 0);													-- Daten  
-    signal      R2						:			  		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
-		signal      G2						:				  	std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA GREEN
-		signal      B2						:			      std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA BLUE
+    signal      R2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
+		signal      G2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA GREEN
+		signal      B2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA BLUE
+		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);
+		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);
+		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);
+		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);
  --   signal      txt2 : STRING(1 TO 30):=" Snake Game                   "; 
 		
 		-- Declarations BoxGraphics
@@ -201,6 +205,10 @@ begin
 					Draw_Snake_Out						=>	Draw_Snake,
 					Draw_Snake_Zero_Out				=>	Draw_Snake_Zero,
 					Draw_Apple_Out						=>	Draw_Apple,
+					Segment3_Game							=>	Segment3_In_TOP,
+					Segment2_Game							=>	Segment2_In_TOP,
+					Segment1_Game							=>	Segment1_In_TOP,
+					Segment0_Game							=>	Segment0_In_TOP,
 					Reset											=>	Reset);
 		/*Grafik Instantiation*/
 		
@@ -252,7 +260,12 @@ begin
 				Game_On	<=	'0';
 				BTN_RESET_SYNC(0) <= Reset;
 				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
-					
+				
+			
+				Segment0	<=	Segment0_In_TOP;
+				Segment1	<= 	Segment1_In_TOP;
+				Segment2	<=	Segment2_In_TOP;
+				Segment3	<=	Segment3_In_TOP;
 
 				if videoOn_top = '1' then
 				

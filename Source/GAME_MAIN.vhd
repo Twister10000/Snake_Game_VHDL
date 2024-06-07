@@ -30,6 +30,11 @@ entity Game_Main is
 		-- Output ports				
 			Draw_Snake_Out													: out 	std_logic := 	'0';										-- Signal for Snake-Body Drawing on VGA Output
 			Draw_Snake_Zero_Out											: out 	std_logic := 	'0';										-- Signal for Snake-Head Drawing on VGA Output
+			Draw_Apple_Out													:	out		std_logic	:=	'0';
+			Segment0_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
+			Segment1_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
+			Segment2_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
+			Segment3_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0'));										-- Signal for Apple Drawing on VGA Output
 end Game_Main;
 
 architecture beh_Game_Main of Game_Main is
@@ -82,8 +87,33 @@ begin
 					Apple_Update						=>	Apple_Update,
 					y_apple_Out							=>	y_apple_Game
 			);
+	/*Segment 0 Instantiation*/
+		Segment_0	:	entity	work.SSegment
+			port map(
+					CLK											=>	vga_clk,
+					BCD_In									=>	Seg0,
+					Segment									=> Segment0_Game);
+		/*Segment 1 Instantiation*/
 		
-	
+		Segment_1	:	entity	work.SSegment
+			port map(
+					CLK											=>	vga_clk,
+					BCD_In									=>	Seg1,
+					Segment									=> Segment1_Game);
+					
+			/*Segment 0 Instantiation*/
+		Segment_2	:	entity	work.SSegment
+			port map(
+					CLK											=>	vga_clk,
+					BCD_In									=>	Seg2,
+					Segment									=> Segment2_Game);
+					
+			/*Segment 0 Instantiation*/
+		Segment_3	:	entity	work.SSegment
+			port map(
+					CLK											=>	vga_clk,
+					BCD_In									=>	Seg3,
+					Segment									=> Segment3_Game);
 		/*Proccess for everything that happens in the Startscreen*/
 		Game_Start	:	process(all)
 		
@@ -115,9 +145,21 @@ begin
 					
 					/*7-Segment Output*/
 						case	Game_Difficulty	is
-							when	Easy					=>	Null;		
-							when	Medium				=>	Null;		
-							when	Hard					=>	Null;		
+							when	Easy					=>	Seg3	<=	'e';
+																			Seg2	<=	'a';
+																			Seg1	<=	's';
+																			Seg0	<=	'y';
+																			
+							when	Medium				=>	Seg3	<=	'n';
+																			Seg2	<=	'o';
+																			Seg1	<=	'r';
+																			Seg0	<=	'd';
+																			
+							when	Hard					=>	Seg3	<=	'h';
+																			Seg2	<=	'a';
+																			Seg1	<=	'r';
+																			Seg0	<=	'd';
+																			
 							when	others				=>	Null;		
 						end case;
 					end if;
@@ -145,15 +187,6 @@ begin
 					
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
-					
-					SLD_Easy_SYNC(0)	<=	SLD_Easy_Game;
-					SLD_Easy_SYNC(1)	<=	SLD_Easy_SYNC(0);
-					
-					SLD_Mid_SYNC(0)	<=	SLD_Mid_Game;
-					SLD_Mid_SYNC(1)	<=	SLD_Mid_SYNC(0);
-					
-					SLD_Hard_SYNC(0)	<=	SLD_Hard_Game;
-					SLD_Hard_SYNC(1)	<=	SLD_Hard_SYNC(0);
 					
 					/*GameState Change*/
 					
