@@ -45,8 +45,8 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		-- Declarations Constant
 		constant 		MAX_Y 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in y dir
 		constant 		MAX_X 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in x dir
-		constant 		PIC_MAX_X  								:		integer	range	0	to	300 	:= 14;                 				-- Bildgroesse in x Richtung (horizontal)
-    constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 16;                 				-- Bildgroesse in y Richtung (vertikal)
+		constant 		PIC_MAX_X  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in x Richtung (horizontal)
+    constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in y Richtung (vertikal)
 		-- Declarations Own Var Types
 		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);							-- 
 
@@ -75,7 +75,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
     signal   		Adr3								      : 	std_logic_vector	(11 downto 0);
      signal    	Adrtxt								    : 	std_logic_vector	(11 downto 0);		
     
-    signal   		q  								        : 	std_logic_vector	(13 downto 0);													-- Daten  
+    signal   		q  								        : 	std_logic_vector	(31 downto 0);													-- Daten  
     signal      R2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
 		signal      G2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA GREEN
 		signal      B2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA BLUE
@@ -109,19 +109,19 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 															(x"F", x"F", x"F", x"F", x"F", x"F"));
 															
 		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
-    signal   		x_s2								    : 	integer range	0	to	800 	:= 636;												
+    signal   		x_s2								    : 	integer range	0	to	800 	:= 652;												
     signal   		x_s3								    : 	integer range	0	to	800 	:= 235;			
 	-- Declarations Functions
 		
 		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
-		variable	cbit	: integer range 0 to 15 	:= 0;
+		variable	cbit	: integer range 0 to 32 	:= 0;
 		variable	x1		: integer range 0 to 1300 := 0;
 		variable	Char_adr	:	integer	range	0	to	650000;
 		begin
 			
 			
 			Char_adr	:= character'pos(char);
-			Char_adr	:=	(char_adr - 33)*16;																											-- 33 wegen des  Offset vom Attribute pos
+			Char_adr	:=	(char_adr - 33)*32;																											-- 33 wegen des  Offset vom Attribute pos
 			
 			if ypos_top >= y_start and ypos_top < y_start + PIC_MAX_Y then 
 							x1 := x_s;
@@ -131,9 +131,9 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
               
 							if xpos_top >= x_s and xpos_top < x_s + PIC_MAX_X then
                   --Adr <= AdrIn;
-                  cbit := 13 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
+                  cbit := 32 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
                   if cbit = 0 then																					
-                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
                   end if;																					
                   if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
                         R  <= x"f";
@@ -148,7 +148,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
                         B  <= x"f";
                   end if;
               end if;
-							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
+							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
                   AdrIn <= AdrIn + 1;
 							end if;
         else
@@ -162,7 +162,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 	
 begin
 
-    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃƒÂ¼hrt
+    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃƒÆ’Ã‚Â¼hrt
         PLL1	:	entity work.pll
         
         port map(
@@ -172,7 +172,7 @@ begin
 					
     end generate PLL;
    
-    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃƒÂ¼hrt
+    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃƒÆ’Ã‚Â¼hrt
           vga_clk <= CLK; -- Der Clock input wird direkt mit dem globalen
     end generate Simu_PLL;
     
@@ -232,15 +232,15 @@ begin
 			textPos_y => 50, -- Textposition: Bildschirm y Position
 			txt => printSingTxt("Snake Game "), -- fixer Text, der ausgegeben wird
 			txtColor => x"F20", -- Farbe: RGB Werte, je 4 bit x"RGB"
-			address => adrtxt, -- Adresse fÃƒÆ’Ã‚Â¼r Zeichen ROM
+			address => adrtxt, -- Adresse fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r Zeichen ROM
 			R => R2, -- Rot   Ausgabewert (4bit)      
 			G => G2, -- Gruen Ausgabewert (4bit)       
 			B => B2 -- Blau  Ausgabewert (4bit)      
 		);
     
     	------------------ ROM ------------------  
-	Rom1 : ENTITY work.Rom -- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã‚Â¤lt
-		PORT MAP(-- Jede Adresse enthÃƒÆ’Ã‚Â¤lt 32 bit Horizontal Pixel, gefolgt
+	Rom1 : ENTITY work.Rom -- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt
+		PORT MAP(-- Jede Adresse enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt 32 bit Horizontal Pixel, gefolgt
 			clock => VGA_Clk, -- von 31 Adressen mit den 32 bit horizontalen Zeilen des aktuellen Zeichens  
 			address => adrtxt, -- Memory Addresse
 			q => pixel); -- 32 bit Datenausgang
@@ -255,8 +255,8 @@ begin
 				G <= x"0";
 				B	<= x"0";
 				Char_Test	<= 'H';
-        Char_Test2<= 'A';
-        Char_Test3<= 'A';
+        Char_Test2<= 'B';
+        Char_Test3<= 'D';
 				Game_On	<=	'0';
 				BTN_RESET_SYNC(0) <= Reset;
 				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
