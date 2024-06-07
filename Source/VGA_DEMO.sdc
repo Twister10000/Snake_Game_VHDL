@@ -36,14 +36,14 @@ derive_clock_uncertainty
 
 # tsu/th constraints
 
-set_input_delay -clock $vga_clk -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset SLD_Easy SLD_Mid SLD_Hard}] 
-set_input_delay -clock $vga_clk -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset SLD_Easy SLD_Mid SLD_Hard}] 
+set_input_delay -clock $vga_clk -max 0ns [get_ports {BTN_LEFT BTN_RIGHT Reset }] 
+set_input_delay -clock $vga_clk -min 0.000ns [get_ports {BTN_LEFT BTN_RIGHT Reset }] 
 
 
 # tco constraints
 
-set_output_delay -clock $vga_clk -max 0ns [get_ports { B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
-set_output_delay -clock $vga_clk -min -0.000ns [get_ports { B[0] B[1] B[2] B[3] G[0] G[1] G[2] G[3] hsync_top R[0] R[1] R[2] R[3] vsync_top}] 
+set_output_delay -clock $vga_clk -max 0ns [get_ports { B* G* R* Segment0* Segment1* Segment2* Segment3* vsync_top hsync_top}] 
+set_output_delay -clock $vga_clk -min -0.000ns [get_ports { B* G* R* Segment0* Segment1* Segment2* Segment3* vsync_top hsync_top}] 
 
 
 # tpd constraints
