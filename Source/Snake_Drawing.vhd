@@ -134,7 +134,7 @@ begin
 					/*Default Values befor a new game Starts END*/
 					
 					/*Select degree of difficulty*/
-						
+
 						case Game_Difficulty	is
 							when	Easy							=>	CLK_ENA_1	<=	CLK_ENA_Easy;
 							when	Medium						=>	CLK_ENA_1	<=	CLK_ENA_Mid;					
@@ -157,7 +157,7 @@ begin
 						Move_Direction <= Movement(BTN_RIGHT_SYNC(1 downto 0), BTN_LEFT_SYNC(1 downto 0), Move_Direction);	
 
 						
-						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt*/
+						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt*/
 						for i in 1 to lange	loop
 							if xpos_snake	> x_snake(i) and xpos_snake < (x_snake(i)+40) then
 								if ypos_snake > y_snake(i) and ypos_snake < (y_snake(i)+40) then -- Quadrat
@@ -166,7 +166,7 @@ begin
 							end if;
 						end loop;
 						
-						/*Das Zeichen für das Zeichnen der schlange wird hier erzeugt END*/
+						/*Das Zeichen fÃ¼r das Zeichnen der schlange wird hier erzeugt END*/
 						
 						
 						/*Update Snake*/

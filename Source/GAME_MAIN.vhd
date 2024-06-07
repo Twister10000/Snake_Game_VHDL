@@ -20,9 +20,6 @@ entity Game_Main is
 			BTN_LEFT																:	in	 	std_logic;														-- Button 02	
 			BTN_RIGHT																:	in	 	std_logic;														-- Button 01
 			Reset																		:	in		std_logic;														-- Button 00
-			SLD_Easy_Game														:	in		std_logic;
-			SLD_Mid_Game														:	in		std_logic;
-			SLD_Hard_Game														:	in		std_logic;
 			videoOn_game  													:	in  	std_logic;               							-- 1 = Bildbereich
 			vga_clk																	:	in		std_logic;														-- Global CLK
 			NewFrame_game														:	in		std_logic;														-- 1 = NewFrame on VGA	
@@ -33,7 +30,6 @@ entity Game_Main is
 		-- Output ports				
 			Draw_Snake_Out													: out 	std_logic := 	'0';										-- Signal for Snake-Body Drawing on VGA Output
 			Draw_Snake_Zero_Out											: out 	std_logic := 	'0';										-- Signal for Snake-Head Drawing on VGA Output
-			Draw_Apple_Out													:	out		std_logic	:=	'0');										-- Signal for Apple Drawing on VGA Output
 end Game_Main;
 
 architecture beh_Game_Main of Game_Main is
@@ -46,10 +42,9 @@ architecture beh_Game_Main of Game_Main is
 	signal			Draw_Snake_Zero									:	std_logic	:=	'0';													-- Signal for Snake-Head Drawing on VGA Output
 	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
 	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
-	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Easy_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Mid_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Hard_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing
+	signal			BTN_RIGHT_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			BTN_LEFT_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 	
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;							-- x Kordinate from Apple
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;							-- y Kordinate from Apple
 	signal			Seg0														:	character;
@@ -97,18 +92,24 @@ begin
 					
 					/*Difficulty Setting*/
 					if Game_State = startscreen	then
-						
-						if SLD_Easy_SYNC(1) = '1' and SLD_Hard_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
-							Game_Difficulty <= Easy;
-	
-						elsif SLD_Mid_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Hard_SYNC(1) = '0'	then
-							Game_Difficulty	<=	Medium;
-							
-						elsif SLD_Hard_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
-							Game_Difficulty	<=	Hard;
+
+						if BTN_RIGHT_SYNC(1) = '0' and BTN_RIGHT_SYNC(0) = '1' then
+							case Game_Difficulty	is
+								when	Easy				=>		Game_Difficulty	<= Medium;
+								when	Medium			=>		Game_Difficulty	<= Hard;
+								when	Hard				=>		Game_Difficulty	<= Easy;
+								when others				=>		Game_Difficulty	<= Medium;
+							end case;
 						end if;
-						else 
-							Game_Difficulty	<=	Medium;																			-- Default Medium
+						
+						if BTN_LEFT_SYNC(1) = '0' and BTN_LEFT_SYNC(0) = '1' then
+							case Game_Difficulty	is
+								when	Easy				=>		Game_Difficulty	<= Hard;
+								when	Medium			=>		Game_Difficulty	<= Easy;
+								when	Hard				=>		Game_Difficulty	<= Medium;
+								when others				=>		Game_Difficulty	<= Medium;
+							end case;
+						end if;
 					end if;
 					/*Difficulty Setting END*/
 					
@@ -136,6 +137,11 @@ begin
 					Draw_Snake_Out 				<=	Draw_Snake_In;
 					Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
 					
+					BTN_LEFT_SYNC(0) <= BTN_LEFT;
+					BTN_LEFT_SYNC(1) <= BTN_LEFT_SYNC(0);
+					
+					BTN_RIGHT_SYNC(0) <= BTN_RIGHT;
+					BTN_RIGHT_SYNC(1) <= BTN_RIGHT_SYNC(0);
 					
 					BTN_RESET_SYNC(0) <= Reset;
 					BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);

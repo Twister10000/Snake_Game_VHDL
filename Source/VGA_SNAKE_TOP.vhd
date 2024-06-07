@@ -70,10 +70,10 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 																										
 		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 downto 0);														-- Vektor for Syncing    
     signal   		Adr								        : 	std_logic_vector	(11 downto 0);					
-    signal   		Adr1								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
-    signal   		Adr2								        : 	std_logic_vector	(11 downto 0);													-- Adressen 
-    signal   		Adr3								        : 	std_logic_vector	(11 downto 0);
-     signal    	Adrtxt								        : 	std_logic_vector	(11 downto 0);		
+    signal   		Adr1								      : 	std_logic_vector	(11 downto 0);													-- Adressen 
+    signal   		Adr2								      : 	std_logic_vector	(11 downto 0);													-- Adressen 
+    signal   		Adr3								      : 	std_logic_vector	(11 downto 0);
+     signal    	Adrtxt								    : 	std_logic_vector	(11 downto 0);		
     
     signal   		q  								        : 	std_logic_vector	(13 downto 0);													-- Daten  
     signal      R2						:			  		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
@@ -129,7 +129,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
                   --Adr <= AdrIn;
                   cbit := 13 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
                   if cbit = 0 then																					
-                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
                   end if;																					
                   if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
                         R  <= x"f";
@@ -144,7 +144,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
                         B  <= x"f";
                   end if;
               end if;
-							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶hen
+							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
                   AdrIn <= AdrIn + 1;
 							end if;
         else
@@ -158,7 +158,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 	
 begin
 
-    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃ¼hrt
+    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃƒÂ¼hrt
         PLL1	:	entity work.pll
         
         port map(
@@ -168,7 +168,7 @@ begin
 					
     end generate PLL;
    
-    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃ¼hrt
+    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃƒÂ¼hrt
           vga_clk <= CLK; -- Der Clock input wird direkt mit dem globalen
     end generate Simu_PLL;
     
@@ -195,9 +195,6 @@ begin
 					ypos_game     						=>	ypos_top,
 					BTN_LEFT									=>	BTN_LEFT,
 					BTN_RIGHT									=>	BTN_RIGHT,
-					SLD_Easy_Game							=>	SLD_EASY,
-					SLD_Mid_Game							=>	SLD_Mid,
-					SLD_Hard_Game							=>	SLD_HARD,
 					videoOn_game  						=>	videoOn_top,
 					vga_clk										=>	vga_clk,
 					NewFrame_game							=>	NewFrame_top,
@@ -227,15 +224,15 @@ begin
 			textPos_y => 50, -- Textposition: Bildschirm y Position
 			txt => printSingTxt("Snake Game "), -- fixer Text, der ausgegeben wird
 			txtColor => x"F20", -- Farbe: RGB Werte, je 4 bit x"RGB"
-			address => adrtxt, -- Adresse fÃƒÂ¼r Zeichen ROM
+			address => adrtxt, -- Adresse fÃƒÆ’Ã‚Â¼r Zeichen ROM
 			R => R2, -- Rot   Ausgabewert (4bit)      
 			G => G2, -- Gruen Ausgabewert (4bit)       
 			B => B2 -- Blau  Ausgabewert (4bit)      
 		);
     
     	------------------ ROM ------------------  
-	Rom1 : ENTITY work.Rom -- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÂ¤lt
-		PORT MAP(-- Jede Adresse enthÃƒÂ¤lt 32 bit Horizontal Pixel, gefolgt
+	Rom1 : ENTITY work.Rom -- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã‚Â¤lt
+		PORT MAP(-- Jede Adresse enthÃƒÆ’Ã‚Â¤lt 32 bit Horizontal Pixel, gefolgt
 			clock => VGA_Clk, -- von 31 Adressen mit den 32 bit horizontalen Zeilen des aktuellen Zeichens  
 			address => adrtxt, -- Memory Addresse
 			q => pixel); -- 32 bit Datenausgang

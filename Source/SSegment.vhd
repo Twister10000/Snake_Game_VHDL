@@ -24,15 +24,15 @@ BEGIN
 		if rising_edge(CLK)	then
 		
 			Case	BCD_In	is
-				when	'e'					=>		Segment	<=	"0000110";
-				when	'a'					=>		Segment	<=	"0001000";
-				when	's'					=>		Segment	<=	"0010010";
-				when	'y'					=>		Segment	<=	"0011001";
-				when	'h'					=>		Segment	<=	"0001001";
-				when	'r'					=>		Segment	<=	"1001110";
-				when	'd'					=>		Segment	<=	"0100001";
-				when	'o'					=>		Segment	<=	"1000000";
-				when	'n'					=>		Segment	<=	"0101011";
+				when	'e'					=>			Segment	<=	"0000110";
+				when	'a'					=>			Segment	<=	"0001000";
+				when	's'					=>			Segment	<=	"0010010";
+				when	'y'					=>			Segment	<=	"0011001";
+				when	'h'					=>			Segment	<=	"0001001";
+				when	'r'					=>			Segment	<=	"1001110";
+				when	'd'					=>			Segment	<=	"0100001";
+				when	'o'					=>			Segment	<=	"1000000";
+				when	'n'					=>			Segment	<=	"0101011";
 				when	others				=>		Segment	<= (others	=>	'1');
 			end case;
 			
