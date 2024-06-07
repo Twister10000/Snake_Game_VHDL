@@ -6,7 +6,7 @@ ENTITY SSegment IS
 	PORT(					
         CLK      :  IN STD_LOGIC;   
 				BCD_In   :  IN STD_LOGIC_VECTOR(3 DOWNTO 0);	
-				Segment  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)			
+				Segment  : 	OUT STD_LOGIC_VECTOR(6 DOWNTO 0)			
 		);																	
 END SSegment;
 --------------------------------------------------------------------

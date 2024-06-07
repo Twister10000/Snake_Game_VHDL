@@ -47,11 +47,15 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
 	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
 	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Easy_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Mid_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
-	signal			SLD_Hard_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Easy_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Mid_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
+	signal			SLD_Hard_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
 	signal			x_Apple_Game										:	integer range	0	to	2000 := 0;							-- x Kordinate from Apple
 	signal			y_Apple_Game										:	integer range	0	to	2000 := 0;							-- y Kordinate from Apple
+	signal			Seg0														:	character;
+	signal			Seg1														:	character;
+	signal			Seg2														:	character;
+	signal			Seg3														:	character;
 
 begin
 
@@ -83,8 +87,43 @@ begin
 					Apple_Update						=>	Apple_Update,
 					y_apple_Out							=>	y_apple_Game
 			);
-			
+		
+	
+		/*Proccess for everything that happens in the Startscreen*/
+		Game_Start	:	process(all)
+		
+			begin
+					if rising_edge	(vga_clk)	then
 					
+					/*Difficulty Setting*/
+					if Game_State = startscreen	then
+						
+						if SLD_Easy_SYNC(1) = '1' and SLD_Hard_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
+							Game_Difficulty <= Easy;
+	
+						elsif SLD_Mid_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Hard_SYNC(1) = '0'	then
+							Game_Difficulty	<=	Medium;
+							
+						elsif SLD_Hard_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
+							Game_Difficulty	<=	Hard;
+						end if;
+						else 
+							Game_Difficulty	<=	Medium;																			-- Default Medium
+					end if;
+					/*Difficulty Setting END*/
+					
+					/*7-Segment Output*/
+						case	Game_Difficulty	is
+							when	Easy					=>	Null;		
+							when	Medium				=>	Null;		
+							when	Hard					=>	Null;		
+							when	others				=>	Null;		
+						end case;
+					end if;
+		
+		end process	Game_Start;
+		
+		/*Proccess for everything that happens in the actual Game*/
 		Game_Main : process(all)
 		
 		begin
@@ -121,22 +160,6 @@ begin
 					end if;
 					
 					/*GameState Change END*/
-					/*Difficulty Setting*/
-					if Game_State = startscreen	then
-						
-						if SLD_Easy_SYNC(1) = '1' and SLD_Hard_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
-							Game_Difficulty <= Easy;
-	
-						elsif SLD_Mid_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Hard_SYNC(1) = '0'	then
-							Game_Difficulty	<=	Medium;
-							
-						elsif SLD_Hard_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
-							Game_Difficulty	<=	Hard;
-						end if;
-						else 
-							Game_Difficulty	<=	Medium;																			-- Default Medium
-					end if;
-					/*Difficulty Setting END*/
 					
 					/*Code for Actual Game*/
 					if Game_state	= Game	then
