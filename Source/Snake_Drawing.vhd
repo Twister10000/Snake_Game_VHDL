@@ -33,9 +33,9 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Declarations Own Var Types
 			
 		-- Constants
-			constant 		CLK_div1_MAX_Easy										:		integer range 0 to 108e6 	:= 40e6;								-- CLK MAX COUNTER Speed Control for the snake
-			constant 		CLK_div1_MAX_Mid										:		integer range 0 to 108e6 	:= 27e6;
-			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 13e6;
+			constant 		CLK_div1_MAX_Easy										:		integer range 0 to 108e6 	:= 40e6;										-- 	CLK MAX COUNTER for Difficulty: Easy
+			constant 		CLK_div1_MAX_Mid										:		integer range 0 to 108e6 	:= 27e6;										--	CLK MAX COUNTER for Difficulty: Medium
+			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 16e6;										--	CLK MAX COUNTER for Difficulty: Hard
 			constant		Stepsize_x													:		integer range 0 to 40			:= 40;											-- Stepsize for X
 			constant		Stepsize_y													:		integer range 0 to 41			:= 41;											-- Stepsize for Y
 			constant		X_range															:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
@@ -132,7 +132,18 @@ begin
 						y_snake(1)	<=	0;
 					end if;
 					/*Default Values befor a new game Starts END*/
-
+					
+					/*Select degree of difficulty*/
+						
+						case Game_Difficulty	is
+							when	Easy							=>	CLK_ENA_1	<=	CLK_ENA_Easy;
+							when	Medium						=>	CLK_ENA_1	<=	CLK_ENA_Mid;					
+							when	Hard							=>	CLK_ENA_1	<=	CLK_ENA_Hard;
+							when	others						=>	CLK_ENA_1	<=	CLK_ENA_Mid;			-- Deafult is Medium
+						end case;
+						
+					/*Select degree of difficulty END*/
+					
 					/*Actual Game Logic*/
 					if Game_state	= Game then
 						

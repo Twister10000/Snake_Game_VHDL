@@ -124,20 +124,17 @@ begin
 					/*Difficulty Setting*/
 					if Game_State = startscreen	then
 						
-						if SLD_Easy_SYNC(1) = '1'	then
+						if SLD_Easy_SYNC(1) = '1' and SLD_Hard_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
 							Game_Difficulty <= Easy;
-						end if;
-						
-						
-						if SLD_Mid_SYNC(1) = '1'	then
+	
+						elsif SLD_Mid_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Hard_SYNC(1) = '0'	then
 							Game_Difficulty	<=	Medium;
-						end if;
-						
-						
-						if SLD_Hard_SYNC(1) = '1'	then
+							
+						elsif SLD_Hard_SYNC(1) = '1' and SLD_Easy_SYNC(1) = '0' and SLD_Mid_SYNC(1) = '0'	then
 							Game_Difficulty	<=	Hard;
 						end if;
-						
+						else 
+							Game_Difficulty	<=	Medium;																			-- Default Medium
 					end if;
 					/*Difficulty Setting END*/
 					
