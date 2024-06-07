@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 ENTITY SSegment IS									
 	PORT(					
         CLK      :  IN STD_LOGIC;   
-				BCD_In   :  IN STD_LOGIC_VECTOR(3 DOWNTO 0);	
+				BCD_In   :  IN character;	
 				Segment  : 	OUT STD_LOGIC_VECTOR(6 DOWNTO 0)			
 		);																	
 END SSegment;
@@ -17,17 +17,25 @@ ARCHITECTURE Beh_SSegment OF SSegment IS			-- Counter = Entity Name
 	signal SegmentInt  :  STD_LOGIC_VECTOR(6 DOWNTO 0)	;
 BEGIN
 
-   WITH BCD_In SELECT					-- Auswahl
-	Segment  <= "1000000" WHEN x"0",
-		      "1111001" WHEN x"1",		--	    0			 
-		      "0100100" WHEN x"2",		--	   ---
-		      "0110000" WHEN x"3",		--	 5| 6 |1
-		      "0011001" WHEN x"4",		--	   ---
-		      "0010010" WHEN x"5",		--	 4|   |2
-		      "0000010" WHEN x"6",		--	   ---
-		      "1111000" WHEN x"7",		--	    3
-		      "0000000" WHEN x"8",
-		      "0010000" WHEN x"9",
-		      "1111111" WHEN OTHERS;   
 
+	print_to_seg	:	process (all)
+	
+	begin
+		if rising_edge(CLK)	then
+		
+			Case	BCD_In	is
+				when	'e'					=>		Segment	<=	"0000110";
+				when	'a'					=>		Segment	<=	"0001000";
+				when	's'					=>		Segment	<=	"0010010";
+				when	'y'					=>		Segment	<=	"0011001";
+				when	'h'					=>		Segment	<=	"0001001";
+				when	'r'					=>		Segment	<=	"1001110";
+				when	'd'					=>		Segment	<=	"0100001";
+				when	'o'					=>		Segment	<=	"1000000";
+				when	'n'					=>		Segment	<=	"0101011";
+				when	others				=>		Segment	<= (others	=>	'1');
+			end case;
+			
+		end if;
+	end process print_to_seg;
 END Beh_SSegment;
