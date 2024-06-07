@@ -27,11 +27,15 @@ entity VGA_SNAKE_TOP is
 
 
 		-- Output ports
-		hsync_top    	: 		out  	std_logic;                 											-- Hsync Monitor
-		vsync_top    	: 		out		std_logic;                 											-- Vsync Monitor
-		R							:			out		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
-		G							:			out		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA GREEN
-		B							:			out		std_logic_vector(3 downto 0)										-- 4-Bit Vektor VGA BLUE
+		hsync_top    		: 		out  	std_logic;                 																					-- Hsync Monitor
+		vsync_top    		: 		out		std_logic;                 																					-- Vsync Monitor
+		R								:			out		std_logic_vector(3 downto 0);																				-- 4-Bit Vektor VGA RED
+		G								:			out		std_logic_vector(3 downto 0);																				-- 4-Bit Vektor VGA GREEN
+		B								:			out		std_logic_vector(3 downto 0);																				-- 4-Bit Vektor VGA BLUE
+		Segment0       	: 		out 	std_logic_vector (6 downto 0)	:=	(others	=>	'1');           			-- 7 Segmentanzeige 
+    Segment1       	: 		out 	std_logic_vector (6 downto 0)	:=	(others	=>	'1');           			-- 7 Segmentanzeige 
+    Segment2       	: 		out 	std_logic_vector (6 downto 0)	:=	(others	=>	'1');           			-- 7 Segmentanzeige 
+		Segment3				: 		out 	std_logic_vector (6 downto 0)	:=	(others	=>	'1')          				-- 7 Segmentanzeige
 
 	);
 end VGA_SNAKE_TOP;
