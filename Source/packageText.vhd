@@ -14,8 +14,8 @@ package packageText is
 	PORT
 	(
 		address		: IN STD_LOGIC_VECTOR (11 DOWNTO 0);
-		clock		: IN STD_LOGIC  := '1';
-		q		: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+		clock			: IN STD_LOGIC  := '1';
+		q					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
 	);
 
   end component;

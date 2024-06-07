@@ -47,8 +47,6 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		constant 		MAX_X 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in x dir
 		constant 		PIC_MAX_X  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in x Richtung (horizontal)
     constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in y Richtung (vertikal)
-		-- Declarations Own Var Types
-		type graphicsRGB is array (0 to MAX_x-1,0 to MAX_Y-1) of std_logic_vector(3 downto 0);							-- 
 
 		-- Declarations Signal
 		signal			xpos_top     							:  	integer range 0 to	1300 	:= 0;   												-- Pixel Pos x Bildbereich
@@ -84,30 +82,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);
 		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);
  --   signal      txt2 : STRING(1 TO 30):=" Snake Game                   "; 
-		
-		-- Declarations BoxGraphics
-		signal			BoxGraphics_R							:	graphicsRGB	:=(
-															(x"F", x"F", x"F", x"F", x"F", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"F", x"F", x"F", x"F", x"F"));
-		signal			BoxGraphics_G							:	graphicsRGB	:=(
-															(x"F", x"F", x"F", x"F", x"F", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"F", x"F", x"F", x"F", x"F"));
-		signal			BoxGraphics_B							:	graphicsRGB	:=(
-															(x"F", x"F", x"F", x"F", x"F", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"0", x"0", x"0", x"0", x"F"),
-															(x"F", x"F", x"F", x"F", x"F", x"F"));
-															
+									
 		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
     signal   		x_s2								    : 	integer range	0	to	800 	:= 652;												
     signal   		x_s3								    : 	integer range	0	to	800 	:= 235;			
@@ -130,7 +105,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
               end if;    
               
 							if xpos_top >= x_s and xpos_top < x_s + PIC_MAX_X then
-                  --Adr <= AdrIn;
+
                   cbit := 32 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
                   if cbit = 0 then																					
                       x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
@@ -153,7 +128,6 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 							end if;
         else
            AdriN <= std_logic_vector(to_unsigned(char_adr,12));   			            -- reset rom address    -- auuserhalb Bild: Adresse resetieren
-          -- Adr <= adrtxt;
         end if;
 			
 		end Print_char;
@@ -224,27 +198,27 @@ begin
 	--	GENERIC MAP(STRING_LENGTH => TXT_LENGTH)
 
 		PORT MAP(
-			VGA_Clk => VGA_Clk, -- VGA Clock
-			xPos => xpos_top, -- Aktuelle xPosition der VGA Ausgabe (horizonal)
-			yPos => ypos_top, -- Aktuelle yPosition der VGA Ausgabe (vertikal)
-			screenActive => videoOn_top, -- '1' = Bildschirmausgabe aktiv
-			textPos_x => 10, -- Textposition: Bildschirm x Position
-			textPos_y => 50, -- Textposition: Bildschirm y Position
-			txt => printSingTxt("Snake Game "), -- fixer Text, der ausgegeben wird
-			txtColor => x"F20", -- Farbe: RGB Werte, je 4 bit x"RGB"
-			address => adrtxt, -- Adresse fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r Zeichen ROM
-			R => R2, -- Rot   Ausgabewert (4bit)      
-			G => G2, -- Gruen Ausgabewert (4bit)       
-			B => B2 -- Blau  Ausgabewert (4bit)      
+			VGA_Clk => VGA_Clk, 										-- VGA Clock
+			xPos => xpos_top, 											-- Aktuelle xPosition der VGA Ausgabe (horizonal)
+			yPos => ypos_top, 											-- Aktuelle yPosition der VGA Ausgabe (vertikal)
+			screenActive => videoOn_top, 						-- '1' = Bildschirmausgabe aktiv
+			textPos_x => 10, 												-- Textposition: Bildschirm x Position
+			textPos_y => 50, 												-- Textposition: Bildschirm y Position
+			txt => printSingTxt("Snake Game "), 		-- fixer Text, der ausgegeben wird
+			txtColor => x"F20", 										-- Farbe: RGB Werte, je 4 bit x"RGB"
+			address => adrtxt, 											-- Adresse fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r Zeichen ROM
+			R => R2, 																-- Rot   Ausgabewert (4bit)      
+			G => G2, 																-- Gruen Ausgabewert (4bit)       
+			B => B2 																-- Blau  Ausgabewert (4bit)      
 		);
     
     	------------------ ROM ------------------  
-	Rom1 : ENTITY work.Rom -- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt
-		PORT MAP(-- Jede Adresse enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt 32 bit Horizontal Pixel, gefolgt
-			clock => VGA_Clk, -- von 31 Adressen mit den 32 bit horizontalen Zeilen des aktuellen Zeichens  
-			address => adrtxt, -- Memory Addresse
-			q => pixel); -- 32 bit Datenausgang
-	-- Process Statement (optional)
+	Rom1 : ENTITY work.Rom 											-- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt
+		PORT MAP(																	-- Jede Adresse enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt 32 bit Horizontal Pixel, gefolgt
+			clock => VGA_Clk, 											-- von 31 Adressen mit den 32 bit horizontalen Zeilen des aktuellen Zeichens  
+			address => adrtxt, 											-- Memory Addresse
+			q => pixel); 														-- 32 bit Datenausgang
+																							-- Process Statement (optional)
 		Drawing	:	process(all)
 						
 		begin
@@ -288,14 +262,6 @@ begin
             print_char(char_Test3,x_s3,Adr3,Adr,R,G,B);
 						
 						/*Grafik Output END*/
-
-						if xpos_top	>= 300 and xpos_top < 300 + MAX_X then
-							if	ypos_top >= 412 and ypos_top	< 412 + MAX_Y	then
-								R <=	BoxGraphics_R(ypos_top - 412, xpos_top - 300);
-								G	<=	BoxGraphics_G(ypos_top - 412, xpos_top - 300);
-								B	<=	BoxGraphics_B(ypos_top - 412, xpos_top - 300);
-							end if;						
-						end if;
 					end if;
 
 					/*VGA OUTPUT Schlange und Apfel*/
