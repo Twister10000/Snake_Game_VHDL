@@ -121,7 +121,25 @@ begin
 					end if;
 					
 					/*GameState Change END*/
-					
+					/*Difficulty Setting*/
+					if Game_State = startscreen	then
+						
+						if SLD_Easy_SYNC(1) = '1'	then
+							Game_Difficulty <= Easy;
+						end if;
+						
+						
+						if SLD_Mid_SYNC(1) = '1'	then
+							Game_Difficulty	<=	Medium;
+						end if;
+						
+						
+						if SLD_Hard_SYNC(1) = '1'	then
+							Game_Difficulty	<=	Hard;
+						end if;
+						
+					end if;
+					/*Difficulty Setting END*/
 					
 					/*Code for Actual Game*/
 					if Game_state	= Game	then
