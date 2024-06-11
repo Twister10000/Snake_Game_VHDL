@@ -19,9 +19,6 @@ entity VGA_SNAKE_TOP is
 			Reset    			: 		in   	std_logic;                 										-- 1 = Reset Button 00
 			BTN_LEFT    	:			in 		std_logic;								 										-- Button 02	
 			BTN_RIGHT			:			in 		std_logic;																		-- Button 01
-			SLD_EASY			:			in		std_logic;
-			SLD_MID				:			in		std_logic;
-			SLD_HARD			:			in		std_logic;
 
 		-- Inout ports
 
