@@ -103,7 +103,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
               
 							if xpos_top >= x_s and xpos_top < x_s + PIC_MAX_X then
 
-                  cbit := 32 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
+                  cbit := 31 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
                   if cbit = 0 then																					
                       x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
                   end if;																					
