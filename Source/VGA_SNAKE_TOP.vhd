@@ -82,7 +82,10 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 									
 		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
     signal   		x_s2								    : 	integer range	0	to	800 	:= 652;												
-    signal   		x_s3								    : 	integer range	0	to	800 	:= 235;			
+    signal   		x_s3								    : 	integer range	0	to	800 	:= 235;
+
+
+		signal			Help_Signal										:		Game_FSM;
 	-- Declarations Functions
 		
 		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
@@ -221,7 +224,7 @@ begin
 		begin
 		
 			if rising_edge(vga_clk) then
-				
+			Help_Signal	<=	Game_State;
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
