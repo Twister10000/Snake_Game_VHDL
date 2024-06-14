@@ -20,7 +20,7 @@ package Game_State_PKG is
 
 	-- Signal Declaration (optional)
 		signal			Game_State				:	Game_FSM 		:= Startscreen;							-- Signal for current Game_State
-		signal			Game_Difficulty		:	Game_Level	:= Easy;
+		signal			Game_Difficulty		:	Game_Level	:= Hard;
 	-- Component Declaration (optional)
 
 end Game_State_PKG;

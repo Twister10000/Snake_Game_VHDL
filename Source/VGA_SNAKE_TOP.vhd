@@ -71,13 +71,13 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
      signal    	Adrtxt								    : 	std_logic_vector	(11 downto 0);		
     
     signal   		q  								        : 	std_logic_vector	(31 downto 0);													-- Daten  
-    signal      R2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA RED
-		signal      G2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA GREEN
-		signal      B2												:		std_logic_vector(3 downto 0);										-- 4-Bit Vektor VGA BLUE
-		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);
-		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);
-		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);
-		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);
+    signal      R2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA RED
+		signal      G2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA GREEN
+		signal      B2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA BLUE
+		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
+		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
+		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
+		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
  --   signal      txt2 : STRING(1 TO 30):=" Snake Game                   "; 
 									
 		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
@@ -85,7 +85,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
     signal   		x_s3								    : 	integer range	0	to	800 	:= 235;
 
 
-		signal			Help_Signal										:		Game_FSM;
+		signal			Help_Signal							:		Game_FSM;
 	-- Declarations Functions
 		
 		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
@@ -224,7 +224,7 @@ begin
 		begin
 		
 			if rising_edge(vga_clk) then
-			Help_Signal	<=	Game_State;
+				--Help_Signal	<=	Game_State;
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";

@@ -35,7 +35,7 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Constants
 			constant 		CLK_div1_MAX_Easy										:		integer range 0 to 108e6 	:= 40e6;										-- 	CLK MAX COUNTER for Difficulty: Easy
 			constant 		CLK_div1_MAX_Mid										:		integer range 0 to 108e6 	:= 27e6;										--	CLK MAX COUNTER for Difficulty: Medium
-			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 16e6;										--	CLK MAX COUNTER for Difficulty: Hard
+			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 15/*16e6*/;										--	CLK MAX COUNTER for Difficulty: Hard
 			constant		Stepsize_x													:		integer range 0 to 40			:= 40;											-- Stepsize for X
 			constant		Stepsize_y													:		integer range 0 to 41			:= 41;											-- Stepsize for Y
 			constant		X_range															:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
@@ -54,6 +54,9 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			CLK_ENA_1														:		std_logic := '0';	
 			signal			Update_length												:		std_logic	:=	'0';																		-- Signale for Update Snake Length
 			signal			Test																:		integer	range	0	to 40	:= 2;														-- Current Snake Length
+			
+			signal			TB_xsnake														:		x_pos_arr := (0,0,others => 1900);
+			signal			TB_ysnake														:		y_pos_arr := (0,0,others => 1900);
 				
 begin
 
@@ -102,6 +105,10 @@ begin
 				-- Concurrent Signal Assignment (optional)
 				
 				if rising_edge(vga_clk) then
+					
+					/*TB Hilfssignale*/
+					TB_xsnake	<= x_snake;
+					TB_ysnake	<= y_snake;
 					
 					Draw_Snake 				<= 	'0';
 					

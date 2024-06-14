@@ -34,7 +34,7 @@ end GEN_Clockdivider;
 architecture Beh_GEN_Clockdivider of GEN_Clockdivider is
 
 	-- Declarations (optional)
-		signal	Divider					:	integer range 0 to CNT_MAX;
+		signal	Divider					:	integer range 0 to CNT_MAX+1;
 		
 begin
 		CLK_DIV	: process(all)
