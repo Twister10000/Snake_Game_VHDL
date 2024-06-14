@@ -20,7 +20,15 @@ package Game_State_PKG is
 
 	-- Signal Declaration (optional)
 		signal			Game_State				:	Game_FSM 		:= Startscreen;							-- Signal for current Game_State
+		
+		
+		attribute syn_encoding_Gamestate : string;
+		attribute syn_encoding_Gamestate of Game_FSM : type is "safe"; 
+
+
 		signal			Game_Difficulty		:	Game_Level	:= Hard;
+		attribute syn_encoding_Difficulty : string;
+		attribute syn_encoding_Difficulty of Game_Level : type is "safe"; 	
 	-- Component Declaration (optional)
 
 end Game_State_PKG;

@@ -10,6 +10,10 @@ package Movement_PKG is
 
 	-- Type Declaration (optional)
 				type 				Direction											is	(Rechts, Links, UP, Down);												-- FSM STate for Snake Direction
+				
+				attribute syn_encoding_Direction : string;
+				attribute syn_encoding_Direction of Direction 						: type is "safe"; 
+				
 				type 				x_pos_arr 										is array (0 to 41) of integer range -100 to 2000;			-- Array for X Kordinate for Snake
 				type 				y_pos_arr 										is array (0 to 40) of integer range -100 to 2000;			-- Array for Y Kordinate for Snake
 

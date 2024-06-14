@@ -45,6 +45,8 @@ architecture beh_snake_drawing of snake_drawing is
 			
 		-- Declarations Signal
 			signal 			Move_Direction											:		Direction := Rechts;																	-- Current Moving Direction
+			
+
 			signal			BTN_LEFT_SYNC												:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
 			signal			BTN_RIGHT_SYNC											:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
 			signal			BTN_RESET_SYNC											:		std_logic_vector (1 downto 0)	:= "11";								-- Vektor for Syncing
