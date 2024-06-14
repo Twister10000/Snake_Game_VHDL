@@ -11,7 +11,10 @@ use work.Game_State_PKG.all;
 -- Library Clause(s) (optional)
 -- Use Clause(s) (optional)
 entity Game_Main is
-
+	generic	(Simulation	:	boolean	:= false);
+	
+	
+	
 	port
 	(
 		-- Input ports
@@ -62,6 +65,8 @@ begin
 	/*Snake_Drawing Instantiation*/
 		
 		Snake_Drawing	:	entity	work.snake_Drawing
+			generic	map (Simulation	=>	simulation)
+			
 			port map (
 					xpos_snake     					=>	xpos_game,
 					ypos_snake     					=>	ypos_game,

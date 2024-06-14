@@ -11,7 +11,8 @@ USE work.packageText.ALL;
 use work.PackagePrint.all;
 
 entity VGA_SNAKE_TOP is
-  generic (USE_PLL : boolean := true);
+  generic (USE_PLL : boolean := true; 
+					Simulation	:	boolean	:= false);
 	port
 	(
 		-- Input ports
@@ -168,6 +169,8 @@ begin
 		/*Game_Main Instantiation*/
 		
 		Game_Main	:	entity	work.Game_Main
+			generic	map	(Simulation	=>	Simulation)
+			
 			port map (
 					xpos_game     						=>	xpos_top,
 					ypos_game     						=>	ypos_top,

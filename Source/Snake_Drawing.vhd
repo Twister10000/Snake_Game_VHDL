@@ -7,7 +7,7 @@ use work.Game_State_PKG.all;
 
 
 entity snake_drawing is
-	
+	generic	(Simulation	:	boolean	:= false);
 	port
 	(
 		-- Input ports
@@ -35,7 +35,8 @@ architecture beh_snake_drawing of snake_drawing is
 		-- Constants
 			constant 		CLK_div1_MAX_Easy										:		integer range 0 to 108e6 	:= 40e6;										-- 	CLK MAX COUNTER for Difficulty: Easy
 			constant 		CLK_div1_MAX_Mid										:		integer range 0 to 108e6 	:= 27e6;										--	CLK MAX COUNTER for Difficulty: Medium
-			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 15/*16e6*/;										--	CLK MAX COUNTER for Difficulty: Hard
+			constant 		CLK_div1_MAX_Hard										:		integer range 0 to 108e6 	:= 16e6;										--	CLK MAX COUNTER for Difficulty: Hard
+			constant 		CLK_div1_MAX_Simu										:		integer range 0 to 108e6 	:= 256;											--	CLK MAX COUNTER for Simulation
 			constant		Stepsize_x													:		integer range 0 to 40			:= 40;											-- Stepsize for X
 			constant		Stepsize_y													:		integer range 0 to 41			:= 41;											-- Stepsize for Y
 			constant		X_range															:		integer	range 0	to 1280		:= 1240;										-- Moving Range for X
@@ -62,7 +63,7 @@ begin
 
 
 		/*CLK_DIV Instantiations start*/
-		
+		CLK_DIV	:	if Simulation	= false generate
 		/*Easy Mode*/
 		CLK_div1_Easy	:	entity work.GEN_Clockdivider
 		generic map(
@@ -97,6 +98,22 @@ begin
 			CLK  		=> 	vga_clk,
 			RST			=>	Reset,
 			Enable	=>	CLK_ENA_Hard);
+			
+			end generate Clk_DIV;
+			
+		Simu_CLK_DIV	:	if SImulation	= true	generate
+		
+					CLK_div1_Easy	:	entity work.GEN_Clockdivider
+					generic map(
+						
+					CNT_MAX => CLK_div1_MAX_Simu)
+					port map(
+					
+						CLK  		=> 	vga_clk,
+						RST			=>	Reset,
+						Enable	=>	CLK_ENA_Hard);
+					
+		end generate Simu_CLK_DIV;
 	/*CLK_DIV Instantiation end*/
 	
 	Snake_drawing	: process	(all)
