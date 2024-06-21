@@ -15,20 +15,18 @@ entity Bad_Apple_Drawing is
 	port
 	(
 		-- Input ports
-			xpos_apple     							:	in  	integer range 0 to 1300;   										-- Pixel Pos x Bildbereich
-			ypos_apple     							:	in  	integer range 0 to 1033;    									-- Pixel Pos y Bildbereich
+			xpos_bad_apple     							:	in  	integer range 0 to 1300;   										-- Pixel Pos x Bildbereich
+			ypos_bad_apple     							:	in  	integer range 0 to 1033;    									-- Pixel Pos y Bildbereich
 			Reset												:	in		std_logic	:= '0';															-- Button 00
-			videoOn_apple  							:	in  	std_logic	:= '0';               							-- 1 = Bildbereich
+			videoOn_bad_apple  							:	in  	std_logic	:= '0';               							-- 1 = Bildbereich
 			vga_clk											:	in		std_logic	:= '0';															-- Global CLK
-			NewFrame_apple							:	in		std_logic	:= '0';															-- 1 = NewFrame on VGA	
-			Bad_Apple_Update								:	in		std_logic	:= '0';															-- Signal for Update Apple Position
+			NewFrame_bad_apple							:	in		std_logic	:= '0';															-- 1 = NewFrame on VGA	
+			Bad_Apple_Update								:	in		std_logic	:= '0';													-- Signal for Update Bad_Apple Position
 
 		-- Inout ports
 
 		-- Output ports
-			Draw_Bad_Apple											: out 	std_logic := 	'0'														-- Signal for Apple Drawing on VGA Output
-			--x_bad_Apple_OUT									:	out		integer	range	0	to	2000	:=	0;							-- x Kordinate from Apple
-			--y_bad_Apple_OUT									:	out		integer	range	0	to	2000	:=	0								-- y Kordinate from Apple
+			Draw_Bad_Apple											: out 	std_logic := 	'0'														-- Signal for Bad Apple Drawing on VGA Output
 	);
 end Bad_Apple_Drawing;
 
@@ -48,17 +46,16 @@ architecture beh_Bad_Apple_Drawing of Bad_Apple_Drawing is
 			constant		CNT_MAX_y												:		integer	range	0	to	41			:= 22;				-- Max CNT Value for Ranom Generator
 			constant		Max_Amount											:		integer range 0 to 40				:= 40;				-- MAX SNAKE Length
 			constant 		CLK_div1_MAX										:		integer range 0 to 108e6 		:= 73e6;			-- 	CLK MAX COUNTER
+			constant 		CLK_div1_MAX_Simu								:		integer range 0 to 108e6 	:= 256;											--	CLK MAX COUNTER for Simulation
 			
 			
 			
 		-- Declarations Signal
-			--signal 			x_apple													:		integer	range 0 to	1280		:=	600;				-- x Kordinate from Apple
-			--signal 			y_apple													:		integer	range 0 to	1024		:=	492;				-- y Kordinate from Apple
-			signal			Random_Num_x										:		integer	range	0	to	40			:=	20;						-- Random Number for Apple X 
-			signal			Random_Num_y										:		integer	range	0	to	41			:=	20;						-- Random Number for Apple Y
+			signal			Random_Num_x										:		integer	range	0	to	40			:=	20;						-- Random Number for Bad Apple X 
+			signal			Random_Num_y										:		integer	range	0	to	41			:=	20;						-- Random Number for Bad Apple Y
 			signal			Amount													:		integer	range	0	to	40			:=	1;
 			signal			Update													:		std_logic	:= '0';
-			signal			CLK_ENA													:		std_logic := '0';													-- Enabel Signal for CLK DIivder Easy
+			signal			CLK_ENA													:		std_logic := '0';															-- Enabel Signal for CLK DIivder
 			
 			signal 			x_bad_apple											:	x_pos_arr := (others => 1900);									-- Signal for X Kordinate for bad_Apple
 			signal 			y_bad_apple											:	y_pos_arr := (others => 1900);									-- Signal for Y Kordinate for bad_Apple
@@ -85,7 +82,7 @@ begin
 		CLK_div1	:	entity work.GEN_Clockdivider
 		generic map(
 			
-		CNT_MAX => CLK_div1_MAX)
+		CNT_MAX => CLK_div1_MAX_Simu)
 		port map(
 		
 			CLK  		=> 	vga_clk,
@@ -104,10 +101,10 @@ begin
 				
 
 				
-				if videoOn_apple = '1'	then
+				if videoOn_bad_apple = '1'	then
 						for i in 1 to Max_Amount	loop
-							if xpos_apple	> x_bad_apple(i) and xpos_apple < (x_bad_Apple(i)+40) then
-								if ypos_apple > y_bad_apple(i) and ypos_apple < (y_bad_apple(i)+40) then -- Quadrat
+							if xpos_bad_apple	> x_bad_apple(i) and xpos_bad_apple < (x_bad_Apple(i)+40) then
+								if ypos_bad_apple > y_bad_apple(i) and ypos_bad_apple < (y_bad_apple(i)+40) then -- Quadrat
 									Draw_Bad_Apple <= '1';
 								end if;
 							end if;

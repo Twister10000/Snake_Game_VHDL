@@ -102,11 +102,11 @@ begin
 		Bad_Apple_Drawing	: entity	work.Bad_Apple_Drawing
 			generic	map (Simulation	=>	simulation)
 			port map(
-					xpos_apple     					=>	xpos_game,
-					ypos_apple     					=>	ypos_game,
-					videoOn_apple  					=>	videoOn_game,
+					xpos_bad_apple     			=>	xpos_game,
+					ypos_bad_apple     			=>	ypos_game,
+					videoOn_bad_apple  			=>	videoOn_game,
 					vga_clk									=>	vga_clk,
-					NewFrame_apple					=>	NewFrame_game,
+					NewFrame_bad_apple			=>	NewFrame_game,
 					Draw_Bad_Apple					=>	Draw_bad_Apple_In,
 					Reset										=>	Reset,
 					Bad_Apple_Update				=>	Bad_Apple_Update
