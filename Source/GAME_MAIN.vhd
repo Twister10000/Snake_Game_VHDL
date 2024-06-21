@@ -48,6 +48,7 @@ architecture beh_Game_Main of Game_Main is
 	signal 			Draw_Apple_In										:	std_logic	:=	'0';													-- Signal for Apple Drawing on VGA Output
 	signal 			Draw_Snake_In										:	std_logic	:=	'0';													-- Signal for Snake-Body Drawing on VGA Output
 	signal			Draw_Snake_Zero									:	std_logic	:=	'0';													-- Signal for Snake-Head Drawing on VGA Output
+	signal			Border_Crash_IN									:	std_logic	:=	'0';
 	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
 	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
 	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing
@@ -75,6 +76,7 @@ begin
 					vga_clk									=>	vga_clk,
 					NewFrame_snake					=>	NewFrame_game,
 					Draw_Snake							=>	Draw_Snake_In,
+					Border_Crash						=>	Border_Crash_IN,
 					Reset										=>	Reset,
 					add_snake								=>	add);
 					
@@ -233,6 +235,12 @@ begin
 								Game_state <= Endscreen;
 						end if;
 																				/*Snake Crasch Detection END*/
+																				
+																				/*Border Crash Detection*/
+						if Border_Crash_IN	= '1' then
+								Game_state	<= Endscreen;
+						end if;
+																				/*Border Crash Detection END*/
 					end if;
 					/*Code for Actual Game END*/
 				end if; -- VGA CLK

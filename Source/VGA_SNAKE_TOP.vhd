@@ -276,8 +276,16 @@ begin
 						if	Draw_Apple	= '1'	then
 							R <= x"F";
 						end if;
+						
+						if ypos_top	<= 10 or ypos_top	>= 1014  	then
+							B	<= x"F";
+						end if;
+						if xpos_top	<= 10 or xpos_top	>= 	1270	then
+							B <= x"F";
+						end if;
+					
 					end if;
-										
+					
 					if ypos_top = 0 then
 						R		<= x"F";
 						G		<= x"F";

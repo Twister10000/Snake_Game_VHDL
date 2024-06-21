@@ -24,7 +24,8 @@ entity snake_drawing is
 
 
 		-- Output ports
-			Draw_Snake							: out 	std_logic := 	'0');										-- Signal for Snake Drawing on VGA Output
+			Draw_Snake							: out 	std_logic := 	'0';										-- Signal for Snake Drawing on VGA Output
+			Border_Crash						:	out		std_logic	:=	'0');
 end snake_drawing;
 
 architecture beh_snake_drawing of snake_drawing is
@@ -129,6 +130,7 @@ begin
 					TB_xsnake	<= x_snake;
 					TB_ysnake	<= y_snake;
 					
+					Border_Crash			<=	'0';
 					Draw_Snake 				<= 	'0';
 					
 					if Add_Snake	= '1'	then
@@ -221,28 +223,28 @@ begin
 																							y_snake(0) <= y_snake(0);
 																							/*Detection for Left Screen Border*/
 																							if x_snake(0) < 40 then
-																								x_snake(0) <= x_range;
+																								Border_Crash	<= '1';
 																							end if;
 																						
 								when Rechts								=> 	x_snake(0) <=	x_snake(0) + stepsize_x;
 																							y_snake(0) <= y_snake(0);
 																							/*Detection for Right Screen Border*/
 																							if x_snake(0) > (x_range-40)	then
-																								x_snake(0) <= 0;
+																								Border_Crash <= '1';
 																							end if;
 																						
 								when Up										=> 	y_snake(0)	<=	y_snake(0) - stepsize_y;
 																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for Upper Screen Border*/
 																							if	y_snake(0) < 40	then
-																								y_snake(0)	<= y_range;
+																								Border_Crash <= '1';
 																							end if;
 																							
 								when Down									=> 	y_snake(0)	<=	y_snake(0) + stepsize_y;
 																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for lower Screen Border*/
 																							if y_snake(0) > (y_range-40)	then
-																								y_snake(0)	<= 0;
+																								Border_Crash <= '1';
 																							end if;
 																							
 								when others								=> Null;
