@@ -45,16 +45,20 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		constant 		MAX_X 										:		integer	range	0	to	300 	:= 6; 													-- number of Pixels in x dir
 		constant 		PIC_MAX_X  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in x Richtung (horizontal)
     constant 		PIC_MAX_Y  								:		integer	range	0	to	300 	:= 32;                 				-- Bildgroesse in y Richtung (vertikal)
+		
+		constant   	x_s1								    	: 	integer range	0	to	800 	:= 620;												
+    constant   	x_s2								    	: 	integer range	0	to	800 	:= 652;												
+    constant   	x_s3								    	: 	integer range	0	to	800 	:= 235;
 
 		-- Declarations Signal
 		signal			xpos_top     							:  	integer range 0 to	1300 	:= 0;   												-- Pixel Pos x Bildbereich
 		signal			ypos_top     							:  	integer range 0 to	1033 	:= 0;    												-- Pixel Pos y Bildbereich
     signal   		x_start								    : 	integer range	0	to	800 	:= 620;													-- Bildkoordinate x = 50 
-    signal   		y_start								    : 	integer	range	0	to	700 	:= 5; --512;													-- Bildkoordinate y = 10
+    signal   		y_start								    : 	integer	range	0	to	700 	:= 5; --512;										-- Bildkoordinate y = 10
 		
-		signal			Char_Test									:		character;
-    signal			Char_Test2								:		character;
-    signal			Char_Test3	  						:		character;
+		--signal			Char_Test									:		character;																							-- Test Characters für das Ausgeben einen Character
+    --signal			Char_Test2								:		character;																							-- Test Characters für das Ausgeben einen Character
+    --signal			Char_Test3	  						:		character;																							-- Test Characters für das Ausgeben einen Character
 																									
 		signal			videoOn_top  							:  	std_logic :=	'0';              													-- 1 = Bildbereich
 		signal			vga_clk										:		std_logic :=	'0';																				-- Global Clock
@@ -64,29 +68,25 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Snake_Zero						:		std_logic	:=	'0';																				-- Signal for Snake-Head Drawing on VGA Output
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
-		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 downto 0);														-- Vektor for Syncing    
-    signal   		Adr								        : 	std_logic_vector	(11 downto 0);					
-    signal   		Adr1								      : 	std_logic_vector	(11 downto 0);													-- Adressen 
-    signal   		Adr2								      : 	std_logic_vector	(11 downto 0);													-- Adressen 
-    signal   		Adr3								      : 	std_logic_vector	(11 downto 0);
-     signal    	Adrtxt								    : 	std_logic_vector	(11 downto 0);		
+		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 	downto 	0);													-- Vektor for Syncing    
+    signal   		Adr								        : 	std_logic_vector	(11 downto 	0);					
+    signal   		Adr1								      : 	std_logic_vector	(11 downto 	0);													-- Adressen 
+    signal   		Adr2								      : 	std_logic_vector	(11 downto 	0);													-- Adressen 
+    signal   		Adr3								      : 	std_logic_vector	(11 downto 	0);
+     signal    	Adrtxt								    : 	std_logic_vector	(11 downto 	0);		
     
-    signal   		q  								        : 	std_logic_vector	(31 downto 0);													-- Daten  
-    signal      R2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA RED
-		signal      G2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA GREEN
-		signal      B2												:		std_logic_vector(3 downto 0);															-- 4-Bit Vektor VGA BLUE
+    signal   		q  								        : 	std_logic_vector	(31 downto 	0);													-- Daten  
+    signal      R2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA RED
+		signal      G2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA GREEN
+		signal      B2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA BLUE
 		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
 		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
 		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
 		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
- --   signal      txt2 : STRING(1 TO 30):=" Snake Game                   "; 
-									
-		signal   		x_s1								    : 	integer range	0	to	800 	:= 620;												
-    signal   		x_s2								    : 	integer range	0	to	800 	:= 652;												
-    signal   		x_s3								    : 	integer range	0	to	800 	:= 235;
+								
 
 
-		signal			Help_Signal							:		Game_FSM;
+		signal			Help_Signal							:		Game_FSM;																										-- Hilfssingal für Testbench
 	-- Declarations Functions
 		
 		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
@@ -231,9 +231,6 @@ begin
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
-				Char_Test	<= 'H';
-        Char_Test2<= 'B';
-        Char_Test3<= 'D';
 				Game_On	<=	'0';
 				BTN_RESET_SYNC(0) <= Reset;
 				BTN_RESET_SYNC(1) <= BTN_RESET_SYNC(0);
@@ -257,21 +254,18 @@ begin
 					
 					if Game_State = Startscreen then
 						
-						/*Grafik Output*/
-						print_char(char_Test,x_s1,Adr1,Adr,R,G,B);
+						/*Grafik Output DEMO*/
+						--print_char(char_Test,x_s1,Adr1,Adr,R,G,B);
            
-            print_char(char_Test2,x_s2,Adr2,Adr,R,G,B);
+            --print_char(char_Test2,x_s2,Adr2,Adr,R,G,B);
             
-            print_char(char_Test3,x_s3,Adr3,Adr,R,G,B);
+            --print_char(char_Test3,x_s3,Adr3,Adr,R,G,B);
 						
 						/*Grafik Output END*/
 					end if;
 
 					/*VGA OUTPUT Schlange und Apfel*/
 					
-					if xpos_top = 640 then
-						R <= x"F";
-					end if;
 					if Game_On	= '1' then
 						if Draw_Snake = '1' then 																													-- Schlange zeichnen
 							G <= x"F";
@@ -284,10 +278,6 @@ begin
 						end if;
 					end if;
 										
-					if ypos_top	= 512 then
-						B	<= x"F";
-						R <= x"8";
-					end if;
 					if ypos_top = 0 then
 						R		<= x"F";
 						G		<= x"F";

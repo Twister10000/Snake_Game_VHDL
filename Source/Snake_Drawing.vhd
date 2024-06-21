@@ -58,8 +58,8 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			Update_length												:		std_logic	:=	'0';																		-- Signale for Update Snake Length
 			signal			Test																:		integer	range	0	to 40	:= 2;														-- Current Snake Length
 			
-			signal			TB_xsnake														:		x_pos_arr := (0,0,others => 1900);
-			signal			TB_ysnake														:		y_pos_arr := (0,0,others => 1900);
+			signal			TB_xsnake														:		x_pos_arr := (0,0,others => 1900);										--	Hilfssignal für Testbench
+			signal			TB_ysnake														:		y_pos_arr := (0,0,others => 1900);										--	Hilfssignal für Testbench
 				
 begin
 
