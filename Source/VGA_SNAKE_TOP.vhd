@@ -208,7 +208,7 @@ begin
 			yPos => ypos_top, 											-- Aktuelle yPosition der VGA Ausgabe (vertikal)
 			screenActive => videoOn_top, 						-- '1' = Bildschirmausgabe aktiv
 			textPos_x => 10, 												-- Textposition: Bildschirm x Position
-			textPos_y => 50, 												-- Textposition: Bildschirm y Position
+			textPos_y => 5, 												-- Textposition: Bildschirm y Position
 			txt => printSingTxt("Snake Game "), 		-- fixer Text, der ausgegeben wird
 			txtColor => x"F20", 										-- Farbe: RGB Werte, je 4 bit x"RGB"
 			address => adrtxt, 											-- Adresse fÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼r Zeichen ROM
