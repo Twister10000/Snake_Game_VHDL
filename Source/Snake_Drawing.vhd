@@ -59,8 +59,8 @@ architecture beh_snake_drawing of snake_drawing is
 			signal			Update_length												:		std_logic	:=	'0';																		-- Signale for Update Snake Length
 			signal			Test																:		integer	range	0	to 40	:= 2;														-- Current Snake Length
 			
-			signal			TB_xsnake														:		x_pos_arr := (0,0,others => 1900);										--	Hilfssignal für Testbench
-			signal			TB_ysnake														:		y_pos_arr := (0,0,others => 1900);										--	Hilfssignal für Testbench
+			signal			TB_xsnake														:		x_pos_arr := (40,40,others => 1900);										--	Hilfssignal für Testbench
+			signal			TB_ysnake														:		y_pos_arr := (41,41,others => 1900);										--	Hilfssignal für Testbench
 				
 begin
 
@@ -154,10 +154,10 @@ begin
 						Move_Direction	<= Rechts;
 						x_snake <= (others 		=>	1900);
 						y_snake	<= (others		=>	1900);
-						x_snake(0)	<= 	40;
+						x_snake(0)	<= 	80;
 						x_snake(1)	<=	0;
-						y_snake(0)	<= 	0;
-						y_snake(1)	<=	0;
+						y_snake(0)	<= 	82;
+						y_snake(1)	<=	82;
 					end if;
 					/*Default Values befor a new game Starts END*/
 					
@@ -222,28 +222,28 @@ begin
 								when Links								=> 	x_snake(0) <=	x_snake(0) - stepsize_x;
 																							y_snake(0) <= y_snake(0);
 																							/*Detection for Left Screen Border*/
-																							if x_snake(0) < 40 then
+																							if x_snake(0) < 80 then
 																								Border_Crash	<= '1';
 																							end if;
 																						
 								when Rechts								=> 	x_snake(0) <=	x_snake(0) + stepsize_x;
 																							y_snake(0) <= y_snake(0);
 																							/*Detection for Right Screen Border*/
-																							if x_snake(0) > (x_range-40)	then
+																							if x_snake(0) > (x_range-80)	then
 																								Border_Crash <= '1';
 																							end if;
 																						
 								when Up										=> 	y_snake(0)	<=	y_snake(0) - stepsize_y;
 																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for Upper Screen Border*/
-																							if	y_snake(0) < 40	then
+																							if	y_snake(0) < 80	then
 																								Border_Crash <= '1';
 																							end if;
 																							
 								when Down									=> 	y_snake(0)	<=	y_snake(0) + stepsize_y;
 																							x_snake(0)	<=	x_snake(0);
 																							/*Detection for lower Screen Border*/
-																							if y_snake(0) > (y_range-40)	then
+																							if y_snake(0) > (y_range-80)	then
 																								Border_Crash <= '1';
 																							end if;
 																							

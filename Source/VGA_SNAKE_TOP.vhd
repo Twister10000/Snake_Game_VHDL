@@ -56,9 +56,9 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
     signal   		x_start								    : 	integer range	0	to	800 	:= 620;													-- Bildkoordinate x = 50 
     signal   		y_start								    : 	integer	range	0	to	700 	:= 5; --512;										-- Bildkoordinate y = 10
 		
-		--signal			Char_Test									:		character;																							-- Test Characters für das Ausgeben einen Character
-    --signal			Char_Test2								:		character;																							-- Test Characters für das Ausgeben einen Character
-    --signal			Char_Test3	  						:		character;																							-- Test Characters für das Ausgeben einen Character
+		--signal			Char_Test									:		character;																							-- Test Characters fÃ¼r das Ausgeben einen Character
+    --signal			Char_Test2								:		character;																							-- Test Characters fÃ¼r das Ausgeben einen Character
+    --signal			Char_Test3	  						:		character;																							-- Test Characters fÃ¼r das Ausgeben einen Character
 																									
 		signal			videoOn_top  							:  	std_logic :=	'0';              													-- 1 = Bildbereich
 		signal			vga_clk										:		std_logic :=	'0';																				-- Global Clock
@@ -79,14 +79,14 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
     signal      R2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA RED
 		signal      G2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA GREEN
 		signal      B2												:		std_logic_vector	(3 	downto 	0);													-- 4-Bit Vektor VGA BLUE
-		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
-		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
-		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
-		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal für die 7-Segment Anzeigen
+		signal			Segment3_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal fÃ¼r die 7-Segment Anzeigen
+		signal			Segment2_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal fÃ¼r die 7-Segment Anzeigen
+		signal			Segment1_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal fÃ¼r die 7-Segment Anzeigen
+		signal			Segment0_In_TOP						:		std_logic_vector	(6	downto	0);													--	Hilfssignal fÃ¼r die 7-Segment Anzeigen
 								
 
 
-		signal			Help_Signal							:		Game_FSM;																										-- Hilfssingal für Testbench
+		signal			Help_Signal							:		Game_FSM;																										-- Hilfssingal fÃ¼r Testbench
 	-- Declarations Functions
 		
 		procedure	Print_char	(signal char :	character; signal x_s : integer; signal AdrIn : inout std_logic_vector;signal Adr : out std_logic_vector;signal R	:out		std_logic_vector(3 downto 0);	signal	G:			out		std_logic_vector(3 downto 0);	signal	B	:			out		std_logic_vector(3 downto 0))	is
@@ -109,7 +109,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 
                   cbit := 31 - (xpos_top  - x1 );    																					-- aktuelles Bit berechnen
                   if cbit = 0 then																					
-                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
+                      x1 := xpos_top;                																					-- Zaehler zurÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼cksetzen, um Bitcounter im Bereich 0 - 14 zu halten
                   end if;																					
                   if q(cbit) = '1' then              																					-- falls bit = 1:  weiss ausgeben
                         R  <= x"f";
@@ -124,7 +124,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
                         B  <= x"f";
                   end if;
               end if;
-							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
+							if  xpos_top = x_s + PIC_MAX_X then      																	-- nach Ende x-Bereich: Adresse erhÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶hen
                   AdrIn <= AdrIn + 1;
 							end if;
         else
@@ -137,7 +137,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 	
 begin
 
-    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃƒÆ’Ã‚Â¼hrt
+    PLL: if USE_PLL = true generate -- wird bei der Quartus Compilation ausgefÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼hrt
         PLL1	:	entity work.pll
         
         port map(
@@ -147,7 +147,7 @@ begin
 					
     end generate PLL;
    
-    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃƒÆ’Ã‚Â¼hrt
+    Simu_PLL: if USE_PLL = false generate -- wird bei der Modelsim Simulation ausgefÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼hrt
           vga_clk <= CLK; -- Der Clock input wird direkt mit dem globalen
     end generate Simu_PLL;
     
@@ -209,15 +209,15 @@ begin
 			textPos_y => 50, 												-- Textposition: Bildschirm y Position
 			txt => printSingTxt("Snake Game "), 		-- fixer Text, der ausgegeben wird
 			txtColor => x"F20", 										-- Farbe: RGB Werte, je 4 bit x"RGB"
-			address => adrtxt, 											-- Adresse fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼r Zeichen ROM
+			address => adrtxt, 											-- Adresse fÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼r Zeichen ROM
 			R => R2, 																-- Rot   Ausgabewert (4bit)      
 			G => G2, 																-- Gruen Ausgabewert (4bit)       
 			B => B2 																-- Blau  Ausgabewert (4bit)      
 		);
     
     	------------------ ROM ------------------  
-	Rom1 : ENTITY work.Rom 											-- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt
-		PORT MAP(																	-- Jede Adresse enthÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¤lt 32 bit Horizontal Pixel, gefolgt
+	Rom1 : ENTITY work.Rom 											-- Zeichen ROM, das die Bitmaps der Textzeichen enthÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤lt
+		PORT MAP(																	-- Jede Adresse enthÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤lt 32 bit Horizontal Pixel, gefolgt
 			clock => VGA_Clk, 											-- von 31 Adressen mit den 32 bit horizontalen Zeilen des aktuellen Zeichens  
 			address => adrtxt, 											-- Memory Addresse
 			q => pixel); 														-- 32 bit Datenausgang
@@ -277,10 +277,10 @@ begin
 							R <= x"F";
 						end if;
 						
-						if ypos_top	<= 10 or ypos_top	>= 1014  	then
+						if ypos_top	<= 40 or ypos_top	>= 984  	then
 							B	<= x"F";
 						end if;
-						if xpos_top	<= 10 or xpos_top	>= 	1270	then
+						if xpos_top	<= 40 or xpos_top	>= 	1240	then
 							B <= x"F";
 						end if;
 					

@@ -39,8 +39,8 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 			constant		Y_range													:		integer	range 0 to 	1024		:= 984;				-- Moving Range for Y
 			constant		Stepsize_x											:		integer range 0 to 40				:= 40;				-- Stepsize for X
 			constant		Stepsize_y											:		integer range 0 to 41				:= 41;				-- Stepsize for Y
-			constant		CNT_MAX_x												:		integer	range	0	to	40			:= 31;				-- Max CNT Value for Ranom Generator
-			constant		CNT_MAX_y												:		integer	range	0	to	41			:= 24;				-- Max CNT Value for Ranom Generator
+			constant		CNT_MAX_x												:		integer	range	0	to	40			:= 29;				-- Max CNT Value for Ranom Generator
+			constant		CNT_MAX_y												:		integer	range	0	to	41			:= 22;				-- Max CNT Value for Ranom Generator
 			
 			
 		-- Declarations Signal
@@ -93,8 +93,8 @@ begin
 						end if;
 					
 						if Apple_Update	=	'1'	then
-							x_apple	<=	Random_Num_x*Stepsize_x;
-							y_apple	<=	Random_Num_y*stepsize_y;
+							x_apple	<=	Random_Num_x*Stepsize_x + stepsize_x;
+							y_apple	<=	Random_Num_y*stepsize_y + stepsize_y;
 						end if;
 				end if;
 			
