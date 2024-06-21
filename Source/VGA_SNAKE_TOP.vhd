@@ -69,8 +69,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 		signal			Draw_bad_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
-		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 	downto 	0);													-- Vektor for Syncing    
-    signal   		Adr								        : 	std_logic_vector	(11 downto 	0);					
+		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 	downto 	0);													-- Vektor for Syncing    					
     signal   		Adr1								      : 	std_logic_vector	(11 downto 	0);													-- Adressen 
     signal   		Adr2								      : 	std_logic_vector	(11 downto 	0);													-- Adressen 
     signal   		Adr3								      : 	std_logic_vector	(11 downto 	0);
@@ -190,14 +189,6 @@ begin
 					Draw_bad_Apple_Out				=>	Draw_bad_Apple,
 					Reset											=>	Reset);
 		/*Grafik Instantiation*/
-		
-		 grafik: entity work.FONTS               							-- Name des ROMs: FONTS.vhd
-				port map (
-                clock     => vga_clk,     								-- ROM Clock mit vgaclk verbinden
-                address   => Adr,         								-- Adresse);
-                q         => q            								-- Daten 
-              );
-              
               ------------------ Textzeile 1-------------------------         
 	text1 : ENTITY work.TextLine -- Textzeile 1
 	--	GENERIC MAP(STRING_LENGTH => TXT_LENGTH)

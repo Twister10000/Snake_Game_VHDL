@@ -32,7 +32,7 @@ BEGIN
 				when	'r'					=>			Segment	<=	"1001110";
 				when	'd'					=>			Segment	<=	"0100001";
 				when	'o'					=>			Segment	<=	"1000000";
-				when	'n'					=>			Segment	<=	"0101011";
+				when	'f'					=>			Segment	<=	"0001110";
 				when	others				=>		Segment	<= (others	=>	'1');
 			end case;
 			

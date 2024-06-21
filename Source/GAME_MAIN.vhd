@@ -176,10 +176,10 @@ begin
 																			Seg1	<=	's';
 																			Seg0	<=	'y';
 																			
-							when	Medium				=>	Seg3	<=	'n';
-																			Seg2	<=	'o';
-																			Seg1	<=	'r';
-																			Seg0	<=	'd';
+							when	Medium				=>	Seg3	<=	'd';
+																			Seg2	<=	'e';
+																			Seg1	<=	'f';
+																			Seg0	<=	'x';
 																			
 							when	Hard					=>	Seg3	<=	'h';
 																			Seg2	<=	'a';
