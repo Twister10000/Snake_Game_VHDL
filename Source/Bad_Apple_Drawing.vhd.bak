@@ -5,8 +5,6 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
-use work.Game_State_PKG.all;
-
 entity Apple_Drawing is
 
 	port
@@ -39,8 +37,6 @@ architecture beh_Apple_Drawing of Apple_Drawing is
 		-- Constants
 			constant		X_range													:		integer	range 0	to 	1280		:= 1240;			-- Moving Range for X
 			constant		Y_range													:		integer	range 0 to 	1024		:= 984;				-- Moving Range for Y
-			constant		Default_x												:		integer	range 0 to 	1024		:= 600;				-- Default Value for x
-			constant		Default_y												:		integer	range 0 to 	1024		:= 492;				-- Default Value for Y
 			constant		Stepsize_x											:		integer range 0 to 40				:= 40;				-- Stepsize for X
 			constant		Stepsize_y											:		integer range 0 to 41				:= 41;				-- Stepsize for Y
 			constant		CNT_MAX_x												:		integer	range	0	to	40			:= 29;				-- Max CNT Value for Ranom Generator
@@ -84,15 +80,7 @@ begin
 			begin
 						
 				if rising_edge(vga_clk)	then
-						
-						/*Default Value for Apple*/
-						if game_State = startscreen		then
-						
-							x_apple <= Default_x;
-							y_apple <= Default_y;
-						end if;
 						/*Counter*/
-						
 						Random_Num_x	<=	Random_Num_x	+	1;
 						Random_Num_y	<=	Random_Num_y	+	1;
 						

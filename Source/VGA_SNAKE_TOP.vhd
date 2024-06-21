@@ -67,6 +67,7 @@ architecture VGA_DEMO_TOP of VGA_SNAKE_TOP is
 		signal			Draw_Snake								:		std_logic	:=	'0';																				-- Signal for Snake-Body Drawing on VGA Output
 		signal			Draw_Snake_Zero						:		std_logic	:=	'0';																				-- Signal for Snake-Head Drawing on VGA Output
 		signal			Draw_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
+		signal			Draw_bad_Apple								:		std_logic	:=	'0';																				-- Signal for Apple Drawing on VGA Output
 																										
 		signal			BTN_RESET_SYNC						:		std_logic_vector	(1 	downto 	0);													-- Vektor for Syncing    
     signal   		Adr								        : 	std_logic_vector	(11 downto 	0);					
@@ -186,6 +187,7 @@ begin
 					Segment2_Game							=>	Segment2_In_TOP,
 					Segment1_Game							=>	Segment1_In_TOP,
 					Segment0_Game							=>	Segment0_In_TOP,
+					Draw_bad_Apple_Out				=>	Draw_bad_Apple,
 					Reset											=>	Reset);
 		/*Grafik Instantiation*/
 		
@@ -227,7 +229,7 @@ begin
 		begin
 		
 			if rising_edge(vga_clk) then
-				--Help_Signal	<=	Game_State;
+				Help_Signal	<=	Game_State;
 				R <= x"0";
 				G <= x"0";
 				B	<= x"0";
@@ -275,6 +277,9 @@ begin
 						end if;
 						if	Draw_Apple	= '1'	then
 							R <= x"F";
+						end if;
+						if	Draw_Bad_Apple	= '1'	then
+							B <= x"F";
 						end if;
 						
 						if ypos_top	<= 40 or ypos_top	>= 984  	then

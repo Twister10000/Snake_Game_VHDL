@@ -34,6 +34,7 @@ entity Game_Main is
 			Draw_Snake_Out													: out 	std_logic := 	'0';										-- Signal for Snake-Body Drawing on VGA Output
 			Draw_Snake_Zero_Out											: out 	std_logic := 	'0';										-- Signal for Snake-Head Drawing on VGA Output
 			Draw_Apple_Out													:	out		std_logic	:=	'0';
+			Draw_bad_Apple_Out											:	out		std_logic	:=	'0';
 			Segment0_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
 			Segment1_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
 			Segment2_Game														:	out		std_logic_vector	(6 downto 0)	:=(others	=>	'0');
@@ -46,11 +47,13 @@ architecture beh_Game_Main of Game_Main is
 	-- Signal Declarations
 	
 	signal 			Draw_Apple_In										:	std_logic	:=	'0';													-- Signal for Apple Drawing on VGA Output
+	signal 			Draw_bad_Apple_In								:	std_logic	:=	'0';													-- Signal for Apple Drawing on VGA Output
 	signal 			Draw_Snake_In										:	std_logic	:=	'0';													-- Signal for Snake-Body Drawing on VGA Output
 	signal			Draw_Snake_Zero									:	std_logic	:=	'0';													-- Signal for Snake-Head Drawing on VGA Output
 	signal			Border_Crash_IN									:	std_logic	:=	'0';
 	signal 			Add															:	std_logic	:=	'0';													-- Signal for Snake Growing
 	signal			Apple_Update										:	std_logic	:=	'0';													-- Signal for Update Apple Position
+	signal			Bad_Apple_Update								:	std_logic	:=	'0';													-- Signal for Update Apple Position
 	signal			BTN_RESET_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing
 	signal			BTN_RIGHT_SYNC									:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 
 	signal			BTN_LEFT_SYNC										:	std_logic_vector (1 downto 0) := "11";			-- Vektor for Syncing 	
@@ -94,6 +97,22 @@ begin
 					Apple_Update						=>	Apple_Update,
 					y_apple_Out							=>	y_apple_Game
 			);
+	
+	/*Bad_Apple_Drawing Instantiation*/
+		Bad_Apple_Drawing	: entity	work.Bad_Apple_Drawing
+			generic	map (Simulation	=>	simulation)
+			port map(
+					xpos_apple     					=>	xpos_game,
+					ypos_apple     					=>	ypos_game,
+					videoOn_apple  					=>	videoOn_game,
+					vga_clk									=>	vga_clk,
+					NewFrame_apple					=>	NewFrame_game,
+					Draw_Bad_Apple					=>	Draw_bad_Apple_In,
+					Reset										=>	Reset,
+					Bad_Apple_Update				=>	Bad_Apple_Update
+
+			);	
+	
 	/*Segment 0 Instantiation*/
 		Segment_0	:	entity	work.SSegment
 			port map(
@@ -183,6 +202,7 @@ begin
 					Draw_Snake_Zero 			<=	'0';
 					Apple_Update					<=	'0';
 					Draw_Apple_Out 				<=	Draw_Apple_In;
+					Draw_bad_Apple_Out 				<=	Draw_Bad_Apple_In;
 					Draw_Snake_Out 				<=	Draw_Snake_In;
 					Draw_Snake_Zero_Out		<=	Draw_Snake_Zero;
 					
@@ -215,12 +235,13 @@ begin
 						
 							Add 					<=	'1';
 							Apple_Update	<=	'1';
+							Bad_Apple_Update	<= '1';
 							
 						else
 						
 							Add 					<=	'0';
 							Apple_Update	<=	'0';
-							
+							Bad_Apple_Update	<= '0';
 						end if;
 					
 																				/*Snake Crasch Detection*/
@@ -241,6 +262,13 @@ begin
 								Game_state	<= Endscreen;
 						end if;
 																				/*Border Crash Detection END*/
+																				/*Bad Apple Detection*/
+																				
+						if Draw_Snake_Zero	and Draw_Bad_Apple_In	then
+							Game_State	<= Endscreen;
+						end if;
+																				
+																				/*Bad Apple Detection END*/
 					end if;
 					/*Code for Actual Game END*/
 				end if; -- VGA CLK
